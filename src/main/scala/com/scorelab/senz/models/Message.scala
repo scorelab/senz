@@ -14,7 +14,6 @@ object MessageType extends Enumeration {
   * @param attributes the attributes
   * @param sender the sender of the message
   * @param receiver the receiver of the message
-  * @param timestamp the timestamp the message is sent
   * @param signature the digital signature of the sender
   */
 case class Message(
@@ -22,6 +21,5 @@ case class Message(
                     attributes: Map[String, String],
                     sender: String,
                     receiver: String,
-                    timestamp: String = "",
                     signature: Option[String] = None)
 
