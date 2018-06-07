@@ -82,6 +82,6 @@ object MessageUtils {
     * @return
     */
   private def getSignature(tokens: Array[String]): Option[String] = {
-    tokens.tail.last.trim
+    Some(tokens.tail.last.trim)
   }
 }
