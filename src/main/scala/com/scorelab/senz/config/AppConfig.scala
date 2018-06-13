@@ -3,7 +3,7 @@ package com.scorelab.senz.config
 import com.typesafe.config._
 
 // App configuration
-object Config {
+object AppConfig {
   val environment: String = if (System.getenv("SCALA_ENV") == null) "development" else System.getenv("SCALA_ENV")
 
   val config: Config = ConfigFactory.load()
