@@ -2,9 +2,10 @@ package com.scorelab.senz.socket
 
 import java.net.InetSocketAddress
 
-import akka.actor.{Actor, ActorLogging, ActorRef, ActorSystem, Props}
+import akka.actor._
 import akka.io.{IO, Tcp}
 
+//Senz Socket
 class SenzSocketActor extends Actor with ActorLogging {
   import context.system
 
@@ -18,12 +19,15 @@ class SenzSocketActor extends Actor with ActorLogging {
     case Tcp.Connected(remote, local) =>
       log.info("New device connected")
       val device = sender()
-      val handler = context.actorOf(Props(classOf[SenzSocketHandlerActor]), name = "senzhandler")
+      val handler = context.actorOf(Props(classOf[SenzSocketHandlerActor], device))
 
   }
 }
 
-class SenzSocketHandlerActor extends Actor with ActorLogging {
+//Senz Socket handler
+class SenzSocketHandlerActor(device: ActorRef) extends Actor with ActorLogging {
+  device ! Tcp.Register(self)
+
   def receive = {
     case Tcp.Received(data) =>
       print(data.utf8String)
