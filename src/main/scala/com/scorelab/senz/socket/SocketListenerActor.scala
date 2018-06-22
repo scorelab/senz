@@ -6,7 +6,7 @@ import akka.actor._
 import akka.io.{IO, Tcp}
 
 //Senz Socket
-class SenzSocketActor extends Actor with ActorLogging {
+class SocketListenerActor extends Actor with ActorLogging {
   import context.system
 
   IO(Tcp) ! Tcp.Bind(self, new InetSocketAddress("localhost", 2552))
@@ -19,20 +19,8 @@ class SenzSocketActor extends Actor with ActorLogging {
     case Tcp.Connected(remote, local) =>
       log.info("New device connected")
       val device = sender()
-      val handler = context.actorOf(Props(classOf[SenzSocketHandlerActor], device))
+      val handler = context.actorOf(Props(classOf[SocketHandlerActor], device))
 
   }
 }
 
-//Senz Socket handler
-class SenzSocketHandlerActor(device: ActorRef) extends Actor with ActorLogging {
-  device ! Tcp.Register(self)
-
-  def receive = {
-    case Tcp.Received(data) =>
-      print(data.utf8String)
-    case Tcp.PeerClosed =>
-      log.info("Device disconnected")
-      context stop self
-  }
-}
