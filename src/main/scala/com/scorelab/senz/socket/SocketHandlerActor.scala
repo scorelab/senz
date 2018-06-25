@@ -10,7 +10,7 @@ class SocketHandlerActor(device: ActorRef) extends Actor with ActorLogging {
   def receive = {
     case Tcp.Received(data) =>
       print(data.utf8String)
-    case Tcp.PeerClosed =>
+   case Tcp.PeerClosed =>
       log.info("Device disconnected")
       context stop self
   }

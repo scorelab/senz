@@ -20,6 +20,7 @@ class SocketListenerActor extends Actor with ActorLogging {
       log.info("New device connected")
       val device = sender()
       val handler = context.actorOf(Props(classOf[SocketHandlerActor], device))
+      SessionManager.login(device.toString(), device); // Add to the session
       println(device)
 
   }
