@@ -53,7 +53,7 @@ object MessageUtils {
         } else if (tokens(0).startsWith("$")) {
           getAttributes(tokens.drop(2), attr + (tokens(1) -> tokens(2)))
         } else {
-          attr
+          getAttributes(tokens.drop(1))
         }
     }
   }
@@ -73,7 +73,7 @@ object MessageUtils {
     * @return
     */
   private def getReceiver(tokens: Array[String]): String = {
-    tokens.find(_.startsWith("*")).get.trim.substring(1)
+    tokens.find(_.startsWith("@")).get.trim.substring(1)
   }
 
   /** Get signature from tokens
