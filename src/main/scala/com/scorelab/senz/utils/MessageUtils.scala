@@ -34,26 +34,26 @@ object MessageUtils {
   /** Get attributes from tokens
     *
     * @param tokens
-    * @param attr
+    * @param attributeList
     * @return
     */
-  private def getAttributes(tokens: Array[String], attr: Map[String, String] = Map[String, String]()): Map[String, String] = {
+  private def getAttributes(tokens: Array[String], attributeList: Map[String, String] = Map[String, String]()): Map[String, String] = {
     tokens match {
-      case Array() =>
-        attr
+      case Array() | Array("") =>
+        attributeList
       case Array(_) =>
-        if (tokens(0).startsWith("#")) attr + (tokens(0) -> "") else attr
+        if (tokens(0).startsWith("#")) attributeList + (tokens(0) -> "") else attributeList
       case Array(_, _*) =>
-        if (tokens(0).startsWith("#")) {
-          if (tokens(1).startsWith("#") || tokens(1).startsWith("$")) {
-            getAttributes(tokens.drop(1), attr + (tokens(0) -> ""))
+        if (tokens(0).startsWith("#")){
+          if (List("#", "$", "@").exists(x => tokens(1).startsWith(x))){
+            getAttributes(tokens.drop(1), attributeList + (tokens(0) -> ""))
           } else {
-            getAttributes(tokens.drop(2), attr + (tokens(0) -> tokens(1)))
+            getAttributes(tokens.drop(2), attributeList + (tokens(0) -> tokens(1)))
           }
         } else if (tokens(0).startsWith("$")) {
-          getAttributes(tokens.drop(2), attr + (tokens(1) -> tokens(2)))
+          getAttributes(tokens.drop(2), attributeList + (tokens(0) -> tokens(1)))
         } else {
-          getAttributes(tokens.drop(1))
+          getAttributes(tokens.drop(1), attributeList)
         }
     }
   }
