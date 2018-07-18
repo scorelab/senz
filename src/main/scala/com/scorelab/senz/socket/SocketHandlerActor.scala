@@ -17,11 +17,14 @@ class SocketHandlerActor(device: ActorRef) extends Actor with ActorLogging {
       val message = MessageUtils.parseMessage(query)
 
       // Login device
-      if (message.messageType == MessageType.SHARE && query.contains("pubkey")){ // TODO: Check pubkey from the atttributes
+      if (message.messageType == MessageType.SHARE && message.attributes.contains("#pubkey")){
+        println("RECEIVED: Share message")
         SessionManager.login(message.sender, device); // Add to the session
         device ! Tcp.Write(ByteString("Device registered\n"))
+        println("Device registered")
         println(device)
       } else if (message.messageType == MessageType.DATA){ // Send message
+        println("RECEIVED: Data Message")
         if (SessionManager.sessions.contains(message.receiver)){
           val receiverActor: ActorRef = SessionManager.getSession(message.receiver).value
           receiverActor ! Tcp.Write(ByteString("Message Received from " + message.sender + ": " + data.utf8String))
@@ -31,7 +34,7 @@ class SocketHandlerActor(device: ActorRef) extends Actor with ActorLogging {
         }
       }
 
-   case Tcp.PeerClosed =>
+    case Tcp.PeerClosed =>
       log.info("Device disconnected")
       context stop self
   }
