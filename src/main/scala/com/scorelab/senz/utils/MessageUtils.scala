@@ -1,9 +1,37 @@
 package com.scorelab.senz.utils
 
+import java.text.SimpleDateFormat
+import java.util.Date
+
+import com.scorelab.senz.config.AppConfig
 import com.scorelab.senz.models.MessageType.MessageType
 import com.scorelab.senz.models.{Message, MessageType}
 
 object MessageUtils {
+  /** Create senz query
+    *
+    * @param messageType
+    * @param attributes
+    * @param receiver
+    * @param sender
+    * @param signature
+    * @return
+    */
+  def createQuery(
+                     messageType: MessageType,
+                     attributes: Map[String, String],
+                     receiver: String,
+                     sender: String = AppConfig().getString("app.config.servername"),
+                     signature: String = ""): String = {
+    val msgType = messageType.toString
+    val attribs = attributes
+      .map(_.productIterator.mkString(" "))
+      .mkString(" ")
+    val redshift = new SimpleDateFormat("yyyyMMddHHmmssX")
+    val timestamp = redshift.format(new Date())
+    s"$msgType $attribs #time $timestamp @$receiver ^$sender $signature"
+  }
+
   /** Parse the query to message structure
     *
     * @param query
