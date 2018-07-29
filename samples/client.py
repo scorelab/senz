@@ -14,10 +14,10 @@ def sendMessage(message):
     # Send message
     client.send(message)
     # Receive and print the respond
-    print(receiveMessage())
+    print(receiveMessage() + "\n")
 
 def receiveMessage():
-    response = client.recv(1000000)
+    response = client.recv(5000000)
     return response
 
 def getTimestamp():
