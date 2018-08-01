@@ -1,9 +1,13 @@
 package com.scorelab.senz
 
+import akka.actor.{ActorSystem, Props}
+import com.scorelab.senz.socket.SocketListenerActor
 import com.scorelab.senz.utils.MessageUtils
 
 object Main extends App{
   println("Initalizing SenZ..")
-  val query = "GET #pubkey @device2 #time time1 ^device1 Signature"
-  val message = MessageUtils.parseMessage(query)
+
+  // Run server
+  val system = ActorSystem("system")
+  val server = system.actorOf(Props[SocketListenerActor], name = "server")
 }

@@ -320,6 +320,23 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="com.scorelab.senz.socket.SessionManager#contains" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="contains(deviceName:String):Boolean"></a><a id="contains(String):Boolean"></a>
+      <span class="permalink">
+      <a href="../../../../com/scorelab/senz/socket/SessionManager$.html#contains(deviceName:String):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">contains</span><span class="params">(<span name="deviceName">deviceName: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Check if the device is already exists in the session
+</p>
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <span class="permalink">
@@ -388,7 +405,8 @@
         <span class="name">getSession</span><span class="params">(<span name="device">device: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Some">Some</span>[<span class="extype" name="akka.actor.ActorRef">ActorRef</span>]</span>
       </span>
       
-      
+      <p class="shortcomment cmt">Get session by it's key
+</p>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <span class="permalink">
@@ -427,9 +445,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="com.scorelab.senz.socket.SessionManager#login" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="login(username:String,actorRef:akka.actor.ActorRef):Unit"></a><a id="login(String,ActorRef):Unit"></a>
+      <a id="login(deviceName:String,actorRef:akka.actor.ActorRef):Unit"></a><a id="login(String,ActorRef):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/scorelab/senz/socket/SessionManager$.html#login(username:String,actorRef:akka.actor.ActorRef):Unit" title="Permalink">
+      <a href="../../../../com/scorelab/senz/socket/SessionManager$.html#login(deviceName:String,actorRef:akka.actor.ActorRef):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -438,14 +456,15 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">login</span><span class="params">(<span name="username">username: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="actorRef">actorRef: <span class="extype" name="akka.actor.ActorRef">ActorRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">login</span><span class="params">(<span name="deviceName">deviceName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="actorRef">actorRef: <span class="extype" name="akka.actor.ActorRef">ActorRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       
-      
+      <p class="shortcomment cmt">Login and add reference to sessions
+</p>
     </li><li name="com.scorelab.senz.socket.SessionManager#logout" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="logout(username:String):Unit"></a><a id="logout(String):Unit"></a>
+      <a id="logout(deviceName:String):Unit"></a><a id="logout(String):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/scorelab/senz/socket/SessionManager$.html#logout(username:String):Unit" title="Permalink">
+      <a href="../../../../com/scorelab/senz/socket/SessionManager$.html#logout(deviceName:String):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -454,10 +473,11 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">logout</span><span class="params">(<span name="username">username: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">logout</span><span class="params">(<span name="deviceName">deviceName: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       
-      
+      <p class="shortcomment cmt">Logout and remove reference from sessions
+</p>
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <span class="permalink">
