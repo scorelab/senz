@@ -10,6 +10,6 @@ class SocketTest extends FunSuite {
     val server = system.actorOf(Props[SocketListenerActor], name = "server")
 
     // Keep the socket alive
-    Thread.sleep(5000000)
+    Thread.sleep(1000)
   }
 }
