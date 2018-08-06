@@ -1,6 +1,6 @@
 # Senz
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1fe7fd504fa64047a287a046cc92f213)](https://app.codacy.com/app/sumedhe/senz?utm_source=github.com&utm_medium=referral&utm_content=sumedhe/senz&utm_campaign=badger) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://raw.githubusercontent.com/sumedhe/senz/master/LICENSE)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1fe7fd504fa64047a287a046cc92f213)](https://app.codacy.com/app/sumedhe/senz?utm_source=github.com&utm_medium=referral&utm_content=sumedhe/senz&utm_campaign=badger) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://raw.githubusercontent.com/sumedhe/senz/master/LICENSE) [![Build Status](https://travis-ci.org/sumedhe/senz.svg)](https://travis-ci.org/sumedhe/senz)
 
 SenZ is a new kind of query language that can be used to communicate with IoT Devices . It is easily integrable, Ultimately fast and is in the Highest end of security integration. Also it is lively developed accordingly. As it is said earlier this uses a #twitter like massaging syntax which has made this language a usable, more powerful and understandable. The communication between each of these devices are done via the My sensors switch which was developed using python, A high-end application switch which works as a massage broker. Once client devices are registered in the switch they should share their data to specific people (Other client devices). Then they are capable of sharing massages accordingly.
 
