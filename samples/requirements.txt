@@ -1,0 +1,2 @@
+twisted>=18.7.0
+pycrypto>=2.6.1

@@ -1,2 +1,0 @@
-SHARE #pubkey KEY @senz #time time1 ^dev2 signature
-DATA #msg Hello @dev1 #time t1 ^dev2 sig
