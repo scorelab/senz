@@ -1,4 +1,4 @@
-name := "MySenZ"
+name := "senz"
 
 version := "0.1"
 
@@ -11,7 +11,8 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-actor" % akkaVersion,
   "com.typesafe.akka" %% "akka-testkit" % akkaVersion,
   "org.mongodb" %% "casbah" % "3.1.1",
-  "org.slf4j" % "slf4j-simple" % "1.6.4"
+  "org.slf4j" % "slf4j-simple" % "1.6.4",
+  "javax.xml.bind" % "jaxb-api" % "2.2.6"
 )
 
 scalacOptions += "-deprecation"
