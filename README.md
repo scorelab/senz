@@ -2,14 +2,14 @@
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1fe7fd504fa64047a287a046cc92f213)](https://app.codacy.com/app/sumedhe/senz?utm_source=github.com&utm_medium=referral&utm_content=sumedhe/senz&utm_campaign=badger) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://raw.githubusercontent.com/sumedhe/senz/master/LICENSE) [![Build Status](https://travis-ci.org/sumedhe/senz.svg)](https://travis-ci.org/sumedhe/senz)
 
-SenZ is a new kind of query language that can be used to communicate with IoT Devices . It is easily integrable, Ultimately fast and is in the Highest end of security integration. Also it is lively developed accordingly. As it is said earlier this uses a #twitter like massaging syntax which has made this language a usable, more powerful and understandable. The communication between each of these devices are done via the My sensors switch which was developed using python, A high-end application switch which works as a massage broker. Once client devices are registered in the switch they should share their data to specific people (Other client devices). Then they are capable of sharing massages accordingly.
+SenZ is a new kind of query language that can be used to communicate with IoT devices. It is easily integrable, incredibly fast, and is in the highest end of security integration. Also, it is developed live. As said earlier SenZ uses a #twitter like messaging syntax which makes this language more usable, powerful, and understandable. The communication between each of these devices are done via the MySensors switch which was developed using Python, a high-end application switch which works as a message broker. Once client devices are registered in the switch they should share their data to specific people (other client devices). Then, they are capable of sharing messages accordingly.
 
 ![SenZ](https://user-images.githubusercontent.com/2020370/40389831-fbb0b9a8-5e30-11e8-93da-496632d20d12.png)
 
-Currently MySensors switch is implemented on two languages one is Python and the other one is Scala. In either case it doesn't matter in which language your clients are built on. You can use either of the implementations to suit your product. Currently there are two implementation which works on UDP packet connection and TCP packet connections.
+Currently, the MySensors switch is implemented on two languages: one is Python and the other one is Scala. In either case it doesn't matter in which language your clients are built on. You can use either of the implementations to suit your product. As of now there are two implementation which works on UDP packet connection and TCP packet connections.
 
 # Internal Working
-SenZ uses five types of messages for the communication
+SenZ uses five types of messages for the communication:
 
 | Type | Description |
 | ------- | ------- |
@@ -19,7 +19,7 @@ SenZ uses five types of messages for the communication
 | PUT | To do some alternation to the device. When you need to control some device/application/client. |
 | DATA | Reply to a GET, PUT or a SHARE. To send the reply with the requested data. |
 
-SenZ messages follow a twitter like message structure.
+SenZ messages follow a Twitter-like message structure.
 
     <type> #<attribute name> <attribute value> #time <current timestamp> @<receiver> ^<sender> <digital signature>
 
@@ -36,10 +36,10 @@ SenZ messages follow a twitter like message structure.
 | &lt;digital signature&gt; | The digital signature which is used by SenZ-switch to verify the sender |
 
 # Setting up the project
-These are the instructions on how to setup the project.
+These are the instructions on how to setup the project:
 ## Pre-requisites
 - Scala 2.12.6 or higher
-- MongoDB Community edition
+- MongoDB Community edition (Server)
 
 ## Run server
 1. `cd` in to the project folder
