@@ -29,10 +29,10 @@ SenZ messages follow a Twitter-like message structure.
 | #&lt;attribute name&gt; | Name of the attribute you need to use in the message. It depends on your purpose. |
 | $&lt;attribute name&gt; | Name of the attribute which is encrypted |
 | &lt;attribute value&gt; | Value of the attribute you are sharing |
-| #time | The attribute to represent the current timestamp. This has to be sent in every messages |
+| #time | The attribute to represent the current timestamp. This has to be sent in every message |
 | &lt;current timestamp&gt; | This is the value of the time attribute |
-| @&lt;receiver&gt; | This is the user name of the receiver of the massage |
-| ^&lt;sender&gt; | This is the user name of the sender of the massage |
+| @&lt;receiver&gt; | This is the user name of the receiver of the message |
+| ^&lt;sender&gt; | This is the user name of the sender of the message |
 | &lt;digital signature&gt; | The digital signature which is used by SenZ-switch to verify the sender |
 
 # Setting up the project
