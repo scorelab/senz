@@ -48,3 +48,31 @@ These are the instructions on how to setup the project:
 ## Run tests
 1. `cd` in to the project folder
 2. Run `sbt test`
+
+# Running sample Codes
+
+## Python
+
+#### Pre-requisites
+- Python 2
+- pip
+
+```bash
+pip install pycrypto
+cd samples/python
+python receiver.py
+python sender.py
+```
+## NodeJS
+
+#### Pre-requisites
+- node
+- npm
+
+```bash
+cd samples/javascript
+npm install
+cd transfer_image
+node sender.js
+node receiver.js
+```
