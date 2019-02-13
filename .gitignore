@@ -128,6 +128,7 @@ parts/
 sdist/
 var/
 wheels/
+samples/javascript/node_modules
 *.egg-info/
 .installed.cfg
 *.egg
