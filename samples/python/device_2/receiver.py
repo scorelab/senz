@@ -1,23 +1,26 @@
+#!/usr/bin/env python3
+
 import sys, os
 sys.path.insert(0, os.path.abspath('..'))
 
-from client import *
+from senz.client import *
 from utils.image_utils import *
 from utils.aes_utils import *
 
+deviceName = "dev2"
 sharedKey = "LGWlhb329Y09oluI"
 imagePathToStore = "received.jpg"
 
 # Register device
-print "Registering..."
-msg = "SHARE #pubkey KEY @senz #time {} ^dev2 signature".format(getTimestamp())
+print("Registering...")
+msg = "SHARE #pubkey KEY @senz #time {} ^{} signature".format(getTimestamp(), deviceName)
 sendMessage(msg)
 
 # Receive message
-print "Ready to receive image"
+print("Ready to receive image")
 reply = receiveMessage()
-print reply
 byteString = reply.split()[2]
+print("Image received..")
 
 # Decode using AES Crypto
 aes = AESUtils(sharedKey)
@@ -25,4 +28,4 @@ byteString = aes.decrypt(byteString)
 
 # Save image
 stringToImage(byteString, imagePathToStore)
-print "Image saved [{}]".format(imagePathToStore)
+print("Image saved ({})".format(imagePathToStore))
