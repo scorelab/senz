@@ -35,44 +35,11 @@ SenZ messages follow a Twitter-like message structure.
 | ^&lt;sender&gt; | This is the user name of the sender of the message |
 | &lt;digital signature&gt; | The digital signature which is used by SenZ-switch to verify the sender |
 
+
 # Setting up the project
-These are the instructions on how to setup the project:
-## Pre-requisites
-- Scala 2.12.6 or higher
-- MongoDB Community edition (Server)
 
-## Run server
-1. `cd` in to the project folder
-2. Run `sbt run`
+[Senz server](senz-server/README.md)
 
-## Run tests
-1. `cd` in to the project folder
-2. Run `sbt test`
-
-# Running sample Codes
-
-## Python
-
-#### Pre-requisites
-- Python 2
-- pip
-
-```bash
-pip install pycrypto
-cd samples/python
-python receiver.py
-python sender.py
-```
-## NodeJS
-
-#### Pre-requisites
-- node
-- npm
-
-```bash
-cd samples/javascript
-npm install
-cd transfer_image
-node sender.js
-node receiver.js
-```
+## Sample programs
+- [Python](senz-client-samples/python/README.md)
+- [JavaScript](senz-client-samples/javascript/README.md)
