@@ -1,9 +1,14 @@
 # Sample Client : Transfer Image (python)
 
 ## Instructions
-1. Setup and run senz server
+1. Install required packages
+    ```
+    $ pip install -r requirements.txt
+    ```
 
-2. Run receiver device
+2. Setup and run [Senz server](/../../senz-server/README.md)
+
+3. Run receiver device
     ```
     $ cd device_2
     $ python receiver.py
@@ -16,7 +21,7 @@
     ```
     
      
-3. Run sender device
+4. Run sender device
     ```
     $ cd device_1
     $ python sender.py
