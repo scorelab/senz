@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 echo "Installation Started"
 sudo apt update
 echo "Installing MongoDB"
