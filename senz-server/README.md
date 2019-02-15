@@ -1,8 +1,12 @@
 # Setting up the project
-These are the instructions on how to setup the project:
-## Pre-requisites
-- Scala 2.12.6 or higher
-- MongoDB Community edition (Server)
+1.For debian bases operating systems
+```bash
+sudo bash serverInstallDebian.sh
+```
+2.For other operating systems
+##    Pre-requisites
+    - Scala 2.12.6 or higher
+    - MongoDB Community edition (Server)
 
 ## Run server
 1. `cd` in to the project folder
