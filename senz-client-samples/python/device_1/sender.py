@@ -25,7 +25,7 @@ byteString = aes.encrypt(byteString)
 
 # Send the message
 print("Press enter to send the image...")
-raw_input()
+input()
 
 msg = "DATA $image {} @dev2 #time {} ^dev1 signature\n".format(byteString, getTimestamp())
 sendMessage(msg)
