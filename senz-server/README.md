@@ -1,5 +1,5 @@
 # Setting up the project
-1.For debian bases operating systems
+1.For debian based operating systems
 ```bash
 sudo bash serverInstallDebian.sh
 ```
