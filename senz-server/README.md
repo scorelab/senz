@@ -1,13 +1,11 @@
 # Setting up the project
-1.For debian based operating systems
-```bash
-sudo bash serverInstallDebian.sh
-```
-2.For other operating systems
 ##Pre-requisites
 - Scala 2.12.6 or higher
 - MongoDB Community edition (Server)
-
+# Setting up the project using shell script
+```bash
+sudo bash serverInstallDebian.sh
+```
 ## Run server
 1. `cd` in to the project folder
 2. Run `sbt run`
