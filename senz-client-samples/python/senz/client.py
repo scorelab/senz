@@ -13,14 +13,14 @@ client.connect((host, port))
 # Send message to server
 def sendMessage(message):
     # Send message
-    client.send(message)
+    client.send(message.encode())
     # Receive and print the respond
     res = receiveMessage()
     print("[Server] {}\n".format(res))
 
 def receiveMessage():
     response = client.recv(5000000)
-    return response
+    return response.decode()
 
 def getTimestamp():
     return time.strftime("%Y%m%d%H%M%S", time.localtime())
@@ -43,5 +43,5 @@ if __name__ == "__main__":
 
 	# send some data (in this case a HTTP GET request)
 	while True:
-	    msg = raw_input()
+	    msg = input()
 	    sendMessage(msg)
