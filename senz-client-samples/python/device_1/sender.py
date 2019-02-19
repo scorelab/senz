@@ -17,7 +17,7 @@ msg = "SHARE #pubkey KEY @senz #time {} ^{} signature".format(getTimestamp(), de
 sendMessage(msg)
 
 # Convert image to byte string
-byteString = imageToString(imagePathToSend)
+byteString = imageToString(imagePathToSend).decode()
 
 # Encrypt using AES Crypto
 aes = AESUtils(sharedKey)
