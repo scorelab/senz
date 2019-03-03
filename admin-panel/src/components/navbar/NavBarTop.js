@@ -8,6 +8,9 @@ import { Link } from 'react-router-dom'
 import IconButton from '@material-ui/core/IconButton'
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuIcon from '@material-ui/icons/Menu';
+import Plus from '@material-ui/icons/Add';
+import Toc from '@material-ui/icons/Toc';
+import SettingsIcon from '@material-ui/icons/Settings';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
@@ -71,21 +74,29 @@ class TopNavBar extends Component {
                 <List>
 
                     <ListItem button key='Create Device'>
-                        <ListItemText primary='Create Device' />
+                        <Plus /><ListItemText primary='Create Device' />
                     </ListItem>
 
                     <ListItem button key='Manage Device' component={Link} to='/devices'>
-                        <ListItemText primary='Manage Device' />
+                        <Toc /><ListItemText primary='Manage Device' />
+                    </ListItem>
+
+
+                    <ListItem button key='Create Project'>
+                        <Plus /><ListItemText primary='Create Project' />
+                    </ListItem>
+                    <ListItem button key='Your Projects'>
+                        <Toc /><ListItemText primary='Your Projects' />
                     </ListItem>
 
                 </List>
                 <Divider />
                 <List>
-                    {['Settings'].map((text, index) => (
-                        <ListItem button key={text}>
-                            <ListItemText primary={text} />
-                        </ListItem>
-                    ))}
+
+                    <ListItem button key='Settings'>
+                        <SettingsIcon /><ListItemText primary='Settings' />
+                    </ListItem>
+
                 </List>
             </div>
         )
