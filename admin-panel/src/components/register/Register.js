@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
+import React, { Component } from "react";
 
 class Register extends Component {
-    state = {}
-    render() {
-        return (<h1>Register</h1>);
-    }
+  state = {};
+  render() {
+    return <h1>Register</h1>;
+  }
 }
 
 export default Register;
