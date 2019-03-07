@@ -47,12 +47,12 @@ class TopNavBar extends Component {
     left: false
   };
 
-  handleToggle = event => {
+  handleToggle = (event) => {
     this.setState({ anchorEl: event.currentTarget });
   };
 
   handleClose = () => {
-    this.setState(state => ({
+    this.setState((state) => ({
       anchorEl: null
     }));
   };
@@ -124,7 +124,6 @@ class TopNavBar extends Component {
             style={styles.navbarLinks}
             onClick={this.handleToggle}
             aria-haspopup="true"
-            aria-owns={anchorEl ? "simple-menu" : undefined}
           >
             <AccountCircle />
           </IconButton>
