@@ -1,0 +1,11 @@
+version: 1
+
+update_configs:
+  - package_manager: "javascript"
+    directory: "/senz-client-samples/javascript"
+    update_schedule: "live"
+
+    
+  - package_manager: "python"
+    directory: "/senz-client-samples/python"
+    update_schedule: "live"
