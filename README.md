@@ -9,37 +9,38 @@ SenZ is a new kind of query language that can be used to communicate with IoT de
 Currently, the MySensors switch is implemented on two languages: one is Python and the other one is Scala. In either case it doesn't matter in which language your clients are built on. You can use either of the implementations to suit your product. As of now there are two implementations which work on the UDP packet connection and TCP packet connections.
 
 # Internal Working
+
 SenZ uses five types of messages for the communication:
 
-| Type | Description |
-| ------- | ------- |
-| SHARE |  Share some attributes to some client/device |
-| UNSHARE | Stop sharing some attributes |
-| GET | Request a SHARES attribute from a client/device |
-| PUT | To do some alternation to the device. When you need to control some device/application/client. |
-| DATA | Reply to a GET, PUT or a SHARE. To send the reply with the requested data. |
+| Type    | Description                                                                                    |
+| ------- | ---------------------------------------------------------------------------------------------- |
+| SHARE   | Share some attributes to some client/device                                                    |
+| UNSHARE | Stop sharing some attributes                                                                   |
+| GET     | Request a SHARES attribute from a client/device                                                |
+| PUT     | To do some alternation to the device. When you need to control some device/application/client. |
+| DATA    | Reply to a GET, PUT or a SHARE. To send the reply with the requested data.                     |
 
 SenZ messages follow a Twitter-like message structure.
 
     <type> #<attribute name> <attribute value> #time <current timestamp> @<receiver> ^<sender> <digital signature>
 
-| Tag | Description |
-| --- | ----------- |
-| &lt;type&gt; | Type of the message. One of the types from SHARE, UNSHARE, GET, PUT, DATA
-| #&lt;attribute name&gt; | Name of the attribute you need to use in the message. It depends on your purpose. |
-| $&lt;attribute name&gt; | Name of the attribute which is encrypted |
-| &lt;attribute value&gt; | Value of the attribute you are sharing |
-| #time | The attribute to represent the current timestamp. This has to be sent in every message |
-| &lt;current timestamp&gt; | This is the value of the time attribute |
-| @&lt;receiver&gt; | This is the user name of the receiver of the message |
-| ^&lt;sender&gt; | This is the user name of the sender of the message |
-| &lt;digital signature&gt; | The digital signature which is used by SenZ-switch to verify the sender |
-
+| Tag                    | Description                                                                            |
+| ---------------------- | -------------------------------------------------------------------------------------- |
+| &lt;type>              | Type of the message. One of the types from SHARE, UNSHARE, GET, PUT, DATA              |
+| #&lt;attribute name>   | Name of the attribute you need to use in the message. It depends on your purpose.      |
+| $&lt;attribute name>   | Name of the attribute which is encrypted                                               |
+| &lt;attribute value>   | Value of the attribute you are sharing                                                 |
+| #time                  | The attribute to represent the current timestamp. This has to be sent in every message |
+| &lt;current timestamp> | This is the value of the time attribute                                                |
+| @&lt;receiver>         | This is the user name of the receiver of the message                                   |
+| ^&lt;sender>           | This is the user name of the sender of the message                                     |
+| &lt;digital signature> | The digital signature which is used by SenZ-switch to verify the sender                |
 
 # Setting up the project
 
 [Senz server](senz-server/README.md)
 
 ## Sample programs
-- [Python](senz-client-samples/python/README.md)
-- [JavaScript](senz-client-samples/javascript/README.md)
+
+-   [Python](senz-client-samples/python/README.md)
+-   [JavaScript](senz-client-samples/javascript/README.md)

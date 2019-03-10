@@ -3,11 +3,13 @@
 ## Instructions
 
 ### Pre-requisites
-- node
-- npm
+
+-   node
+-   npm
 
 ### Steps
-```bash
+
+```sh
 cd samples/javascript
 npm install
 cd transfer_image
