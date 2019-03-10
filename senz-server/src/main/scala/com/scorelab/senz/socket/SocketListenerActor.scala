@@ -1,6 +1,7 @@
 package com.scorelab.senz.socket
 
 import java.net.InetSocketAddress
+import context.system
 
 import akka.actor._
 import akka.io.{IO, Tcp}
@@ -8,7 +9,6 @@ import com.scorelab.senz.config.AppConfig
 
 //Senz Socket
 class SocketListenerActor extends Actor with ActorLogging {
-  import context.system
 
   val hostname : String = AppConfig().getString("app.socket.hostname")
   val port : Int = AppConfig().getInt("app.socket.port")
