@@ -1,6 +1,10 @@
 # Senz
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1e53e1509f714cf781df157ace7a0cf9)](https://www.codacy.com/app/sumedhe/senz?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=scorelab/senz&amp;utm_campaign=Badge_Grade) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://raw.githubusercontent.com/sumedhe/senz/master/LICENSE) [![Build Status](https://travis-ci.org/sumedhe/senz.svg)](https://travis-ci.org/sumedhe/senz)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://raw.githubusercontent.com/sumedhe/senz/master/LICENSE)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1e53e1509f714cf781df157ace7a0cf9)](https://www.codacy.com/app/sumedhe/senz?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=scorelab/senz&amp;utm_campaign=Badge_Grade)
+[![Build Status](https://travis-ci.org/sumedhe/senz.svg)](https://travis-ci.org/sumedhe/senz)
+[![Gitter chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/scorelab/senz)
+
 
 SenZ is a new kind of query language that can be used to communicate with IoT devices. It is easily integrable, incredibly fast, and is in the highest end of security integration. Also, it is developed live. As said earlier SenZ uses a #twitter like messaging syntax which makes this language more usable, powerful, and understandable. The communication between each of these devices are done via the MySensors switch which was developed using Python; a high-end application switch which works as a message broker. Once client devices are registered in the switch they should share their data to specific people (other client devices). Then, they are capable of sharing messages accordingly.
 
