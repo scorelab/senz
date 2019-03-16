@@ -8,7 +8,7 @@
     pip install -r requirements.txt
     ```
 
-2.  Setup and run [Senz server](/../../senz-server/README.md)
+2.  Setup and run [Senz server](../../senz-server/README.md)
 
 3.  Run receiver device
     ```sh
