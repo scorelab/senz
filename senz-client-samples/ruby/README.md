@@ -11,12 +11,12 @@ bundle install
 
 3. Now cd into project directory 'ruby'
 
-4. Run Receiver
+4. Run Receiver Device
 ```bash
 ruby receiver.rb
 ```
 
-5. Run Sender
+5. Run Sender Device
 ```bash
 ruby sender.rb
 ```
