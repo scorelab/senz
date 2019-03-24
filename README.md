@@ -47,6 +47,7 @@ SenZ messages follow a Twitter-like message structure.
 
 -   [Python](senz-client-samples/python/README.md)
 -   [JavaScript](senz-client-samples/javascript/README.md)
+-   [Ruby](senz-client-samples/ruby/README.md)
 
 # How to Contribute
 
