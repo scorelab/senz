@@ -11,12 +11,15 @@ var sendMessage=function(msg){
         socket.on("data",function(data){
         data=data.toString('utf8')
         resolve(data);
-    
-    
+
+
     })
-    
+      socket.on('error', function(e){
+        console.log("Error Message:",e);
+   })
+
     })
-    
+
 }
 var getResponse=function(){
     return new Promise(function(resolve,reject){
@@ -27,18 +30,18 @@ var getResponse=function(){
                     chunk+=data[i];
                 }
                 console.log(chunk);
-                resolve(chunk);  
+                resolve(chunk);
             })
-            
+
         })
     }
 
 var receiveMessage=async function(){
         let data=await getResponse();
         return data;
-                
-    
-    
+
+
+
 }
 var getTimestamp=function(){
     return Date.now();

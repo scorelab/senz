@@ -19,12 +19,15 @@ sendMessage(msg)
 # Receive message
 print("Ready to receive image")
 reply = receiveMessage()
-byteString = reply.split()[2]
+byteString = reply.split(" ")[2]
+res=""
+for i in byteString:
+    res+=i
 print("Image received..")
 
 # Decode using AES Crypto
 aes = AESUtils(sharedKey)
-byteString = aes.decrypt(byteString)
+byteString = aes.decrypt(res)
 
 # Save image
 stringToImage(byteString, imagePathToStore)

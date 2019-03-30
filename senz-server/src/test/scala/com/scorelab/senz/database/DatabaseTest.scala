@@ -15,7 +15,7 @@ class DatabaseTest extends FunSuite {
     val result = coll.insert(builder.result)
 
     // Check for the object
-    var items = coll.find
+    val items = coll.find
     assert(items.count === 1)
 
     // Drop the collection
