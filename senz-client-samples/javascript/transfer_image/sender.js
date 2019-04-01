@@ -51,5 +51,5 @@ app.get("/sen1",function(req,res){
 app.listen(port,function(err){
     if(err)
     throw err;
-    console.log("Server running on port "+3001);
+    console.log(`server running on port ${port}`);
 })
