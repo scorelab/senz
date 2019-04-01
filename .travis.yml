@@ -2,6 +2,9 @@ language: scala
 scala:
    - 2.12.6
 services: mongodb
-before_install: cd senz-server
+before_install: 
+   - cd senz-server
+   - pip install pytest
 script:
    - sbt ++$TRAVIS_SCALA_VERSION test
+   - pytest
