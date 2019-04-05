@@ -28,15 +28,11 @@ var registeringDevice=function(regmsg)
 var sendingMessage=function(senmsg){
     client.sendMessage(senmsg).then(function(senData){
         console.log(senData);
+        client.sendMessage(`UNSHARE #pubkey KEY @senz #time ${time} ^dev1 signature\n`).then(function(registered){
+            console.log(registered);
+        })
     })
 }
-// client.sendMessage(regmsg).then(function(registered){
-//     console.log(registered);
-//     client.sendMessage(senmsg).then(function(sentData){
-//         console.log(sentData);
-        
-//     })
-// });
 app.get("/",function(req,res){
     res.sendFile("sendRegister.html",{root:__dirname});
 })
