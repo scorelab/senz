@@ -30,7 +30,3 @@ input()
 msg = "DATA $image {} @dev2 #time {} ^dev1 signature\n".format(byteString, getTimestamp())
 sendMessage(msg)
 
-# Unregister device
-print("Unregistering device...")
-msg = "UNSHARE #pubkey KEY @senz #time {} ^{} signature".format(getTimestamp(), deviceName)
-sendMessage(msg)
