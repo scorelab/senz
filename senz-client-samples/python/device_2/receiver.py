@@ -33,3 +33,7 @@ byteString = aes.decrypt(res)
 stringToImage(byteString, imagePathToStore)
 print("Image saved ({})".format(imagePathToStore))
 
+# Unregister device
+print("Unregistering...")
+msg = "UNSHARE #pubkey KEY @senz #time {} ^{} signature".format(getTimestamp(), deviceName)
+sendMessage(msg)
