@@ -22,11 +22,7 @@ var receiveImage = function() {
     client.receiveMessage().then(function(encImg) {
         var decrptedBase64 = aes.decrypt(encImg);
         imageUtil.stringToImage(decrptedBase64, imagePathToSave);
-        client.sendMessage("").then(function(retMsg) {
-            console.log(`UNSHARE #pubkey KEY @senz #time ${time} ^dev2 signature\n`);
-            console.log("Unregistering the device");
-    
-        })
+        
         console.log("CHECK YOUR DIRECTORY");
     })
 }
