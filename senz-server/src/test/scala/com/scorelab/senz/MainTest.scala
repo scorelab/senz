@@ -16,19 +16,7 @@ class MainTest extends FunSuite {
 //
 //    val doc: Document = Document("_id" -> 0, "name" -> "MongoDB", "type" -> "database",
 //      "count" -> 1, "info" -> Document("x" -> 203, "y" -> 102))
-//
 //    collection.insertOne(doc)
-//
-
-
-
-
-
-
-
-
-
-
     // To directly connect to the default server localhost on port 27017
 //      val mongoClient: MongoClient = MongoClient()
 
@@ -48,8 +36,6 @@ class MainTest extends FunSuite {
 //      "count" -> 1, "info" -> Document("x" -> 203, "y" -> 102))
 //    collection.insertOne(doc)
 //    collection.find.first().printResults()
-
-
 
     //    val collection: MongoCollection[Document] = database.getCollection("movie");
 
@@ -77,8 +63,5 @@ class MainTest extends FunSuite {
 //      builder += "price" -> stock.price
 //      builder.result
 //    }
-
-
-
   }
 }
