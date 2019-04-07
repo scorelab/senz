@@ -24,6 +24,8 @@ class SocketHandlerActor(device: ActorRef) extends Actor with ActorLogging {
         onShare(message)
       } else if (message.messageType == MessageType.DATA){ // Send message
         onData(message, data)
+      }else if (message.messageType == MessageType.UNSHARE && message.attributes.contains("#pubkey")){
+        onUnshare(message)
       }
 
     case Tcp.PeerClosed =>
@@ -45,6 +47,23 @@ class SocketHandlerActor(device: ActorRef) extends Actor with ActorLogging {
         val reply = MessageUtils.createQuery(DATA, Map("#msg" -> "OK"), deviceName)
         device ! Tcp.Write(ByteString(reply))
         println("Device registered")
+      }
+    }
+  }
+  def onUnshare(message: Message) = {
+    if (message.attributes.contains("#pubkey")){
+      val deviceName = message.sender
+
+      if (!SessionManager.contains(deviceName)){
+        // Send error message
+        val reply = MessageUtils.createQuery(DATA, Map("#msg" -> "ERR:DEVICE_UNIDENTIFIED"), deviceName)
+        device ! Tcp.Write(ByteString(reply))
+      } else {
+        // Logout the device
+        SessionManager.logout(deviceName); // Remove from the session
+        val reply = MessageUtils.createQuery(DATA, Map("#msg" -> "OK"), deviceName)
+        device ! Tcp.Write(ByteString(reply))
+        println("Device unregistered")
       }
     }
   }
