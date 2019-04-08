@@ -113,6 +113,9 @@ Temporary Items
 *.class
 *.log
 
+project/target/
+target/
+
 ### VisualStudioCode ###
 .vscode/*
 !.vscode/settings.json
