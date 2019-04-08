@@ -5,7 +5,7 @@ const express=require("express");
 const app=express();
 const port=process.env.port || 3001;
 const sharedKey=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16];
-//Register Device 
+//Register Device
 console.log("Registering Device");
 var time=client.getTimestamp();
 var regmsg=`SHARE #pubkey KEY @senz #time ${time} ^dev1 signature\n`;
@@ -34,7 +34,7 @@ var sendingMessage=function(senmsg){
 //     console.log(registered);
 //     client.sendMessage(senmsg).then(function(sentData){
 //         console.log(sentData);
-        
+
 //     })
 // });
 app.get("/",function(req,res){
@@ -51,5 +51,7 @@ app.get("/sen1",function(req,res){
 app.listen(port,function(err){
     if(err)
     throw err;
+
     console.log(`server running on port ${port}`);
 })
+
