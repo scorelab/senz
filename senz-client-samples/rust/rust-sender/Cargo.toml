@@ -5,4 +5,7 @@ authors = ["chaliya"]
 edition = "2018"
 
 [dependencies]
+
+sodiumoxide = "0.2.1"
+base64 = "0.10.1"
 chrono = "0.4"
