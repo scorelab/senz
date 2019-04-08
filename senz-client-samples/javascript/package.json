@@ -4,8 +4,8 @@
   "description": "A simple sample for sending an image using senz query",
   "main": "client.js",
   "scripts": {
-    "test": "mocha",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "mocha"
   },
   "author": "",
   "license": "ISC",

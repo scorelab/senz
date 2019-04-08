@@ -8,7 +8,11 @@
     "extends": "eslint:recommended",
     "globals": {
         "Atomics": "readonly",
-        "SharedArrayBuffer": "readonly"
+        "SharedArrayBuffer": "readonly",
+	"describe":true,
+	"it":true,
+	"before":true,
+	"after":true
     },
     "parserOptions": {
         "ecmaVersion": 2018

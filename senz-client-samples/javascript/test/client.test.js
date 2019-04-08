@@ -3,7 +3,7 @@ process.env.NODE_ENV = 'test';
 const chai = require('chai');
 const client = require('../client.js');
 const net = require('net');
-
+const logger = require('../utils/winstonConfig')
 
 //to use expect
 const expect = chai.expect;
@@ -17,9 +17,9 @@ describe('testing client.js', () => {
 
   before(() => {
     server.on('connection', function(socket) {
-      console.log('Server: connected to client');
+      logger.info('Server: connected to client');
       socket.write("DATA ok success : ")
-      socket.on('data', function(data) {
+      socket.on('data', function() {
         socket.write('received');
       })
     })
