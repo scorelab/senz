@@ -15,10 +15,10 @@ const imagePathToSend="sample.jpg";
 var byteString=imageUtil.imageToString(imagePathToSend);
 //Encrypt using AES Crypto
 var aes=new AESUtil.AESUtils(sharedKey);
-var byteString=aes.encrypt(byteString);
-//logger.info(byteString);
+var encryptedByteString=aes.encrypt(byteString);
+//logger.info(encryptedByteString);
 //Send Message
-var senmsg = `DATA $image ${byteString} @dev2 #time ${time} ^dev1 signature\n`
+var senmsg = `DATA $image ${encryptedByteString} @dev2 #time ${time} ^dev1 signature\n`
 //sendImage(regmsg,senmsg);
 var registeringDevice=function(regmsg)
 {
