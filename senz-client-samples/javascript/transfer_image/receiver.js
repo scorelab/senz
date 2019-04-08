@@ -11,7 +11,7 @@ var time=client.getTimestamp();
 var regmsg=`SHARE #pubkey KEY @senz #time ${time} ^dev2 signature\n`;
 const imagePathToSave="received.jpg";
 var aes=new AESUtil.AESUtils(sharedKey);  
-var registerDevice=function(mssg){
+var registerDevice=function(){
     logger.info("Registering Device");
     client.sendMessage(regmsg).then(function(retMsg){
         logger.info("<><><><><><><><><><><><><><<><>");
@@ -24,7 +24,7 @@ var receiveImage=function(){
     client.receiveMessage().then(function(encImg){
     var decrptedBase64=aes.decrypt(encImg);
     imageUtil.stringToImage(decrptedBase64,imagePathToSave);
-    client.sendMessage("").then(function(retMsg) {
+    client.sendMessage("").then(function() {
         logger.info(`UNSHARE #pubkey KEY @senz #time ${time} ^dev2 signature\n`);
         logger.info("Unregistering the device");
 
