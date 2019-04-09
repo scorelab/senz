@@ -1,14 +1,14 @@
 const fs=require('fs')
 
-var imageToString=function(filename){
+const imageToString=function(filename){
     // read binary data
-    var binaryImg = fs.readFileSync(filename);
+    const binaryImg = fs.readFileSync(filename);
     // convert binary data to base64 encoded string
     return new Buffer(binaryImg).toString('base64');
 }
-var stringToImage=function(str,filename){
+const stringToImage=function(str,filename){
     //Decoding the base64 string and writing the file 
-    //var buf = Buffer.from(str,'base64');
+    //const buf = Buffer.from(str,'base64');
     fs.writeFile(filename,str,'base64',function(err){
         if(err)
         throw err;
