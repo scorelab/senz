@@ -7,11 +7,11 @@ const app=express();
 const port=process.env.port || 3000;
 const sharedKey=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16];
 //Register Device 
-var time=client.getTimestamp();
-var regmsg=`SHARE #pubkey KEY @senz #time ${time} ^dev2 signature\n`;
+const time=client.getTimestamp();
+const regmsg=`SHARE #pubkey KEY @senz #time ${time} ^dev2 signature\n`;
 const imagePathToSave="received.jpg";
-var aes=new AESUtil.AESUtils(sharedKey);  
-var registerDevice=function(){
+const aes=new AESUtil.AESUtils(sharedKey);  
+const registerDevice=function(){
     logger.info("Registering Device");
     client.sendMessage(regmsg).then(function(retMsg){
         logger.info("<><><><><><><><><><><><><><<><>");
@@ -20,9 +20,9 @@ var registerDevice=function(){
     
     })    
 }
-var receiveImage=function(){
+const receiveImage=function(){
     client.receiveMessage().then(function(encImg){
-    var decrptedBase64=aes.decrypt(encImg);
+    const decrptedBase64=aes.decrypt(encImg);
     imageUtil.stringToImage(decrptedBase64,imagePathToSave);
     client.sendMessage("").then(function() {
         logger.info(`UNSHARE #pubkey KEY @senz #time ${time} ^dev2 signature\n`);
