@@ -1,7 +1,17 @@
-language: scala
-scala:
-   - 2.12.6
-services: mongodb
-before_install: cd senz-server
-script:
-   - sbt ++$TRAVIS_SCALA_VERSION test
+sudo: required
+matrix:
+  include:
+    - language: scala
+      scala: 2.12.6
+      services: mongodb
+      before_install:
+        - cd senz-server
+      script:
+        - sbt ++$TRAVIS_SCALA_VERSION test
+        
+    - language: python
+      python: 3.6
+      before_install:
+        - pip install pytest
+      script:
+        - pytest

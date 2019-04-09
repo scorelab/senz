@@ -20,3 +20,12 @@
     cd device_1
     python3 sender.py
     ```
+
+5.  In order to run tests first install the pytest package
+    `pip install pytest`
+
+    and then in terminal run 
+
+    `pytest`
+
+    
