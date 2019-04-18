@@ -15,3 +15,13 @@ matrix:
         - pip install pytest
       script:
         - pytest
+
+    - language: node_js
+      install:
+        - npm install
+      before_install:
+        - cd senz-client-samples/javascript/
+      before_script:
+        - cd senz-client-samples/javascript/
+      script:
+        - npm run lint 
