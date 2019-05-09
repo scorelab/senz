@@ -5,7 +5,7 @@ matrix:
       scala: 2.12.6
       services: mongodb
       before_install:
-        - cd senz-server
+        - cd senz-switch
       script:
         - sbt ++$TRAVIS_SCALA_VERSION test
         
