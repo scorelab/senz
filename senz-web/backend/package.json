@@ -1,0 +1,19 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "This is the backend-API of the senz-admin panel.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scorelab/senz.git"
+  },
+  "author": "YashMeh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/scorelab/senz/issues"
+  },
+  "homepage": "https://github.com/scorelab/senz#readme"
+}
