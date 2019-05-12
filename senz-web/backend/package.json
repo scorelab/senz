@@ -1,19 +1,36 @@
 {
-  "name": "backend",
+  "name": "wth",
   "version": "1.0.0",
-  "description": "This is the backend-API of the senz-admin panel.",
-  "main": "main.js",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "export NODE_ENV=test && mocha --timeout 10000 && node main.js",
+    "start": "export NODE_ENV=dev && nodemon main.js",
+    "dev": "export NODE_ENV=dev && nodemon main.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/scorelab/senz.git"
-  },
-  "author": "YashMeh",
+  "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/scorelab/senz/issues"
+  "dependencies": {
+    "axios": "^0.18.0",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.3",
+    "config": "^3.0.1",
+    "cors": "^2.8.5",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "helmet": "^3.16.0",
+    "jsonwebtoken": "^8.5.0",
+    "jwt-decode": "^2.2.0",
+    "mongoose": "^5.4.18",
+    "morgan": "^1.9.1",
+    "nodemon": "^1.18.10"
   },
-  "homepage": "https://github.com/scorelab/senz#readme"
+  "engines": {
+    "node": "8.11.4"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.1",
+    "mocha": "^6.0.2"
+  }
 }
