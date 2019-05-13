@@ -18,8 +18,6 @@ npm start
 ```bash
 npm test
 ```
-
-
 ## Documentation 
 
 
