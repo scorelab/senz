@@ -1,15 +1,23 @@
 {
   "name": "senz-admin-backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "This is the backend-API of the senz-admin panel.",
+  "main": "main.js",
   "scripts": {
     "test": "export NODE_ENV=test && mocha --timeout 10000 && node main.js",
     "start": "export NODE_ENV=dev && nodemon main.js",
     "dev": "export NODE_ENV=dev && nodemon main.js"
   },
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scorelab/senz.git"
+  },
+  "author": "YashMeh",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/scorelab/senz/issues"
+  },
+  "homepage": "https://github.com/scorelab/senz#readme",
   "dependencies": {
     "axios": "^0.18.0",
     "bcryptjs": "^2.4.3",
