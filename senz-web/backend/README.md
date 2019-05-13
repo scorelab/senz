@@ -8,7 +8,7 @@ This is the backend API for the admin-panel
 npm install
 ```
 ### Pre-Running
-- Create a dev.json file in the config directory with the following details.
+Create a dev.json file in the config directory with the following details.
 
 ```bash
 {
@@ -24,7 +24,7 @@ npm install
 npm start
 ```
 ### Pre-Testing
-- Create a test.json file in the config directory with the following details.
+Create a test.json file in the config directory with the following details.
 
 ```bash
 {
