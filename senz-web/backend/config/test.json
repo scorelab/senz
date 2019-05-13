@@ -1,5 +1,0 @@
-{
-    "port":8080,
-    "dbURI":"mongodb://localhost/senzAdminTest",
-    "secretKey":"yash123"             
-}
