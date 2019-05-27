@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { toggleDrawerAction } from "../../actions";
+import { toggleDrawerAction } from "../../_actions/layout";
 import classNames from "classnames";
 import {
   Drawer,

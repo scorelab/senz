@@ -1,14 +1,17 @@
-import React, { Component, Fragment } from "react";
-import NavBar from "./layout/NavBar";
-import Drawer from "./layout/Drawer";
+import React, { Component } from "react";
+import { BrowserRouter, Route } from "react-router-dom";
+import Register from "./authentication/Register";
+import Login from "./authentication/Login";
 
 class App extends Component {
   render() {
     return (
-      <Fragment>
-        <NavBar />
-        <Drawer />
-      </Fragment>
+      <BrowserRouter>
+        <div>
+          <Route path="/" exact component={Register} />
+          <Route path="/login" exact component={Login} />
+        </div>
+      </BrowserRouter>
     );
   }
 }
