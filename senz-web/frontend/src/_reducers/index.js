@@ -1,10 +1,10 @@
 import { combineReducers } from "redux";
-import { toggleDrawerReducer } from "./layoutReducer";
+import { toggleHeadingReducer } from "./headingReducer";
 import authReducer from "./authReducers";
 import { reducer as formReducer } from "redux-form";
 
 export default combineReducers({
-  open: toggleDrawerReducer,
-  form:formReducer,
-  auth:authReducer
+  heading: toggleHeadingReducer,
+  form: formReducer,
+  auth: authReducer
 });

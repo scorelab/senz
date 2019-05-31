@@ -1,68 +1,43 @@
-import React, { Component } from "react";
-import classNames from "classnames";
-import { AppBar, Toolbar, IconButton, Typography } from "@material-ui/core";
+import React from "react";
 import { withStyles } from "@material-ui/core/styles";
-import MenuIcon from "@material-ui/icons/Menu";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import Logout from "./Logout";
 import { connect } from "react-redux";
-import { toggleDrawerAction } from "../../_actions/layout";
 
-const drawerWidth = 250;
+const drawerWidth = 240;
 
 const styles = theme => ({
   root: {
     display: "flex"
   },
   appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
-    })
-  },
-  appBarShift: {
-    marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen
-    })
+    marginLeft: drawerWidth,
+    backgroundColor: "#2196F3"
   },
-  menuButton: {
-    marginLeft: 12,
-    marginRight: 36
-  },
-  hide: {
-    display: "none"
+  logoutButton: {
+    marginLeft: "auto",
+    marginRight: 25
   }
 });
 
-class NavBar extends Component {
+class NavBar extends React.Component {
   render() {
     const { classes } = this.props;
     return (
-      <div className={classes.root}>
-        <AppBar
-          position="fixed"
-          className={classNames(classes.appBar, {
-            [classes.appBarShift]: this.props.open.open
-          })}
-        >
-          <Toolbar disableGutters={!this.props.open.open}>
-            <IconButton
-              color="inherit"
-              aria-label="Open drawer"
-              onClick={() => {
-                this.props.toggleDrawerAction();
-              }}
-              className={classNames(classes.menuButton, {
-                [classes.hide]: this.props.open.open
-              })}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" color="inherit" noWrap>
-              SenZ
+      <div>
+        <CssBaseline />
+        <AppBar position="fixed" className={classes.appBar}>
+          <Toolbar>
+            <Typography variant="h6" noWrap>
+              {this.props.heading}
             </Typography>
+            <div className={classes.logoutButton}>
+              <Logout />
+            </div>
           </Toolbar>
         </AppBar>
       </div>
@@ -71,10 +46,9 @@ class NavBar extends Component {
 }
 
 const MapStateToProp = state => {
-  return { open: state.open };
+  return { heading: state.heading.heading };
 };
 
-export default connect(
-  MapStateToProp,
-  { toggleDrawerAction }
-)(withStyles(styles, { withTheme: true })(NavBar));
+export default connect(MapStateToProp)(
+  withStyles(styles, { withTheme: true })(NavBar)
+);

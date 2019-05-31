@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import {
-    Container,
-    Typography,
-    Grid,
-    Link,
-    TextField,
-    CssBaseline,
-    Button,
-    Avatar
-} from '@material-ui/core';
+  Container,
+  Typography,
+  Grid,
+  Link,
+  TextField,
+  CssBaseline,
+  Button,
+  Avatar
+} from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 
 import { Field, reduxForm } from "redux-form";
@@ -34,7 +34,7 @@ const styles = theme => ({
   },
   form: {
     width: "80%", // Fix IE 11 issue.
-    marginTop: theme.spacing(5)
+    marginTop: theme.spacing(3)
   },
   submit: {
     margin: theme.spacing(5, 0, 2)
@@ -179,13 +179,13 @@ const passwordValid = password => {
   return password.length > 4;
 };
 
-const validate = ({ firstName, lastName, email, password,cPassword }) => {
+const validate = ({ firstName, lastName, email, password, cPassword }) => {
   const errors = {};
   if (!firstName) errors.firstName = "Not given";
   if (!lastName) errors.lastName = "Not given";
   if (!emailValid(email)) errors.email = "Email not valid";
   if (!passwordValid(password)) errors.password = "Password too short";
-  if(cPassword!==password) errors.cPassword="Password don't match"  
+  if (cPassword !== password) errors.cPassword = "Password don't match";
   return errors;
 };
 
