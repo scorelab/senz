@@ -1,14 +1,13 @@
 import React, { Component } from "react";
 import {
-    Container,
-    Typography,
-    Grid,
-    Link,
-    TextField,
-    CssBaseline,
-    Button,
-    Avatar
-} from '@material-ui/core';
+  Container,
+  Typography,
+  Grid,
+  TextField,
+  CssBaseline,
+  Button,
+  Avatar
+} from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 
 import { Field, reduxForm } from "redux-form";
@@ -77,7 +76,7 @@ class Register extends Component {
       );
     }
   };
-  submit = ({  email, password }) => {
+  submit = ({ email, password }) => {
     this.props.LoginAction({ email, password }, this.props.history);
   };
   render() {
@@ -115,7 +114,6 @@ class Register extends Component {
                   component={this.renderInput}
                 />
               </Grid>
-              
             </Grid>
             <Button
               type="submit"
@@ -126,7 +124,6 @@ class Register extends Component {
             >
               Sign In
             </Button>
-        
           </form>
         </div>
       </Container>
@@ -146,7 +143,7 @@ const passwordValid = password => {
   return password.length > 4;
 };
 
-const validate = ({ firstName, lastName, email, password,cPassword }) => {
+const validate = ({ firstName, lastName, email, password, cPassword }) => {
   const errors = {};
   if (!emailValid(email)) errors.email = "Email not valid";
   if (!passwordValid(password)) errors.password = "Password too short";

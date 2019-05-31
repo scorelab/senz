@@ -18,7 +18,7 @@ export const RegisterAction = ({ name, email, password }, history) => {
       });
       dispatch({ type: AUTHENTICATED });
       localStorage.setItem("id_token", response.data.token);
-      history.push("/secret");
+      history.push("/home");
     } catch (err) {
       dispatch({
         type: AUTHENTICATION_ERROR,
@@ -37,7 +37,7 @@ export const LoginAction = ({ email, password }, history) => {
       });
       dispatch({ type: AUTHENTICATED });
       localStorage.setItem("id_token", response.data.token);
-      history.push("/secret");
+      history.push("/home");
     } catch (err) {
       dispatch({
         type: AUTHENTICATION_ERROR,
@@ -49,7 +49,7 @@ export const LoginAction = ({ email, password }, history) => {
 
 export const LogoutAction = history => {
   localStorage.removeItem("id_token");
-  history.push("/signin");
+  history.push("/register");
   return {
     type: UNAUTHENTICATED
   };
