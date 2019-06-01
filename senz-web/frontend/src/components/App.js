@@ -14,7 +14,7 @@ class App extends Component {
           <Route path="/" exact component={authNotRequired(Register)} />
           <Route path="/register" exact component={authNotRequired(Register)} />
           <Route path="/login" exact component={authNotRequired(Login)} />
-          <Route path="/home" exact component={authRequired(Home)} />
+          <Route path="/home" exact component={Home} />
         </div>
       </BrowserRouter>
     );
