@@ -13,36 +13,26 @@ class Analytics extends Component {
         name: "device1",
         key: "2343283hsdiash7",
         date: "23-06-2019",
-        sent: 5,
-        received: 7
+        requests: [10, 2, 7, 5, 6, 9, 10, 5, 3, 5]
       },
       {
         name: "device2",
-        key: "234328sdssdiash7",
-        date: "24-06-2019",
-        sent: 2,
-        received: 1
-      },
-      {
-        name: "device3",
         key: "23432gggsdiash7",
         date: "23-06-2019",
-        sent: 3,
-        received: 1
+        requests: [8, 9, 1, 5, 4, 3, 2, 10, 12, 3]
+      },
+
+      {
+        name: "device3",
+        key: "234328sdssdiash7",
+        date: "24-06-2019",
+        requests: [15, 2, 7, 5, 6, 9, 10, 5, 3, 5]
       },
       {
         name: "device4",
         key: "2343283hsdippp7",
         date: "23-06-2019",
-        sent: 2,
-        received: 7
-      },
-      {
-        name: "device5",
-        key: "23432fdsdiash7",
-        date: "28-06-2019",
-        sent: 7,
-        received: 9
+        requests: [6, 9, 1, 5, 4, 3, 2, 10, 12, 3]
       }
     ]
   };
