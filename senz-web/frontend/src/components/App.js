@@ -7,6 +7,8 @@ import AddProject from "./project/AddProject";
 // import authRequired from "./authentication/hoc/authRequired";
 import authNotRequired from "./authentication/hoc/authNotVisible";
 import AddDevice from "./devices/AddDevice";
+import AllProject from "./project/AllProjects";
+import AllDevice from "./devices/AllDevices";
 
 class App extends Component {
   render() {
@@ -19,6 +21,8 @@ class App extends Component {
           <Route path="/home" exact component={Home} />
           <Route path="/addProject" exact component={AddProject} />
           <Route path="/addDevice" exact component={AddDevice} />
+          <Route path="/allProject" exact component={AllProject} />
+          <Route path="/allDevice" exact component={AllDevice} />
         </div>
       </BrowserRouter>
     );

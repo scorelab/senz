@@ -4,7 +4,7 @@ import { Grid, Container } from "@material-ui/core";
 import SentReceived from "./SentReceived";
 import NumDevices from "./NumDevices";
 import Info from "./Info";
-import ProjectList from "./ProjectList";
+import ProjectList from "./ProjectStat";
 import { connect } from "react-redux";
 import { toggleHeadingAction } from "../../../_actions/heading";
 
@@ -32,12 +32,7 @@ class DashBoard extends Component {
             <Grid item xs={6}>
               <NumDevices />
             </Grid>
-            <Grid item xs={6}>
-              <Info
-                firstLine="Amount of Data Sent:180 MB "
-                secondLine="Amount of Data Received:200 MB"
-              />
-            </Grid>
+            <Grid item xs={6} />
             <Grid item xs={6}>
               <Info
                 firstLine="Number of Devices Online: 10  "

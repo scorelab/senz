@@ -93,9 +93,11 @@ class SideBar extends React.Component {
             </ListItem>
             <Collapse in={this.state.popen} timeout="auto" unmountOnExit>
               <List className={classes.nestedList}>
-                <ListItem className={classes.nested} button>
-                  <ListItemText>All Projects</ListItemText>
-                </ListItem>
+                <Link to="/allProject" className={classes.links}>
+                  <ListItem className={classes.nested} button>
+                    <ListItemText>All Projects</ListItemText>
+                  </ListItem>
+                </Link>
                 <Link to="/addProject" className={classes.links}>
                   <ListItem className={classes.nested} button>
                     <ListItemText>New Project</ListItemText>
@@ -113,9 +115,11 @@ class SideBar extends React.Component {
             </ListItem>
             <Collapse in={this.state.dopen} timeout="auto" unmountOnExit>
               <List className={classes.nestedList}>
-                <ListItem className={classes.nested} button>
-                  <ListItemText>All Devices</ListItemText>
-                </ListItem>
+                <Link to="/allDevice" className={classes.links}>
+                  <ListItem className={classes.nested} button>
+                    <ListItemText>All Devices</ListItemText>
+                  </ListItem>
+                </Link>
                 <Link to="/addDevice" className={classes.links}>
                   <ListItem className={classes.nested} button>
                     <ListItemText>Register Device</ListItemText>

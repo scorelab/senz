@@ -24,6 +24,9 @@ const styles = theme => ({
     margin: theme.spacing(1),
     color: "#2196F3",
     borderColor: "#2196F3"
+  },
+  remButton: {
+    margin: theme.spacing(1)
   }
 });
 class ActionSelector extends Component {
@@ -60,6 +63,13 @@ class ActionSelector extends Component {
         </FormControl>
         <Button variant="outlined" color="primary" className={classes.button}>
           Switch
+        </Button>
+        <Button
+          color="secondary"
+          variant="outlined"
+          className={classes.remButton}
+        >
+          Remove Device
         </Button>
       </form>
     );

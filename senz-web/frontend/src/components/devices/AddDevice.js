@@ -105,7 +105,7 @@ class AddDevice extends Component {
               <br />
               <br />
               <Button color="primary" variant="outlined" type="submit">
-                Add
+                Register
               </Button>
             </form>
           </main>
@@ -115,10 +115,10 @@ class AddDevice extends Component {
   }
 }
 
-const validate = ({ name, description }) => {
+const validate = ({ name, publicKey }) => {
   const errors = {};
   if (!name) errors.name = "Required";
-  if (!description) errors.description = "Required";
+  if (!publicKey) errors.publicKey = "Required";
   return errors;
 };
 

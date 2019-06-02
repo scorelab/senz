@@ -4,7 +4,6 @@ import {
   MenuItem,
   InputLabel,
   FormControl,
-  Button,
   Paper
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
@@ -77,14 +76,6 @@ class ActionSelector extends Component {
         <div className={classes.sub}>
           <DeviceChart data={this.state.data} />
         </div>
-        <Button
-          className={classes.sub}
-          size="small"
-          color="secondary"
-          variant="outlined"
-        >
-          Remove
-        </Button>
       </Paper>
     );
   }

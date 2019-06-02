@@ -5,8 +5,7 @@ import { Doughnut } from "react-chartjs-2";
 
 const styles = theme => ({
   root: {
-    padding: theme.spacing(3, 2),
-    borderRadius: 15
+    padding: theme.spacing(3, 2)
   }
 });
 
