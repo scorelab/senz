@@ -1,113 +1,169 @@
-import React, { Component } from "react";
+import React from "react";
+import PropTypes from "prop-types";
+import clsx from "clsx";
 import { withStyles } from "@material-ui/core/styles";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-  TableHead,
-  Paper,
-  Checkbox
-} from "@material-ui/core";
-
-const StyledTableCell = withStyles(theme => ({
-  head: {
-    borderBottom: "2px solid #bbdefb",
-    color: theme.palette.common.black,
-    height: 10
-  },
-  body: {
-    fontSize: 14
-  }
-}))(TableCell);
+import TableCell from "@material-ui/core/TableCell";
+import Paper from "@material-ui/core/Paper";
+import { AutoSizer, Column, Table } from "react-virtualized";
 
 const styles = theme => ({
-  root: {
-    width: "100%",
-    marginTop: theme.spacing(3),
-    overflowX: "auto",
-    borderRadius: 15
+  flexContainer: {
+    display: "flex",
+    alignItems: "center",
+    boxSizing: "border-box"
   },
-  table: {
-    minWidth: 700
+  tableRow: {
+    cursor: "pointer"
   },
-  tableHead: {
-    fontWeight: "bold"
+  tableRowHover: {
+    "&:hover": {
+      backgroundColor: theme.palette.grey[200]
+    }
   },
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120
+  tableCell: {
+    flex: 1
+  },
+  noClick: {
+    cursor: "initial"
   }
 });
 
-class DeviceList extends Component {
-  state = {
-    devices: [
-      {
-        name: "device1",
-        key: "27y1ehwd72",
-        date: "23-05-2019",
-        status: "offline"
-      },
-      {
-        name: "device2",
-        key: "27y1essd78",
-        date: "30-05-2019",
-        status: "online"
-      },
-      {
-        name: "device3",
-        key: "27y1ehwd72",
-        date: "23-05-2019",
-        status: "online"
-      }
-    ]
+class MuiVirtualizedTable extends React.PureComponent {
+  static defaultProps = {
+    headerHeight: 48,
+    rowHeight: 48
   };
 
-  render() {
-    const { classes } = this.props;
+  getRowClassName = ({ index }) => {
+    const { classes, onRowClick } = this.props;
+
+    return clsx(classes.tableRow, classes.flexContainer, {
+      [classes.tableRowHover]: index !== -1 && onRowClick != null
+    });
+  };
+
+  cellRenderer = ({ cellData, columnIndex }) => {
+    const { columns, classes, rowHeight, onRowClick } = this.props;
     return (
-      <Paper className={classes.root}>
-        <Table className={classes.table}>
-          <TableHead>
-            <TableRow>
-              <StyledTableCell className={classes.tableHead} />
-              <StyledTableCell className={classes.tableHead}>
-                Name
-              </StyledTableCell>
-              <StyledTableCell className={classes.tableHead}>
-                Public Key
-              </StyledTableCell>
-              <StyledTableCell className={classes.tableHead}>
-                Created On
-              </StyledTableCell>
-              <StyledTableCell className={classes.tableHead}>
-                Status
-              </StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {this.state.devices.map((device, index) => {
+      <TableCell
+        component="div"
+        className={clsx(classes.tableCell, classes.flexContainer, {
+          [classes.noClick]: onRowClick == null
+        })}
+        variant="body"
+        style={{ height: rowHeight }}
+        align={
+          (columnIndex != null && columns[columnIndex].numeric) || false
+            ? "right"
+            : "left"
+        }
+      >
+        <span>{cellData}</span>
+      </TableCell>
+    );
+  };
+
+  headerRenderer = ({ label, columnIndex }) => {
+    const { headerHeight, columns, classes } = this.props;
+
+    return (
+      <TableCell
+        component="div"
+        className={clsx(
+          classes.tableCell,
+          classes.flexContainer,
+          classes.noClick
+        )}
+        variant="head"
+        style={{ height: headerHeight }}
+        align={columns[columnIndex].numeric || false ? "right" : "left"}
+      >
+        <span>{label}</span>
+      </TableCell>
+    );
+  };
+  handleClick = ({ index, rowData }) => {
+    //Update selected state and highlight
+    console.log(index, rowData);
+  };
+  render() {
+    const { classes, columns, ...tableProps } = this.props;
+    return (
+      <AutoSizer>
+        {({ height, width }) => (
+          <Table
+            height={height}
+            width={width}
+            {...tableProps}
+            rowClassName={this.getRowClassName}
+            onRowClick={this.handleClick}
+          >
+            {columns.map(({ dataKey, ...other }, index) => {
               return (
-                <TableRow key={index}>
-                  <TableCell>
-                    <Checkbox
-                      value={device.name}
-                      onChange={this.handleChange}
-                    />
-                  </TableCell>
-                  <TableCell>{device.name}</TableCell>
-                  <TableCell>{device.key}</TableCell>
-                  <TableCell>{device.date}</TableCell>
-                  <TableCell>{device.status}</TableCell>
-                </TableRow>
+                <Column
+                  key={dataKey}
+                  headerRenderer={headerProps =>
+                    this.headerRenderer({
+                      ...headerProps,
+                      columnIndex: index
+                    })
+                  }
+                  className={classes.flexContainer}
+                  cellRenderer={this.cellRenderer}
+                  dataKey={dataKey}
+                  {...other}
+                />
               );
             })}
-          </TableBody>
-        </Table>
-      </Paper>
+          </Table>
+        )}
+      </AutoSizer>
     );
   }
 }
 
-export default withStyles(styles, { withTheme: true })(DeviceList);
+MuiVirtualizedTable.propTypes = {
+  classes: PropTypes.object.isRequired,
+  columns: PropTypes.arrayOf(PropTypes.object).isRequired,
+  headerHeight: PropTypes.number,
+  onRowClick: PropTypes.func,
+  rowHeight: PropTypes.number
+};
+
+const VirtualizedTable = withStyles(styles)(MuiVirtualizedTable);
+
+function ReactVirtualizedTable(props) {
+  const rows = props.devices;
+  return (
+    <Paper style={{ height: 400, width: 800 }}>
+      <VirtualizedTable
+        rowCount={rows.length}
+        rowGetter={({ index }) => rows[index]}
+        columns={[
+          {
+            width: 200,
+            label: "Name",
+            dataKey: "name"
+          },
+          {
+            width: 200,
+            label: "Number of Devices",
+            dataKey: "key"
+          },
+          {
+            width: 200,
+            label: "Created On",
+            dataKey: "date"
+          },
+          {
+            width: 200,
+            label: "Status",
+            dataKey: "status"
+          }
+        ]}
+      />
+    </Paper>
+  );
+}
+
+export default ReactVirtualizedTable;
