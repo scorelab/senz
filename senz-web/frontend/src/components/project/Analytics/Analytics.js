@@ -27,6 +27,7 @@ class Analytics extends Component {
         key: "234328sdssdiash7",
         date: "24-06-2019",
         requests: [15, 2, 7, 5, 6, 9, 10, 5, 3, 5]
+
       },
       {
         name: "device4",

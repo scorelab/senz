@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import {
-  Select,
+ Select,
   MenuItem,
   InputLabel,
   FormControl,
@@ -77,8 +77,10 @@ class ActionSelector extends Component {
           <DeviceChart data={this.state.data} />
         </div>
       </Paper>
+
     );
   }
 }
 
 export default withStyles(styles, { withTheme: true })(ActionSelector);
+
