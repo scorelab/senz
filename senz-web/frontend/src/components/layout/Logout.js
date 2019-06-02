@@ -16,6 +16,9 @@ function SimpleMenu(props) {
   function handleLogout() {
     props.LogoutAction(props.history);
   }
+  function handleNav() {
+    props.history.push("/home");
+  }
   return (
     <div>
       <Button
@@ -31,6 +34,7 @@ function SimpleMenu(props) {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
+        <MenuItem onClick={handleNav}>Dashboard</MenuItem>
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>
     </div>

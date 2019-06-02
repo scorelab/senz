@@ -22,7 +22,8 @@ const styles = theme => ({
   },
   button: {
     margin: theme.spacing(1),
-    backgroundColor: "#2196F3"
+    color: "#2196F3",
+    borderColor: "#2196F3"
   }
 });
 class ActionSelector extends Component {
@@ -57,7 +58,7 @@ class ActionSelector extends Component {
             <MenuItem value={1}>Online</MenuItem>
           </Select>
         </FormControl>
-        <Button variant="contained" color="primary" className={classes.button}>
+        <Button variant="outlined" color="primary" className={classes.button}>
           Switch
         </Button>
       </form>

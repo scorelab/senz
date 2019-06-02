@@ -13,8 +13,6 @@ import {
   Grid
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
-import { reduxForm } from "redux-form";
-import { connect } from "react-redux";
 
 const IOSSwitch = withStyles(theme => ({
   root: {
@@ -178,8 +176,4 @@ class Form extends Component {
   }
 }
 
-const updateForm = reduxForm({
-  form: "projectUpdate"
-})(withStyles(styles, { withTheme: true })(Form));
-
-export default connect(null)(updateForm);
+export default withStyles(styles, { withTheme: true })(Form);
