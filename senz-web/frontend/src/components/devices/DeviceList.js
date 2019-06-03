@@ -83,7 +83,7 @@ class MuiVirtualizedTable extends React.PureComponent {
     );
   };
   handleClick = ({ index, rowData }) => {
-    //Update selected state and highlight
+    //Do nothing as of now
     console.log(index, rowData);
   };
   render() {
@@ -147,18 +147,20 @@ function ReactVirtualizedTable(props) {
           },
           {
             width: 200,
-            label: "Number of Devices",
-            dataKey: "key"
+            label: "Number of Sents",
+            dataKey: "sent",
+            numeric: true
+          },
+          {
+            width: 200,
+            label: "Number of Receives",
+            dataKey: "received",
+            numeric: true
           },
           {
             width: 200,
             label: "Created On",
             dataKey: "date"
-          },
-          {
-            width: 200,
-            label: "Status",
-            dataKey: "status"
           }
         ]}
       />

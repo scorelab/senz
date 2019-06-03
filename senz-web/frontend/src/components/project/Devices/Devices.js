@@ -7,7 +7,66 @@ import { connect } from "react-redux";
 import { toggleHeadingAction } from "../../../_actions/heading";
 
 class Devices extends Component {
+  state = {
+    devices: [
+      {
+        name: "device1",
+        key: "27y1ehwd72",
+        date: "23-05-2019",
+        status: "offline"
+      },
+      {
+        name: "device2",
+        key: "27y1essd78",
+        date: "30-05-2019",
+        status: "online"
+      },
+      {
+        name: "device3",
+        key: "27y1ehwd72",
+        date: "23-05-2019",
+        status: "online"
+      },
+      {
+        name: "device3",
+        key: "27y1ehwd72",
+        date: "23-05-2019",
+        status: "online"
+      },
+      {
+        name: "device3",
+        key: "27y1ehwd72",
+        date: "23-05-2019",
+        status: "online"
+      },
+      {
+        name: "device3",
+        key: "27y1ehwd72",
+        date: "23-05-2019",
+        status: "online"
+      },
+      {
+        name: "device3",
+        key: "27y1ehwd72",
+        date: "23-05-2019",
+        status: "online"
+      },
+      {
+        name: "device3",
+        key: "27y1ehwd72",
+        date: "23-05-2019",
+        status: "online"
+      },
+      {
+        name: "device3",
+        key: "27y1ehwd72",
+        date: "23-05-2019",
+        status: "online"
+      }
+    ]
+  };
   componentWillMount = () => {
+    //Fetch all devices of the project from the store
     this.props.toggleHeadingAction({ heading: "Devices" });
   };
   render() {
@@ -27,8 +86,8 @@ class Devices extends Component {
             <Grid item xs={6}>
               <ActionSelector />
             </Grid>
-            <Grid item xs={12}>
-              <DevicesList />
+            <Grid item xs={12} style={{ padding: 30 }}>
+              <DevicesList devices={this.state.devices} />
             </Grid>
           </Grid>
         </Container>

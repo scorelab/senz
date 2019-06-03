@@ -7,8 +7,7 @@ const useStyles = makeStyles(theme => ({
   root: {
     padding: theme.spacing(3, 2),
     backgroundColor: "rgba(33, 150, 243, 0.7)",
-    color: "#fafafa",
-    borderRadius: 15
+    color: "#fafafa"
   }
 }));
 

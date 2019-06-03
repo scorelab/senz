@@ -5,8 +5,7 @@ import { Paper, Typography } from "@material-ui/core";
 
 const styles = theme => ({
   root: {
-    padding: theme.spacing(3, 2),
-    borderRadius: 15
+    padding: theme.spacing(3, 2)
   }
 });
 class SentReceived extends Component {
@@ -70,7 +69,7 @@ class SentReceived extends Component {
     return (
       <Paper className={classes.root}>
         <Typography variant="h6" component="h3">
-          <b>Data Sent and Received</b>
+          <b>Monthly Data Sent and Received</b>
         </Typography>
         <br />
         <div>

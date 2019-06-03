@@ -1,119 +1,86 @@
 import React, { Component } from "react";
 import {
-  Card,
-  CardActionArea,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Button,
-  Grid,
-  Typography
+ Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
+  Paper
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
+import DeviceChart from "./DeviceChart";
+import classNames from "classnames";
 
-import { Doughnut } from "react-chartjs-2";
-
-const styles = {
-  card: {
-    width: 300,
-    height: 310,
-    borderRadius: 15
+const styles = theme => ({
+  root: {
+    display: "flex",
+    flexWrap: "wrap"
   },
-  media: {
-    height: 140,
-    padding: 10
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120
   },
-  sameLineText: {
-    display: "inline-block",
-    padding: 3
+  selectEmpty: {
+    marginTop: theme.spacing(2)
   },
   button: {
-    marginTop: -2,
-    marginLeft: 8
+    margin: theme.spacing(1),
+    backgroundColor: "#2196F3"
+  },
+  main: {
+    padding: 20
+  },
+  sub: {
+    marginTop: 15,
+    marginLeft: 300
   }
-};
-
-class Devices extends Component {
-  handleClick = key => {
-    console.log(key);
+});
+class ActionSelector extends Component {
+  state = {
+    status: 0,
+    data: this.props.devices[0].requests
   };
-  renderHelper = () => {
-    const { classes } = this.props;
-    return this.props.devices.map((device, index) => {
-      const data = {
-        labels: ["Sent", "Received"],
-        datasets: [
-          {
-            data: [device.sent, device.received],
-            backgroundColor: ["#bbdefb", "#64b5f6"],
-            hoverBackgroundColor: ["#bbdefb", "#64b5f6"]
-          }
-        ]
+  handleChange = e => {
+    this.setState(prevState => {
+      return {
+        ...prevState,
+        [e.target.name]: e.target.value,
+        data: this.props.devices[e.target.value].requests
       };
-
-      const options = {
-        responsive: true,
-        maintainAspectRatio: false,
-        legend: {
-          display: false
-        }
-      };
-
-      return (
-        <Grid item xs={4} key={index}>
-          <Card className={classes.card}>
-            <CardActionArea>
-              <CardMedia className={classes.media} src="removeWarning">
-                <Doughnut data={data} options={options} />
-              </CardMedia>
-              <CardContent>
-                <Typography variant="body1" gutterBottom>
-                  <b>Name:</b> {device.name}
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  <b>Key:</b> {device.key}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  className={classes.sameLineText}
-                  gutterBottom
-                >
-                  <b>Sent:</b> {device.sent}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  className={classes.sameLineText}
-                  gutterBottom
-                >
-                  <b>Received:</b> {device.received}
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-            <CardActions>
-              <Button
-                size="small"
-                color="secondary"
-                variant="outlined"
-                onClick={() => {
-                  this.handleClick(device.key);
-                }}
-                className={classes.button}
-              >
-                Remove
-              </Button>
-            </CardActions>
-          </Card>
-        </Grid>
-      );
     });
   };
   render() {
+    const { classes } = this.props;
+    const MenuList = this.props.devices.map((device, index) => {
+      return <MenuItem value={index}>{device.name}</MenuItem>;
+    });
     return (
-      <Grid container spacing={2}>
-        {this.renderHelper()}
-      </Grid>
+      <Paper className={classes.main}>
+        <form
+          className={classNames(classes.root, classes.sub)}
+          autoComplete="off"
+        >
+          <FormControl className={classes.formControl}>
+            <InputLabel htmlFor="Action">Device Name</InputLabel>
+            <Select
+              value={this.state.status}
+              onChange={this.handleChange}
+              inputProps={{
+                name: "status",
+                id: "Action"
+              }}
+            >
+              {MenuList}
+            </Select>
+          </FormControl>
+        </form>
+        <div className={classes.sub}>
+          <DeviceChart data={this.state.data} />
+        </div>
+      </Paper>
+
     );
   }
 }
 
-export default withStyles(styles, { withTheme: true })(Devices);
+export default withStyles(styles, { withTheme: true })(ActionSelector);
+

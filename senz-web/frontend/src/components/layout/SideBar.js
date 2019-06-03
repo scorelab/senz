@@ -9,6 +9,7 @@ import {
   Typography,
   Collapse
 } from "@material-ui/core";
+import { Link } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -39,6 +40,9 @@ const styles = theme => ({
   },
   nestedList: {
     backgroundColor: "#2d3e58"
+  },
+  links: {
+    textDecoration: "none"
   }
 });
 
@@ -89,12 +93,16 @@ class SideBar extends React.Component {
             </ListItem>
             <Collapse in={this.state.popen} timeout="auto" unmountOnExit>
               <List className={classes.nestedList}>
-                <ListItem className={classes.nested} button>
-                  <ListItemText>All Projects</ListItemText>
-                </ListItem>
-                <ListItem className={classes.nested} button>
-                  <ListItemText>New Project</ListItemText>
-                </ListItem>
+                <Link to="/allProject" className={classes.links}>
+                  <ListItem className={classes.nested} button>
+                    <ListItemText>All Projects</ListItemText>
+                  </ListItem>
+                </Link>
+                <Link to="/addProject" className={classes.links}>
+                  <ListItem className={classes.nested} button>
+                    <ListItemText>New Project</ListItemText>
+                  </ListItem>
+                </Link>
               </List>
             </Collapse>
           </List>
@@ -107,12 +115,16 @@ class SideBar extends React.Component {
             </ListItem>
             <Collapse in={this.state.dopen} timeout="auto" unmountOnExit>
               <List className={classes.nestedList}>
-                <ListItem className={classes.nested} button>
-                  <ListItemText>All Devices</ListItemText>
-                </ListItem>
-                <ListItem className={classes.nested} button>
-                  <ListItemText>New Device</ListItemText>
-                </ListItem>
+                <Link to="/allDevice" className={classes.links}>
+                  <ListItem className={classes.nested} button>
+                    <ListItemText>All Devices</ListItemText>
+                  </ListItem>
+                </Link>
+                <Link to="/addDevice" className={classes.links}>
+                  <ListItem className={classes.nested} button>
+                    <ListItemText>Register Device</ListItemText>
+                  </ListItem>
+                </Link>
               </List>
             </Collapse>
           </List>

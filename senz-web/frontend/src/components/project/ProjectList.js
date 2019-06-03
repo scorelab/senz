@@ -83,7 +83,7 @@ class MuiVirtualizedTable extends React.PureComponent {
     );
   };
   handleClick = ({ index, rowData }) => {
-    //Update selected state and highlight
+    //Navigate to the project
     console.log(index, rowData);
   };
   render() {
@@ -133,7 +133,7 @@ MuiVirtualizedTable.propTypes = {
 const VirtualizedTable = withStyles(styles)(MuiVirtualizedTable);
 
 function ReactVirtualizedTable(props) {
-  const rows = props.devices;
+  const rows = props.projects;
   return (
     <Paper style={{ height: 400, width: 800 }}>
       <VirtualizedTable
@@ -148,7 +148,8 @@ function ReactVirtualizedTable(props) {
           {
             width: 200,
             label: "Number of Devices",
-            dataKey: "key"
+            dataKey: "devices",
+            numeric: true
           },
           {
             width: 200,
