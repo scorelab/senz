@@ -1,7 +1,8 @@
 import {
   FETCH_PROJECTS,
   ADD_PROJECT,
-  SET_PROJECT
+  SET_PROJECT,
+  DELETE_PROJECT
 } from "../_actions/types/index";
 import axios from "axios";
 
@@ -43,5 +44,16 @@ export const setProjectAction = (projectId, token) => {
       }
     });
     dispatch({ type: SET_PROJECT, payload: response.data });
+  };
+};
+
+export const deleteProjectAction = (projectId, userId, token) => {
+  return async dispatch => {
+    await axios.delete(`${URL}/${userId}/delete/${projectId}`, {
+      headers: {
+        Authorization: token
+      }
+    });
+    dispatch({ type: DELETE_PROJECT, payload: projectId });
   };
 };
