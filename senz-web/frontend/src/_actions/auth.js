@@ -5,6 +5,7 @@ import {
 } from "./types/index";
 
 import axios from "axios";
+import decode from "jwt-decode";
 
 const URL = "http://localhost:8080/api";
 
@@ -16,7 +17,11 @@ export const RegisterAction = ({ name, email, password }, history) => {
         email: email,
         password: password
       });
-      dispatch({ type: AUTHENTICATED });
+      const user = {
+        ...decode(response.data.token),
+        token: response.data.token
+      };
+      dispatch({ type: AUTHENTICATED, payload: user });
       localStorage.setItem("id_token", response.data.token);
       history.push("/home");
     } catch (err) {
@@ -35,7 +40,11 @@ export const LoginAction = ({ email, password }, history) => {
         email: email,
         password: password
       });
-      dispatch({ type: AUTHENTICATED });
+      const user = {
+        ...decode(response.data.token),
+        token: response.data.token
+      };
+      dispatch({ type: AUTHENTICATED, payload: user });
       localStorage.setItem("id_token", response.data.token);
       history.push("/home");
     } catch (err) {

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import {
- Select,
+  Select,
   MenuItem,
   InputLabel,
   FormControl,
@@ -51,7 +51,11 @@ class ActionSelector extends Component {
   render() {
     const { classes } = this.props;
     const MenuList = this.props.devices.map((device, index) => {
-      return <MenuItem value={index}>{device.name}</MenuItem>;
+      return (
+        <MenuItem key={index} value={index}>
+          {device.name}
+        </MenuItem>
+      );
     });
     return (
       <Paper className={classes.main}>
@@ -77,10 +81,8 @@ class ActionSelector extends Component {
           <DeviceChart data={this.state.data} />
         </div>
       </Paper>
-
     );
   }
 }
 
 export default withStyles(styles, { withTheme: true })(ActionSelector);
-
