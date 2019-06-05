@@ -4,7 +4,6 @@ const jwtVerify = require("./verifyTokens");
 const Project = require("../models/project");
 const User = require("../models/user");
 
-
 /**
  * @api {get} project/:userid/all Get all the projects of a user
  * @apiGroup Projects
@@ -37,13 +36,12 @@ const User = require("../models/user");
  */
 //Get all the projects of a particular user
 router.get("/:userid/all", jwtVerify, (req, res) => {
-
-    User.findById(req.params.userid).populate("projects").exec((err, user) => {
-        res.json(user.projects)
-    })
-
-
-})
+  User.findById(req.params.userid)
+    .populate("projects")
+    .exec((err, user) => {
+      res.json(user.projects);
+    });
+});
 
 /**
  * @api {post} project/:userid/new Create a new project
@@ -79,19 +77,21 @@ router.get("/:userid/all", jwtVerify, (req, res) => {
  */
 //Post a new project for a particular user
 router.post("/:userid/new", jwtVerify, (req, res) => {
-    var userId = req.params.userid;
-    var projectName = req.body.name;
-    var project = {
-        name: projectName
-    };
-    User.findById(userId).then((user) => {
-        Project.create(project).then((newProject) => {
-            user.projects.push(newProject);
-            user.save();
-            res.json(newProject)
-        })
-    })
-})
+  const userId = req.params.userid;
+  const projectName = req.body.name;
+  const projectDesc = req.body.description;
+  const project = {
+    name: projectName,
+    description: projectDesc
+  };
+  User.findById(userId).then(user => {
+    Project.create(project).then(newProject => {
+      user.projects.push(newProject);
+      user.save();
+      res.json(newProject);
+    });
+  });
+});
 
 /**
  * @api {delete} project/:userId/delete/:projectId Remove a project of a user
@@ -113,18 +113,21 @@ router.post("/:userid/new", jwtVerify, (req, res) => {
  */
 //Delete a particular project of a particular user
 router.delete("/:userId/delete/:projectId", jwtVerify, (req, res) => {
-    var userId = req.params.userId;
-    var projectId = req.params.projectId;
-    User.findById(userId).then((user) => {
-        user.projects.remove(projectId);
-        console.log(user)
-        user.save().then((pr) => {
-            res.json("Deleted");
-        })
-    })
-
-
-})
-
+  const userId = req.params.userId;
+  const projectId = req.params.projectId;
+  User.findById(userId).then(user => {
+    user.projects.remove(projectId);
+    user.save().then(pr => {
+      res.json("Deleted");
+    });
+  });
+});
+//Get the detail of a particular project
+router.get("/:projectId/info", jwtVerify, (req, res) => {
+  const projectId = req.params.projectId;
+  Project.findById(projectId).then(project => {
+    res.json(project);
+  });
+});
 
 module.exports = router;
