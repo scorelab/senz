@@ -1,11 +1,18 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import { toggleHeadingAction } from "../../_actions/heading";
+import { fetchProjectAction, addProjectAction } from "../../_actions/project";
 import NavBar from "../layout/NavBar";
 import SideBar from "../layout/SideBar";
 import { withStyles } from "@material-ui/core/styles";
 import Intro from "./Intro";
-import { Paper, TextField, Button, Typography } from "@material-ui/core";
+import {
+  Paper,
+  TextField,
+  Button,
+  Typography,
+  Snackbar
+} from "@material-ui/core";
 import { reduxForm, Field } from "redux-form";
 
 const drawerWidth = 240;
@@ -23,12 +30,17 @@ const styles = theme => ({
   form: {
     padding: 50,
     border: "1px solid #9e9e9e"
+  },
+  close: {
+    padding: theme.spacing(0.5)
   }
 });
 
 class AddProject extends Component {
+  state = { done: false };
   componentWillMount = () => {
     this.props.toggleHeadingAction({ heading: "New Project" });
+    this.props.fetchProjectAction(this.props.user.id, this.props.user.token);
   };
   renderInputError = ({ error, touched }) => {
     if (error && touched) return { error: true, message: error };
@@ -62,8 +74,18 @@ class AddProject extends Component {
       );
     }
   };
-  submit = ({ name, description }) => {
+  submit = async ({ name, description }) => {
     //Project Add Action here
+    const newProject = { name: name, description: description };
+    this.props.addProjectAction(
+      newProject,
+      this.props.user.id,
+      this.props.user.token
+    );
+    this.setState({ done: true });
+  };
+  handleClose = () => {
+    this.setState({ done: false });
   };
 
   render() {
@@ -109,15 +131,36 @@ class AddProject extends Component {
             </form>
           </main>
         </Paper>
+        <Snackbar
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "left"
+          }}
+          open={this.state.done}
+          autoHideDuration={3000}
+          onClose={this.handleClose}
+          ContentProps={{
+            "aria-describedby": "message-id"
+          }}
+          message={<span id="message-id">Project Created</span>}
+        />
       </Fragment>
     );
   }
 }
 
-const validate = ({ name, description }) => {
+const validate = ({ name, description }, props) => {
   const errors = {};
   if (!name) errors.name = "Required";
   if (!description) errors.description = "Required";
+  if (
+    props.projects
+      .map((project, index) => {
+        return project.name;
+      })
+      .indexOf(name) !== -1
+  )
+    errors.name = "Already Exist";
   return errors;
 };
 
@@ -126,7 +169,13 @@ const updatedForm = reduxForm({
   validate: validate
 })(withStyles(styles, { withTheme: true })(AddProject));
 
+const MapStateToProp = state => {
+  return {
+    user: state.auth.user,
+    projects: state.project.AllProject
+  };
+};
 export default connect(
-  null,
-  { toggleHeadingAction }
+  MapStateToProp,
+  { toggleHeadingAction, fetchProjectAction, addProjectAction }
 )(updatedForm);

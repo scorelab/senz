@@ -4,6 +4,7 @@ import SideBar from "../layout/SideBar";
 import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import { toggleHeadingAction } from "../../_actions/heading";
+import { fetchProjectAction } from "../../_actions/project";
 import ProjectList from "./ProjectList";
 import Intro from "./Intro";
 
@@ -25,33 +26,27 @@ const styles = theme => ({
 });
 
 class AllProject extends Component {
-  state = {
-    projects: [
-      { name: "Project1", devices: 12, date: "23-05-2019", status: "ON" },
-      { name: "Project1", devices: 12, date: "23-05-2019", status: "ON" },
-      { name: "Project1", devices: 12, date: "23-05-2019", status: "ON" },
-      { name: "Project1", devices: 12, date: "23-05-2019", status: "ON" },
-      { name: "Project1", devices: 12, date: "23-05-2019", status: "ON" },
-      { name: "Project1", devices: 12, date: "23-05-2019", status: "ON" },
-      { name: "Project1", devices: 12, date: "23-05-2019", status: "ON" },
-      { name: "Project1", devices: 12, date: "23-05-2019", status: "ON" },
-      { name: "Project1", devices: 12, date: "23-05-2019", status: "ON" },
-      { name: "Project1", devices: 12, date: "23-05-2019", status: "ON" },
-      { name: "Project1", devices: 12, date: "23-05-2019", status: "ON" },
-      { name: "Project1", devices: 12, date: "23-05-2019", status: "ON" },
-      { name: "Project1", devices: 12, date: "23-05-2019", status: "ON" },
-      { name: "Project1", devices: 12, date: "23-05-2019", status: "ON" },
-      { name: "Project1", devices: 12, date: "23-05-2019", status: "ON" },
-      { name: "Project1", devices: 12, date: "23-05-2019", status: "ON" },
-      { name: "Project1", devices: 12, date: "23-05-2019", status: "ON" },
-      { name: "Project1", devices: 12, date: "23-05-2019", status: "ON" },
-      { name: "Project1", devices: 12, date: "23-05-2019", status: "ON" },
-      { name: "Project1", devices: 12, date: "23-05-2019", status: "ON" }
-    ]
-  };
   componentWillMount = () => {
     //Update projects from the redux store
     this.props.toggleHeadingAction({ heading: "All Projects" });
+    this.props.fetchProjectAction(this.props.user.id, this.props.user.token);
+    const modifiedProject = this.props.projects.map(project => {
+      if (project.status)
+        return {
+          ...project,
+          status: "ON",
+          devices: project.devices.length,
+          date: project.date.substr(0, 10)
+        };
+      else
+        return {
+          ...project,
+          status: "OFF",
+          devices: project.devices.length,
+          date: project.date.substr(0, 10)
+        };
+    });
+    this.setState({ projects: modifiedProject });
   };
   render() {
     const { classes } = this.props;
@@ -75,7 +70,11 @@ class AllProject extends Component {
   }
 }
 
+const MapStateToProp = state => {
+  return { projects: state.project.AllProject, user: state.auth.user };
+};
+
 export default connect(
-  null,
-  { toggleHeadingAction }
+  MapStateToProp,
+  { toggleHeadingAction, fetchProjectAction }
 )(withStyles(styles, { withTheme: true })(AllProject));
