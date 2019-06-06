@@ -40,10 +40,12 @@ const Device = require("../models/device");
  */
 //Get all the devices of a project
 router.get("/:projectId", jwtVerify, (req, res) => {
-    Project.findById(req.params.projectId).populate("devices").exec((err, project) => {
-        res.status(200).json(project.devices)
-    })
-})
+  Project.findById(req.params.projectId)
+    .populate("devices")
+    .exec((err, project) => {
+      res.status(200).json(project.devices);
+    });
+});
 
 /**
  * @api {post} device/:projectId Create a new device
@@ -82,20 +84,16 @@ router.get("/:projectId", jwtVerify, (req, res) => {
  *      "auth":false
  *    }
  */
-//Post the device for a specific project
-router.post("/:projectId", jwtVerify, (req, res) => {
-    var device = req.body;
-    var projectId = req.params.projectId;
-    Device.create(device).then((newDevice) => {
-        Project.findById(projectId).then((project) => {
-            project.devices.push(newDevice);
-            project.save();
-            res.status(200).json(newDevice)
-        })
-        newDevice.project.id = req.params.projectId;
-        newDevice.save()
+//Create a new device
+router.post("/new", jwtVerify, (req, res) => {
+  Device.create(req.body)
+    .then(createdDevice => {
+      res.json(createdDevice);
     })
-})
+    .catch(err => {
+      throw err;
+    });
+});
 
 /**
  * @api {delete} delete/:deviceId Remove a device of a project
@@ -114,18 +112,16 @@ router.post("/:projectId", jwtVerify, (req, res) => {
  * @apiErrorExample {json} Delete error
  *    HTTP/1.1 500 Internal Server Error
  */
-//Delete a particular device
+//Delete a device device
 router.delete("/delete/:deviceId", jwtVerify, (req, res) => {
-    Device.findByIdAndDelete(req.params.deviceId).then((deletedDevice) => {
-        Project.findById(deletedDevice.project.id).then((foundProject) => {
-            foundProject.devices.remove(req.params.deviceId)
-            foundProject.save().then((pr) => {
-                res.json("Deleted")
-            })
-        })
+  Device.findByIdAndDelete(req.params.deviceId).then(deletedDevice => {
+    Project.findById(deletedDevice.project.id).then(foundProject => {
+      foundProject.devices.remove(req.params.deviceId);
+      foundProject.save().then(pr => {
+        res.json("Deleted");
+      });
+    });
+  });
+});
 
-    })
-})
-
-
-module.exports = router
+module.exports = router;

@@ -3,6 +3,7 @@ const router = express.Router();
 const jwtVerify = require("./verifyTokens");
 const Project = require("../models/project");
 const User = require("../models/user");
+const Device = require("../models/device");
 
 /**
  * @api {get} project/:userid/all Get all the projects of a user
@@ -127,6 +128,45 @@ router.get("/:projectId/info", jwtVerify, (req, res) => {
   const projectId = req.params.projectId;
   Project.findById(projectId).then(project => {
     res.json(project);
+  });
+});
+//Update the status of the project
+router.put("/:projectId/status", jwtVerify, (req, res) => {
+  const projectId = req.params.projectId;
+  Project.findByIdAndUpdate(
+    projectId,
+    { $set: { status: req.body.status } },
+    { new: true }
+  )
+    .then(updatedProject => {
+      res.json(updatedProject);
+    })
+    .catch(err => {
+      throw err;
+    });
+});
+//Add a device to the project
+router.post("/:projectId/deviceAdd", jwtVerify, (req, res) => {
+  const { pubkey } = req.body;
+  const projectId = req.params.projectId;
+  Device.findOne({ pubkey }).then(foundDevice => {
+    // //Create the device
+    const { name, _id, status, pubkey } = foundDevice;
+    const device = { name, _id, status, pubkey, date: Date.now() };
+    //Find the project and push to the devices array
+    Project.findByIdAndUpdate(
+      projectId,
+      { $push: { devices: device } },
+      { new: true }
+    )
+      .then(updatedProject => {
+        foundDevice.projects.push(projectId);
+        foundDevice.save();
+        res.json(updatedProject);
+      })
+      .catch(err => {
+        throw err;
+      });
   });
 });
 

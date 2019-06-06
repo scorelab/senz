@@ -17,12 +17,9 @@ var projectSchema = new mongoose.Schema({
     type: Boolean,
     default: true
   },
-  devices: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "device"
-    }
-  ],
+  devices: {
+    type: Array
+  },
   date: {
     type: Date,
     default: Date.now
