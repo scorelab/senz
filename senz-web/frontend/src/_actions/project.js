@@ -2,7 +2,9 @@ import {
   FETCH_PROJECTS,
   ADD_PROJECT,
   SET_PROJECT,
-  DELETE_PROJECT
+  DELETE_PROJECT,
+  UPDATE_PROJECT_INFO,
+  ADD_DEVICE_PROJECT
 } from "../_actions/types/index";
 import axios from "axios";
 
@@ -55,5 +57,45 @@ export const deleteProjectAction = (projectId, userId, token) => {
       }
     });
     dispatch({ type: DELETE_PROJECT, payload: projectId });
+  };
+};
+
+export const updateProjectInfoAction = (
+  projectId,
+  token,
+  name,
+  description
+) => {
+  return async dispatch => {
+    const response = await axios.put(
+      `${URL}/${projectId}/info`,
+      {
+        name,
+        description
+      },
+      {
+        headers: {
+          Authorization: token
+        }
+      }
+    );
+    dispatch({ type: UPDATE_PROJECT_INFO, payload: response.data });
+  };
+};
+
+export const addDeviceToProjectAction = (projectId, token, pubkey) => {
+  return async dispatch => {
+    const response = await axios.post(
+      `${URL}/${projectId}/deviceAdd`,
+      {
+        pubkey
+      },
+      {
+        headers: {
+          Authorization: token
+        }
+      }
+    );
+    dispatch({ type: ADD_DEVICE_PROJECT, payload: response.data });
   };
 };

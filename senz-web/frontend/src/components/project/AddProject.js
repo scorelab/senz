@@ -47,6 +47,7 @@ class AddProject extends Component {
     else return { error: false, message: "" };
   };
   renderInput = ({ input, label, margin, fullWidth, variant, meta }) => {
+    //Fix double clicking of button
     const { error, message } = this.renderInputError(meta);
     if (error) {
       return (
@@ -125,7 +126,12 @@ class AddProject extends Component {
               />
               <br />
               <br />
-              <Button color="primary" variant="outlined" type="submit">
+              <Button
+                color="primary"
+                variant="outlined"
+                type="submit"
+                disabled={this.state.done}
+              >
                 Add
               </Button>
             </form>
@@ -155,7 +161,7 @@ const validate = ({ name, description }, props) => {
   if (!description) errors.description = "Required";
   if (
     props.projects
-      .map((project, index) => {
+      .map(project => {
         return project.name;
       })
       .indexOf(name) !== -1

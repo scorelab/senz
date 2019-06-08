@@ -4,6 +4,7 @@ import SideBar from "../layout/SideBar";
 import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import { toggleHeadingAction } from "../../_actions/heading";
+import { fetchAllDeviceAction } from "../../_actions/device";
 import DeviceList from "./DeviceList";
 import Intro from "../project/Intro";
 
@@ -25,32 +26,14 @@ const styles = theme => ({
 });
 
 class AllDevice extends Component {
-  state = {
-    devices: [
-      { name: "device1", sent: 20, received: 10, date: "23-09-2019" },
-      { name: "device1", sent: 20, received: 10, date: "23-09-2019" },
-      { name: "device1", sent: 20, received: 10, date: "23-09-2019" },
-      { name: "device1", sent: 20, received: 10, date: "23-09-2019" },
-      { name: "device1", sent: 20, received: 10, date: "23-09-2019" },
-      { name: "device1", sent: 20, received: 10, date: "23-09-2019" },
-      { name: "device1", sent: 20, received: 10, date: "23-09-2019" },
-      { name: "device1", sent: 20, received: 10, date: "23-09-2019" },
-      { name: "device1", sent: 20, received: 10, date: "23-09-2019" },
-      { name: "device1", sent: 20, received: 10, date: "23-09-2019" },
-      { name: "device1", sent: 20, received: 10, date: "23-09-2019" },
-      { name: "device1", sent: 20, received: 10, date: "23-09-2019" },
-      { name: "device1", sent: 20, received: 10, date: "23-09-2019" },
-      { name: "device1", sent: 20, received: 10, date: "23-09-2019" },
-      { name: "device1", sent: 20, received: 10, date: "23-09-2019" },
-      { name: "device1", sent: 20, received: 10, date: "23-09-2019" },
-      { name: "device1", sent: 20, received: 10, date: "23-09-2019" },
-      { name: "device1", sent: 20, received: 10, date: "23-09-2019" },
-      { name: "device1", sent: 20, received: 10, date: "23-09-2019" }
-    ]
-  };
+  state = {};
   componentWillMount = () => {
     //Update devices from the redux store
     this.props.toggleHeadingAction({ heading: "All Devices" });
+    this.props.fetchAllDeviceAction(this.props.user.token);
+    this.setState({
+      devices: this.props.devices
+    });
   };
   render() {
     const { classes } = this.props;
@@ -74,7 +57,14 @@ class AllDevice extends Component {
   }
 }
 
+const MapStateToProp = state => {
+  return {
+    user: state.auth.user,
+    devices: state.device.AllDevices
+  };
+};
+
 export default connect(
-  null,
-  { toggleHeadingAction }
+  MapStateToProp,
+  { toggleHeadingAction, fetchAllDeviceAction }
 )(withStyles(styles, { withTheme: true })(AllDevice));

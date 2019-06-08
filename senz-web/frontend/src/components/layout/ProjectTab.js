@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import _ from "lodash";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
@@ -9,6 +10,7 @@ import DashBoard from "../project/DashBoard/DashBoard";
 import Devices from "../project/Devices/Devices";
 import Analytics from "../project/Analytics/Analytics";
 import Settings from "../project/Settings/Settings";
+import { connect } from "react-redux";
 
 function TabContainer(props) {
   return (
@@ -29,14 +31,17 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function SimpleTabs() {
+function SimpleTabs(props) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
   function handleChange(event, newValue) {
     setValue(newValue);
   }
-
+  const project = props.project;
+  if (_.isEmpty(project)) {
+    return <div>Select a Project</div>;
+  }
   return (
     <div className={classes.root}>
       <AppBar position="static" style={{ backgroundColor: "#2196F3" }}>
@@ -71,4 +76,10 @@ function SimpleTabs() {
   );
 }
 
-export default SimpleTabs;
+const MapStateToProp = state => {
+  return {
+    project: state.project.SelectedProject
+  };
+};
+
+export default connect(MapStateToProp)(SimpleTabs);
