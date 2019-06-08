@@ -9,6 +9,9 @@ import {
 } from "../_actions/types/index";
 export const projectReducers = (
   state = { AllProject: [], SelectedProject: {} },
+
+export const fetchProjectReducer = (
+  state = { AllProject: [], SelectedProject: null },
   action
 ) => {
   switch (action.type) {

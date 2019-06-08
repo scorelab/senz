@@ -5,6 +5,7 @@ import {
   DELETE_PROJECT,
   UPDATE_PROJECT_INFO,
   ADD_DEVICE_PROJECT
+  DELETE_PROJECT
 } from "../_actions/types/index";
 import axios from "axios";
 
