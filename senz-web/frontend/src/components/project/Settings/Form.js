@@ -12,8 +12,13 @@ import {
   FormControlLabel,
   Grid
 } from "@material-ui/core";
+import {
+  updateProjectInfoAction,
+  addDeviceToProjectAction
+} from "../../../_actions/project";
 import { withStyles } from "@material-ui/core/styles";
-
+import { connect } from "react-redux";
+import { reduxForm, Field } from "redux-form";
 
 const IOSSwitch = withStyles(theme => ({
   root: {
@@ -85,12 +90,58 @@ const styles = theme => ({
   }
 });
 
-//WON'T STORE DATA IN STORE
-
 class Form extends Component {
-  state = { checkedB: true };
+  state = {
+    checkedB: true,
+    name: this.props.project.name,
+    description: this.props.project.description
+  };
   handleChange = name => event => {
     this.setState({ ...this.state, [name]: event.target.checked });
+  };
+  handleChangeInfo = e => {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  };
+  handleClickInfo = () => {
+    const { name, description } = this.state;
+    this.props.updateProjectInfoAction(
+      this.props.project._id,
+      this.props.user.token,
+      name,
+      description
+    );
+  };
+  renderInputError = ({ error, touched }) => {
+    if (error && touched) return { error: true, message: error };
+    else return { error: false, message: "" };
+  };
+  renderPublicKeyInput = ({ input, label, variant, margin, type, meta }) => {
+    const { error, message } = this.renderInputError(meta);
+    if (error) {
+      return (
+        <TextField
+          {...input}
+          label={message}
+          variant={variant}
+          margin={margin}
+          type={type}
+          error
+        />
+      );
+    } else {
+      return (
+        <TextField
+          {...input}
+          label={label}
+          variant={variant}
+          margin={margin}
+          required
+          type={type}
+        />
+      );
+    }
   };
   render() {
     const { classes } = this.props;
@@ -104,20 +155,28 @@ class Form extends Component {
               <Divider />
               <div className={classes.subHead}>
                 <TextField
+                  name="name"
                   variant="outlined"
                   label="Name"
                   margin="normal"
-                  defaultValue="Project-1" //Update Project Name
+                  value={this.state.name}
+                  onChange={this.handleChangeInfo}
                 />
                 <TextField
+                  name="description"
                   variant="outlined"
                   label="Description"
                   margin="normal"
-                  defaultValue="Project Description" //Update Project Description
+                  value={this.state.description}
+                  onChange={this.handleChangeInfo}
                   fullWidth
                 />
                 <br />
-                <Button color="primary" variant="outlined">
+                <Button
+                  color="primary"
+                  variant="outlined"
+                  onClick={this.handleClickInfo}
+                >
                   Update
                 </Button>
               </div>
@@ -126,16 +185,21 @@ class Form extends Component {
               <Typography variant="h6">Devices Detail</Typography>
               <Divider />
               <div className={classes.subHead}>
-                <TextField
-                  variant="outlined"
-                  label="Public Key"
-                  margin="normal"
-                />
-                <br />
+                <form>
+                  <Field
+                    name="pubkey"
+                    variant="outlined"
+                    label="Public Key"
+                    margin="normal"
+                    component={this.renderPublicKeyInput}
+                    type="text"
+                  />
+                  <br />
 
-                <Button color="primary" variant="outlined">
-                  Add Device
-                </Button>
+                  <Button color="primary" variant="outlined">
+                    Add Device
+                  </Button>
+                </form>
               </div>
             </div>
             <div className={classes.subSection}>
@@ -177,5 +241,26 @@ class Form extends Component {
   }
 }
 
-export default withStyles(styles, { withTheme: true })(Form);
+const MapStateToProp = state => {
+  return {
+    project: state.project.SelectedProject,
+    user: state.auth.user
+  };
+};
+const validate = ({ pubkey }, props) => {
+  const errors = {};
+  if (props.project.devices.indexOf(pubkey) !== -1) {
+    errors.pubkey = "Already exists";
+  } //DO THIS AFTER DOING ALL DEVICES
+  return errors;
+};
 
+const updatedComponent = reduxForm({
+  form: "addDevice",
+  validate: validate
+})(withStyles(styles, { withTheme: true })(Form));
+
+export default connect(
+  MapStateToProp,
+  { updateProjectInfoAction, addDeviceToProjectAction }
+)(updatedComponent);

@@ -147,7 +147,7 @@ function ReactVirtualizedTable(props) {
           },
           {
             width: 200,
-            label: "Number of Devices",
+            label: "Public Key",
             dataKey: "key"
           },
           {

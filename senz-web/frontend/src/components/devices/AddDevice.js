@@ -7,6 +7,7 @@ import { withStyles } from "@material-ui/core/styles";
 import Intro from "../project/Intro";
 import { Paper, TextField, Button, Typography } from "@material-ui/core";
 import { reduxForm, Field } from "redux-form";
+import { addDeviceAction } from "../../_actions/device";
 
 const drawerWidth = 240;
 const styles = theme => ({
@@ -63,7 +64,7 @@ class AddDevice extends Component {
     }
   };
   submit = ({ name, publicKey }) => {
-    //Project Add Action here
+    this.props.addDeviceAction(name, publicKey, this.props.user.token);
     console.log(name, publicKey);
   };
 
@@ -127,7 +128,11 @@ const updatedForm = reduxForm({
   validate: validate
 })(withStyles(styles, { withTheme: true })(AddDevice));
 
+const MapStateToProp = state => {
+  return { user: state.auth.user };
+};
+
 export default connect(
-  null,
-  { toggleHeadingAction }
+  MapStateToProp,
+  { toggleHeadingAction, addDeviceAction }
 )(updatedForm);

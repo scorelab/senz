@@ -13,7 +13,7 @@ import Register from "./authentication/Register";
 import Login from "./authentication/Login";
 import Home from "./Home";
 import AddProject from "./project/AddProject";
-// import authRequired from "./authentication/hoc/authRequired";
+//import authRequired from "./authentication/hoc/authRequired";
 import authNotRequired from "./authentication/hoc/authNotVisible";
 import AddDevice from "./devices/AddDevice";
 import AllProject from "./project/AllProjects";
