@@ -1,7 +1,8 @@
 import {
   AUTHENTICATED,
   UNAUTHENTICATED,
-  AUTHENTICATION_ERROR
+  AUTHENTICATION_ERROR,
+  CLEAR_ALL
 } from "./types/index";
 
 import axios from "axios";
@@ -59,7 +60,8 @@ export const LoginAction = ({ email, password }, history) => {
 export const LogoutAction = history => {
   localStorage.removeItem("id_token");
   history.push("/register");
-  return {
-    type: UNAUTHENTICATED
+  return async dispatch => {
+    dispatch({ type: UNAUTHENTICATED });
+    dispatch({ type: CLEAR_ALL });
   };
 };
