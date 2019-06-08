@@ -169,5 +169,21 @@ router.post("/:projectId/deviceAdd", jwtVerify, (req, res) => {
       });
   });
 });
-
+//Update the information of the project
+router.put("/:projectId/info", (req, res) => {
+  const projectId = req.params.projectId;
+  Project.findByIdAndUpdate(
+    projectId,
+    {
+      $set: { name: req.body.name, description: req.body.description }
+    },
+    { new: true }
+  )
+    .then(updatedProject => {
+      res.json(updatedProject);
+    })
+    .catch(err => {
+      throw err;
+    });
+});
 module.exports = router;
