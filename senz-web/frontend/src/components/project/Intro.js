@@ -7,7 +7,8 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(3, 2)
   },
   divider: {
-    height: 2
+    height: 2,
+    backgroundColor: "#23344e"
   }
 }));
 

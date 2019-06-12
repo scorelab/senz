@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 import { toggleHeadingAction } from "../../../_actions/heading";
 import Devices from "./Devices";
 import Intro from "../Intro";
+
+//TODO: fetch the SelectedProject stats and update states
 class Analytics extends Component {
   componentWillMount = () => {
     this.props.toggleHeadingAction({ heading: "Analytics" });
@@ -27,7 +29,6 @@ class Analytics extends Component {
         key: "234328sdssdiash7",
         date: "24-06-2019",
         requests: [15, 2, 7, 5, 6, 9, 10, 5, 3, 5]
-
       },
       {
         name: "device4",

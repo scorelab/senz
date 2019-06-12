@@ -7,10 +7,12 @@ import {
   ListItemText,
   Divider,
   Typography,
-  Collapse
+  Collapse,
+  ListItemIcon
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
-
+import { Folder, Storage, Person, Help, People } from "@material-ui/icons";
+//TODO: style the sidebar
 const drawerWidth = 240;
 
 const styles = theme => ({
@@ -43,6 +45,19 @@ const styles = theme => ({
   },
   links: {
     textDecoration: "none"
+  },
+  topsection: {
+    // backgroundImage: "url(" + backgroundImg + ")",
+    backgroundColor: "#2d3e58",
+    padding: 30,
+    paddingLeft: 80
+  },
+  iconSection: {
+    color: "#fafafa",
+    display: "inline"
+  },
+  item: {
+    textAlign: "center"
   }
 });
 
@@ -82,11 +97,17 @@ class SideBar extends React.Component {
           }}
           anchor="left"
         >
-          <div className={classes.toolbar} />
-
+          <div>
+            <Typography variant="h5" className={classes.topsection}>
+              SenZ
+            </Typography>
+          </div>
           <Divider className={classes.divider} />
           <List>
             <ListItem button onClick={this.handlePClick}>
+              <ListItemIcon>
+                <Folder className={classes.iconSection} />
+              </ListItemIcon>
               <ListItemText
                 primary={<Typography variant="subtitle1">Projects</Typography>}
               />
@@ -106,9 +127,11 @@ class SideBar extends React.Component {
               </List>
             </Collapse>
           </List>
-          <Divider className={classes.divider} />
           <List>
             <ListItem button onClick={this.handleDClick}>
+              <ListItemIcon>
+                <Storage className={classes.iconSection} />
+              </ListItemIcon>
               <ListItemText
                 primary={<Typography variant="subtitle1">Devices</Typography>}
               />
@@ -128,52 +151,69 @@ class SideBar extends React.Component {
               </List>
             </Collapse>
           </List>
-          <Divider className={classes.divider} />
           <List>
             <ListItem button onClick={this.handleUClick}>
+              <ListItemIcon>
+                <Person className={classes.iconSection} />
+              </ListItemIcon>
               <ListItemText
                 primary={<Typography variant="subtitle1">Profile</Typography>}
               />
             </ListItem>
             <Collapse in={this.state.uopen} timeout="auto" unmountOnExit>
               <List className={classes.nestedList}>
-                <ListItem className={classes.nested} button>
-                  <ListItemText>Edit Profile</ListItemText>
-                </ListItem>
+                <Link to="/editProfile" className={classes.links}>
+                  <ListItem className={classes.nested} button>
+                    <ListItemText>Edit Profile</ListItemText>
+                  </ListItem>
+                </Link>
               </List>
             </Collapse>
           </List>
-          <Divider className={classes.divider} />
           <List>
             <ListItem button onClick={this.handleHClick}>
+              <ListItemIcon>
+                <Help className={classes.iconSection} />
+              </ListItemIcon>
               <ListItemText
                 primary={<Typography variant="subtitle1">Help</Typography>}
               />
             </ListItem>
             <Collapse in={this.state.hopen} timeout="auto" unmountOnExit>
               <List className={classes.nestedList}>
-                <ListItem className={classes.nested} button>
-                  <ListItemText>Documentation</ListItemText>
-                </ListItem>
+                <a
+                  href="https://github.com/scorelab/senz"
+                  className={classes.links}
+                >
+                  <ListItem className={classes.nested} button>
+                    <ListItemText>Documentation</ListItemText>
+                  </ListItem>
+                </a>
               </List>
             </Collapse>
           </List>
-          <Divider className={classes.divider} />
           <List>
             <ListItem button onClick={this.handleAClick}>
+              <ListItemIcon>
+                <People className={classes.iconSection} />
+              </ListItemIcon>
               <ListItemText
                 primary={<Typography variant="subtitle1">About</Typography>}
               />
             </ListItem>
             <Collapse in={this.state.aopen} timeout="auto" unmountOnExit>
               <List className={classes.nestedList}>
-                <ListItem className={classes.nested} button>
-                  <ListItemText>Contact Us</ListItemText>
-                </ListItem>
+                <a
+                  href="https://gitter.im/scorelab/senz"
+                  className={classes.links}
+                >
+                  <ListItem className={classes.nested} button>
+                    <ListItemText>Contact Us</ListItemText>
+                  </ListItem>
+                </a>
               </List>
             </Collapse>
           </List>
-          <Divider className={classes.divider} />
         </Drawer>
       </div>
     );

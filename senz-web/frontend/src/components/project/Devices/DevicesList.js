@@ -4,8 +4,10 @@ import clsx from "clsx";
 import { withStyles } from "@material-ui/core/styles";
 import TableCell from "@material-ui/core/TableCell";
 import Paper from "@material-ui/core/Paper";
+import Checkbox from "@material-ui/core/Checkbox";
 import { AutoSizer, Column, Table } from "react-virtualized";
 
+//TODO: solve duplicate rows bug
 const styles = theme => ({
   flexContainer: {
     display: "flex",
@@ -25,6 +27,10 @@ const styles = theme => ({
   },
   noClick: {
     cursor: "initial"
+  },
+  header: {
+    backgroundColor: "#23344e",
+    color: "#fafafa"
   }
 });
 
@@ -41,26 +47,53 @@ class MuiVirtualizedTable extends React.PureComponent {
       [classes.tableRowHover]: index !== -1 && onRowClick != null
     });
   };
-
   cellRenderer = ({ cellData, columnIndex }) => {
     const { columns, classes, rowHeight, onRowClick } = this.props;
-    return (
-      <TableCell
-        component="div"
-        className={clsx(classes.tableCell, classes.flexContainer, {
-          [classes.noClick]: onRowClick == null
-        })}
-        variant="body"
-        style={{ height: rowHeight }}
-        align={
-          (columnIndex != null && columns[columnIndex].numeric) || false
-            ? "right"
-            : "left"
-        }
-      >
-        <span>{cellData}</span>
-      </TableCell>
-    );
+
+    if (columnIndex === 0) {
+      return (
+        <TableCell
+          component="div"
+          className={clsx(classes.tableCell, classes.flexContainer, {
+            [classes.noClick]: onRowClick == null
+          })}
+          variant="body"
+          style={{ height: rowHeight }}
+          align={
+            (columnIndex != null && columns[columnIndex].numeric) || false
+              ? "right"
+              : "left"
+          }
+        >
+          <span>{cellData}</span>
+          <Checkbox
+            value="checkedA"
+            inputProps={{
+              "aria-label": "primary checkbox"
+            }}
+            onChange={this.props.handleCheck(cellData)}
+          />
+        </TableCell>
+      );
+    } else {
+      return (
+        <TableCell
+          component="div"
+          className={clsx(classes.tableCell, classes.flexContainer, {
+            [classes.noClick]: onRowClick == null
+          })}
+          variant="body"
+          style={{ height: rowHeight }}
+          align={
+            (columnIndex != null && columns[columnIndex].numeric) || false
+              ? "right"
+              : "left"
+          }
+        >
+          <span>{cellData}</span>
+        </TableCell>
+      );
+    }
   };
 
   headerRenderer = ({ label, columnIndex }) => {
@@ -72,7 +105,8 @@ class MuiVirtualizedTable extends React.PureComponent {
         className={clsx(
           classes.tableCell,
           classes.flexContainer,
-          classes.noClick
+          classes.noClick,
+          classes.header
         )}
         variant="head"
         style={{ height: headerHeight }}
@@ -82,10 +116,7 @@ class MuiVirtualizedTable extends React.PureComponent {
       </TableCell>
     );
   };
-  handleClick = ({ index, rowData }) => {
-    //Update selected state and highlight
-    console.log(index, rowData);
-  };
+
   render() {
     const { classes, columns, ...tableProps } = this.props;
     return (
@@ -96,7 +127,6 @@ class MuiVirtualizedTable extends React.PureComponent {
             width={width}
             {...tableProps}
             rowClassName={this.getRowClassName}
-            onRowClick={this.handleClick}
           >
             {columns.map(({ dataKey, ...other }, index) => {
               return (
@@ -139,7 +169,13 @@ function ReactVirtualizedTable(props) {
       <VirtualizedTable
         rowCount={rows.length}
         rowGetter={({ index }) => rows[index]}
+        handleCheck={props.handleCheck}
         columns={[
+          {
+            width: 100,
+            dataKey: "index",
+            type: Number
+          },
           {
             width: 200,
             label: "Name",
@@ -148,11 +184,11 @@ function ReactVirtualizedTable(props) {
           {
             width: 200,
             label: "Public Key",
-            dataKey: "key"
+            dataKey: "pubkey"
           },
           {
             width: 200,
-            label: "Created On",
+            label: "Added On",
             dataKey: "date"
           },
           {

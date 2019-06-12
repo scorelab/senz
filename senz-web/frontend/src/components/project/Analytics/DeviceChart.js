@@ -32,7 +32,7 @@ const DeviceChart = props => {
   };
   const options = {
     responsive: true,
-    maintainAspectRatio: true,
+    maintainAspectRatio: false,
     legend: {
       display: false
     }

@@ -7,7 +7,8 @@ import { withStyles } from "@material-ui/core/styles";
 import Intro from "../project/Intro";
 import { Paper, TextField, Button, Typography } from "@material-ui/core";
 import { reduxForm, Field } from "redux-form";
-import { addDeviceAction } from "../../_actions/device";
+import { addDeviceAction, fetchAllDeviceAction } from "../../_actions/device";
+import Notifier from "../Notifier";
 
 const drawerWidth = 240;
 const styles = theme => ({
@@ -28,7 +29,9 @@ const styles = theme => ({
 });
 
 class AddDevice extends Component {
+  state = { done: false };
   componentWillMount = () => {
+    this.props.fetchAllDeviceAction(this.props.user.id, this.props.user.token);
     this.props.toggleHeadingAction({ heading: "Register Device" });
   };
   renderInputError = ({ error, touched }) => {
@@ -64,10 +67,17 @@ class AddDevice extends Component {
     }
   };
   submit = ({ name, publicKey }) => {
-    this.props.addDeviceAction(name, publicKey, this.props.user.token);
-    console.log(name, publicKey);
+    this.props.addDeviceAction(
+      name,
+      publicKey,
+      this.props.user.token,
+      this.props.user.id
+    );
+    this.setState({ done: true });
   };
-
+  handleClose = () => {
+    this.setState({ done: false });
+  };
   render() {
     const { classes } = this.props;
     return (
@@ -105,21 +115,35 @@ class AddDevice extends Component {
               />
               <br />
               <br />
-              <Button color="primary" variant="outlined" type="submit">
+              <Button
+                color="primary"
+                variant="outlined"
+                type="submit"
+                disabled={this.state.done}
+              >
                 Register
               </Button>
             </form>
           </main>
         </Paper>
+        <Notifier
+          done={this.state.done}
+          message="Device Registered"
+          handleClose={this.handleClose}
+        />
       </Fragment>
     );
   }
 }
 
-const validate = ({ name, publicKey }) => {
+const validate = ({ name, publicKey }, prop) => {
   const errors = {};
   if (!name) errors.name = "Required";
   if (!publicKey) errors.publicKey = "Required";
+  const pubKeyAll = prop.devices.map(device => {
+    return device.pubkey;
+  });
+  if (pubKeyAll.indexOf(publicKey) !== -1) errors.publicKey = "Already Exists";
   return errors;
 };
 
@@ -129,10 +153,10 @@ const updatedForm = reduxForm({
 })(withStyles(styles, { withTheme: true })(AddDevice));
 
 const MapStateToProp = state => {
-  return { user: state.auth.user };
+  return { user: state.auth.user, devices: state.device.AllDevices };
 };
 
 export default connect(
   MapStateToProp,
-  { toggleHeadingAction, addDeviceAction }
+  { toggleHeadingAction, addDeviceAction, fetchAllDeviceAction }
 )(updatedForm);

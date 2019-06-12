@@ -18,7 +18,9 @@ import authNotRequired from "./authentication/hoc/authNotVisible";
 import AddDevice from "./devices/AddDevice";
 import AllProject from "./project/AllProjects";
 import AllDevice from "./devices/AllDevices";
+import EditProfile from "./profile/EditProfile";
 
+//TODO: Update all note cards
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const persistConfig = {
@@ -53,6 +55,7 @@ class App extends Component {
               <Route path="/addDevice" exact component={AddDevice} />
               <Route path="/allProject" exact component={AllProject} />
               <Route path="/allDevice" exact component={AllDevice} />
+              <Route path="/editProfile" exact component={EditProfile} />
             </div>
           </BrowserRouter>
         </PersistGate>

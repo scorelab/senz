@@ -14,11 +14,15 @@ import {
 } from "@material-ui/core";
 import {
   updateProjectInfoAction,
-  addDeviceToProjectAction
+  addDeviceToProjectAction,
+  deleteProjectAction,
+  switchProjectStatus
 } from "../../../_actions/project";
 import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import { reduxForm, Field } from "redux-form";
+import Notifier from "../../Notifier";
+//TODO: Solve switch bug
 
 const IOSSwitch = withStyles(theme => ({
   root: {
@@ -94,10 +98,25 @@ class Form extends Component {
   state = {
     checkedB: true,
     name: this.props.project.name,
-    description: this.props.project.description
+    description: this.props.project.description,
+    added: false,
+    updated: false,
+    switch: false
+  };
+  handleClose = name => event => {
+    this.setState({ [name]: false });
   };
   handleChange = name => event => {
-    this.setState({ ...this.state, [name]: event.target.checked });
+    this.setState({
+      ...this.state,
+      [name]: event.target.checked,
+      switch: true
+    });
+    this.props.switchProjectStatus(
+      this.props.project._id,
+      !this.state.checkedB,
+      this.props.user.token
+    );
   };
   handleChangeInfo = e => {
     this.setState({
@@ -106,6 +125,7 @@ class Form extends Component {
   };
   handleClickInfo = () => {
     const { name, description } = this.state;
+    this.setState({ updated: true });
     this.props.updateProjectInfoAction(
       this.props.project._id,
       this.props.user.token,
@@ -143,6 +163,18 @@ class Form extends Component {
       );
     }
   };
+  handlePubKeySubmit = ({ pubkey }) => {
+    this.props.addDeviceToProjectAction(
+      this.props.project._id,
+      this.props.user.token,
+      pubkey
+    );
+    this.setState({ added: true });
+  };
+  handleDelete = () => {
+    const { project, user } = this.props;
+    this.props.deleteProjectAction(project._id, user.id, user.token);
+  };
   render() {
     const { classes } = this.props;
     return (
@@ -176,6 +208,7 @@ class Form extends Component {
                   color="primary"
                   variant="outlined"
                   onClick={this.handleClickInfo}
+                  disabled={this.state.updated}
                 >
                   Update
                 </Button>
@@ -185,7 +218,9 @@ class Form extends Component {
               <Typography variant="h6">Devices Detail</Typography>
               <Divider />
               <div className={classes.subHead}>
-                <form>
+                <form
+                  onSubmit={this.props.handleSubmit(this.handlePubKeySubmit)}
+                >
                   <Field
                     name="pubkey"
                     variant="outlined"
@@ -196,7 +231,12 @@ class Form extends Component {
                   />
                   <br />
 
-                  <Button color="primary" variant="outlined">
+                  <Button
+                    color="primary"
+                    disabled={this.state.added}
+                    variant="outlined"
+                    type="submit"
+                  >
                     Add Device
                   </Button>
                 </form>
@@ -229,13 +269,33 @@ class Form extends Component {
                     <Grid item>On</Grid>
                   </Grid>
                 </FormGroup>
-                <Button size="small" color="secondary" variant="outlined">
+                <Button
+                  size="small"
+                  color="secondary"
+                  variant="outlined"
+                  onClick={this.handleDelete}
+                >
                   Delete Project
                 </Button>
               </div>
             </div>
           </div>
         </Paper>
+        <Notifier
+          message="Device Added"
+          done={this.state.added}
+          handleClose={this.handleClose("added")}
+        />
+        <Notifier
+          message="Details Updated"
+          done={this.state.updated}
+          handleClose={this.handleClose("updated")}
+        />
+        <Notifier
+          message="Project Switched"
+          done={this.state.switch}
+          handleClose={this.handleClose("switch")}
+        />
       </Container>
     );
   }
@@ -244,14 +304,20 @@ class Form extends Component {
 const MapStateToProp = state => {
   return {
     project: state.project.SelectedProject,
+    devices: state.device.AllDevices,
     user: state.auth.user
   };
 };
 const validate = ({ pubkey }, props) => {
   const errors = {};
-  if (props.project.devices.indexOf(pubkey) !== -1) {
-    errors.pubkey = "Already exists";
-  } //DO THIS AFTER DOING ALL DEVICES
+  const projectDevices = props.project.devices.map(device => {
+    return device.pubkey;
+  });
+  const allDeviceKey = props.devices.map(device => {
+    return device.pubkey;
+  });
+  if (projectDevices.indexOf(pubkey) !== -1) errors.pubkey = "Already Added";
+  if (allDeviceKey.indexOf(pubkey) === -1) errors.pubkey = "Not found";
   return errors;
 };
 
@@ -262,5 +328,10 @@ const updatedComponent = reduxForm({
 
 export default connect(
   MapStateToProp,
-  { updateProjectInfoAction, addDeviceToProjectAction }
+  {
+    updateProjectInfoAction,
+    addDeviceToProjectAction,
+    deleteProjectAction,
+    switchProjectStatus
+  }
 )(updatedComponent);

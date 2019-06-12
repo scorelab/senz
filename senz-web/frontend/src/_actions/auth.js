@@ -2,6 +2,7 @@ import {
   AUTHENTICATED,
   UNAUTHENTICATED,
   AUTHENTICATION_ERROR,
+  UPDATE_USER,
   CLEAR_ALL
 } from "./types/index";
 
@@ -63,5 +64,30 @@ export const LogoutAction = history => {
   return async dispatch => {
     dispatch({ type: UNAUTHENTICATED });
     dispatch({ type: CLEAR_ALL });
+  };
+};
+
+export const updateUserData = (
+  userId,
+  token,
+  name,
+  oldPassword,
+  newPassword
+) => {
+  return async dispatch => {
+    const response = await axios.put(
+      `${URL}/${userId}/update`,
+      {
+        name,
+        oldPassword,
+        newPassword
+      },
+      {
+        headers: {
+          Authorization: token
+        }
+      }
+    );
+    dispatch({ type: UPDATE_USER, payload: response.data });
   };
 };

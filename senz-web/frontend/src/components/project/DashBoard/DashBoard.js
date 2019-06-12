@@ -3,6 +3,7 @@ import Intro from "../Intro";
 import { Grid, Container } from "@material-ui/core";
 import SentReceived from "./SentReceived";
 import NumDevices from "./NumDevices";
+import HourReport from "./24HourReport";
 import Info from "./Info";
 import ProjectList from "./ProjectStat";
 import { connect } from "react-redux";
@@ -27,28 +28,27 @@ class DashBoard extends Component {
         <Container maxWidth="md">
           <Grid container spacing={1}>
             <Grid item xs={6}>
+              <ProjectList />
+            </Grid>
+            <Grid item xs={6}>
+              <Info
+                firstLine="Number of Devices Online: 10  "
+                secondLine="Number of Devices Offline: 4"
+                heading="Device Details"
+              />
+            </Grid>
+            <Grid item xs={6}>
               <SentReceived />
             </Grid>
             <Grid item xs={6}>
               <NumDevices />
             </Grid>
-            <Grid item xs={6} />
-            <Grid item xs={6}>
-              <Info
-                firstLine="Number of Devices Online: 10  "
-                secondLine="Number of Devices Offline: 4"
-              />
+            <Grid item xs={12}>
+              <HourReport />
             </Grid>
+            <Grid item xs={6} />
           </Grid>
         </Container>
-        <Grid item xs={12}>
-          <ProjectList
-            name="Project1"
-            devices="14"
-            date="30-05-2019"
-            status="ACTIVE"
-          />
-        </Grid>
       </div>
     );
   }
