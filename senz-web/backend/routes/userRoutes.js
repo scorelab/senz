@@ -4,6 +4,7 @@ const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
+const jwtVerify = require("./verifyTokens");
 
 /**
  * @api {post} api/register Register a new user
@@ -163,6 +164,33 @@ router.get("/logout", function(req, res) {
   res.status(200).send({
     auth: false,
     token: null
+  });
+});
+
+//Updating the user
+router.put("/:userId/update", jwtVerify, (req, res) => {
+  const userId = req.params.userId;
+  const hashedPass = bcrypt.hashSync(req.body.newPassword, 8);
+  User.findById(userId).then(user => {
+    const passwordisvalid = bcrypt.compareSync(
+      req.body.oldPassword,
+      user.password
+    );
+    if (!passwordisvalid) {
+      res.status(401).send({
+        auth: false
+      });
+    } else {
+      User.findByIdAndUpdate(
+        userId,
+        {
+          $set: { name: req.body.name, password: hashedPass }
+        },
+        { new: true }
+      ).then(updatedUser => {
+        res.status(200).json({ name: updatedUser.name, id: updatedUser._id });
+      });
+    }
   });
 });
 

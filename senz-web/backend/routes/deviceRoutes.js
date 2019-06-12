@@ -3,83 +3,51 @@ const router = express.Router();
 const jwtVerify = require("./verifyTokens");
 const Project = require("../models/project");
 const Device = require("../models/device");
+const User = require("../models/user");
 
-/**
- * @api {post} device/:projectId Create a new device
- * @apiGroup Devices
- * @apiHeaderExample {json} Header-Example:
- *     {
- *       "Authorization": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjYTUxMzFmOTUzYmNmMGNhOThlN2Q3OCIsIm5hbWUiOiJ5YXNoIiwiaWF0IjoxNTU0MzIyNDQyLCJleHAiOjE1NTQ0MDg4NDJ9.9lQ_IN0AZjfcJoGh-f9F8HmG3Yt-RghMGhLxqGpYJJs"
- *
- *     }
- * @apiParam {projectId} id Project id
- * @apiSuccess {String} name Device name
- * @apiSuccess {String} pubkey Device's public key
- * @apiSuccess {String} _id Id of the project
- * @apiSuccess {Object[]} project Project of the device
- * @apiSuccess {Date} date Date of creation
- * @apiParamExample {json} Input
- *    {
- *      "name": "Device1",
- *      "pubkey":"123#$"
- *    }
- * @apiSuccessExample {json} Success
- *    HTTP/1.1 200 OK
- * {
- *   "project": {
- *       "id": "5ca5837c93644d45649e73d7"
- *   },
- *   "_id": "5ca5d7a107ddd95f0a2e56b5",
- *   "name": "device1",
- *   "pubkey": "123@#",
- *   "date": "2019-04-04T10:08:33.025Z",
- *   "__v": 0
- *  }
- * @apiErrorExample {json} Register error
- *    HTTP/1.1 500 Internal Server Error
- *    {
- *      "auth":false
- *    }
- */
-//Create a new device
-router.post("/new", jwtVerify, (req, res) => {
-  Device.create(req.body)
-    .then(createdDevice => {
-      res.json(createdDevice);
+//Create a new device for a particular user
+router.post("/:userId/new", jwtVerify, (req, res) => {
+  const userId = req.params.userId;
+  User.findById(userId)
+    .then(user => {
+      Device.create(req.body)
+        .then(newDevice => {
+          user.devices.push(newDevice);
+          user.save();
+          res.status(200).json(newDevice);
+        })
+        .catch(err => {
+          throw err;
+        });
     })
     .catch(err => {
       throw err;
     });
 });
 
-/**
- * @api {delete} delete/:deviceId Remove a device of a project
- * @apiGroup Devices
- * @apiParam {deviceId} id Device id
- * @apiHeaderExample {json} Header-Example:
- *     {
- *       "Authorization": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjYTUxMzFmOTUzYmNmMGNhOThlN2Q3OCIsIm5hbWUiOiJ5YXNoIiwiaWF0IjoxNTU0MzIyNDQyLCJleHAiOjE1NTQ0MDg4NDJ9.9lQ_IN0AZjfcJoGh-f9F8HmG3Yt-RghMGhLxqGpYJJs"
- *
- *     }
- * @apiSuccessExample {json} Success
- *    HTTP/1.1 204 No Content
- * {
- *     "Deleted"
- * }
- * @apiErrorExample {json} Delete error
- *    HTTP/1.1 500 Internal Server Error
- */
-//Delete a device
-router.delete("/delete/:deviceId", jwtVerify, (req, res) => {});
-
-//Get all devices
-router.get("/all", (req, res) => {
-  Device.find()
-    .then(AllDevices => {
-      res.json(AllDevices);
+//Delete a device for a particular user
+router.delete("/:userId/delete/:deviceId", jwtVerify, (req, res) => {
+  const userId = req.params.userId;
+  const deviceId = req.params.deviceId;
+  User.findById(userId)
+    .then(user => {
+      user.devices.remove(deviceId);
+      user.save().then(pr => {
+        res.status(200).json("Deleted");
+      });
     })
     .catch(err => {
       throw err;
+    });
+});
+
+//Get all devices of a particular user
+router.get("/:userid/all", jwtVerify, (req, res) => {
+  User.findById(req.params.userid)
+    .populate("devices")
+    .exec((err, user) => {
+      if (err) throw err;
+      res.status(200).json(user.devices);
     });
 });
 

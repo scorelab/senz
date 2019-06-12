@@ -4,78 +4,17 @@ const jwtVerify = require("./verifyTokens");
 const Project = require("../models/project");
 const User = require("../models/user");
 const Device = require("../models/device");
+const mongoose = require("mongoose");
 
-/**
- * @api {get} project/:userid/all Get all the projects of a user
- * @apiGroup Projects
- * @apiHeaderExample {json} Header-Example:
- *     {
- *       "Authorization": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjYTUxMzFmOTUzYmNmMGNhOThlN2Q3OCIsIm5hbWUiOiJ5YXNoIiwiaWF0IjoxNTU0MzIyNDQyLCJleHAiOjE1NTQ0MDg4NDJ9.9lQ_IN0AZjfcJoGh-f9F8HmG3Yt-RghMGhLxqGpYJJs"
- *
- *     }
- * @apiParam {userId} id User id
- * @apiSuccess {Object[]} Projects Project's list
- * @apiSuccess {String} name Project name
- * @apiSuccess {String} _id Id of the project
- * @apiSuccess {Object[]} devices Devices of a project
- * @apiSuccess {Date} date Date of creation
- * @apiSuccessExample {json} Success
- *    HTTP/1.1 200 OK
- *    [
- *      {
- *       "devices": [],
- *       "_id": "5ca5837c93644d45649e73d7",
- *      "name": "Project1",
- *       "date": "2019-04-04T04:09:32.895Z",
- *       "__v": 0
- *      }
- *    ]
- * @apiErrorExample {json} Task not found
- *    HTTP/1.1 404 Not Found
- * @apiErrorExample {json} Find error
- *    HTTP/1.1 500 Internal Server Error
- */
 //Get all the projects of a particular user
 router.get("/:userid/all", jwtVerify, (req, res) => {
   User.findById(req.params.userid)
     .populate("projects")
     .exec((err, user) => {
-      res.json(user.projects);
+      res.status(200).json(user.projects);
     });
 });
 
-/**
- * @api {post} project/:userid/new Create a new project
- * @apiGroup Projects
- * @apiHeaderExample {json} Header-Example:
- *     {
- *       "Authorization": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjYTUxMzFmOTUzYmNmMGNhOThlN2Q3OCIsIm5hbWUiOiJ5YXNoIiwiaWF0IjoxNTU0MzIyNDQyLCJleHAiOjE1NTQ0MDg4NDJ9.9lQ_IN0AZjfcJoGh-f9F8HmG3Yt-RghMGhLxqGpYJJs"
- *
- *     }
- * @apiParam {userId} id User id
- * @apiSuccess {String} name Project name
- * @apiSuccess {String} _id Id of the project
- * @apiSuccess {Object[]} devices Devices of a project
- * @apiSuccess {Date} date Date of creation
- * @apiParamExample {json} Input
- *    {
- *      "name": "Project1"
- *    }
- * @apiSuccessExample {json} Success
- *    HTTP/1.1 200 OK
- *    {
- *      "devices": [],
- *      "_id": "5ca5837c93644d45649e73d7",
- *      "name": "Project1",
- *      "date": "2019-04-04T04:09:32.895Z",
- *      "__v": 0
- *    }
- * @apiErrorExample {json} Register error
- *    HTTP/1.1 500 Internal Server Error
- *    {
- *      "auth":false
- *    }
- */
 //Post a new project for a particular user
 router.post("/:userid/new", jwtVerify, (req, res) => {
   const userId = req.params.userid;
@@ -89,45 +28,59 @@ router.post("/:userid/new", jwtVerify, (req, res) => {
     Project.create(project).then(newProject => {
       user.projects.push(newProject);
       user.save();
-      res.json(newProject);
+      res.status(200).json(newProject);
     });
   });
 });
 
-/**
- * @api {delete} project/:userId/delete/:projectId Remove a project of a user
- * @apiGroup Projects
- * @apiParam {userId} id User id
- * @apiParam {projectId} id Project id
- * @apiHeaderExample {json} Header-Example:
- *     {
- *       "Authorization": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjYTUxMzFmOTUzYmNmMGNhOThlN2Q3OCIsIm5hbWUiOiJ5YXNoIiwiaWF0IjoxNTU0MzIyNDQyLCJleHAiOjE1NTQ0MDg4NDJ9.9lQ_IN0AZjfcJoGh-f9F8HmG3Yt-RghMGhLxqGpYJJs"
- *
- *     }
- * @apiSuccessExample {json} Success
- *    HTTP/1.1 204 No Content
- * {
- *     "Deleted"
- * }
- * @apiErrorExample {json} Delete error
- *    HTTP/1.1 500 Internal Server Error
- */
 //Delete a particular project of a particular user
 router.delete("/:userId/delete/:projectId", jwtVerify, (req, res) => {
   const userId = req.params.userId;
   const projectId = req.params.projectId;
-  User.findById(userId).then(user => {
-    user.projects.remove(projectId);
-    user.save().then(pr => {
-      res.json("Deleted");
+  //Remove the project from all the devices it included
+  Project.findById(projectId)
+    .then(project => {
+      project.devices.map(deviceId => {
+        Device.findById(deviceId)
+          .then(device => {
+            device.projects = device.projects.filter(devProjectId => {
+              return projectId !== devProjectId;
+            });
+          })
+          .catch(err => {
+            throw err;
+          });
+      });
+    })
+    .catch(err => {
+      throw err;
     });
+  //Remove the device from the user list
+  User.findById(userId).then(user => {
+    user.projects.remove(mongoose.Types.ObjectId(projectId));
+    user
+      .save()
+      .catch(err => {
+        throw err;
+      })
+      .catch(err => {
+        throw err;
+      });
   });
+  //Remove the project
+  Project.findByIdAndDelete(projectId)
+    .then(delProject => {
+      res.status(200).json(delProject);
+    })
+    .catch(err => {
+      throw err;
+    });
 });
 //Get the detail of a particular project
 router.get("/:projectId/info", jwtVerify, (req, res) => {
   const projectId = req.params.projectId;
   Project.findById(projectId).then(project => {
-    res.json(project);
+    res.status(200).json(project);
   });
 });
 //Update the status of the project
@@ -139,7 +92,7 @@ router.put("/:projectId/status", jwtVerify, (req, res) => {
     { new: true }
   )
     .then(updatedProject => {
-      res.json(updatedProject);
+      res.status(200).json(updatedProject);
     })
     .catch(err => {
       throw err;
@@ -162,7 +115,7 @@ router.post("/:projectId/deviceAdd", jwtVerify, (req, res) => {
       .then(updatedProject => {
         foundDevice.projects.push(projectId);
         foundDevice.save();
-        res.json(updatedProject);
+        res.status(200).json(device);
       })
       .catch(err => {
         throw err;
@@ -170,7 +123,7 @@ router.post("/:projectId/deviceAdd", jwtVerify, (req, res) => {
   });
 });
 //Update the information of the project
-router.put("/:projectId/info", (req, res) => {
+router.put("/:projectId/info", jwtVerify, (req, res) => {
   const projectId = req.params.projectId;
   Project.findByIdAndUpdate(
     projectId,
@@ -180,7 +133,33 @@ router.put("/:projectId/info", (req, res) => {
     { new: true }
   )
     .then(updatedProject => {
-      res.json(updatedProject);
+      res.status(200).json(updatedProject);
+    })
+    .catch(err => {
+      throw err;
+    });
+});
+//Remove a list of devices from a project
+router.put("/:projectId/delDevice", jwtVerify, (req, res) => {
+  const projectId = req.params.projectId;
+  const deviceList = req.body.devices;
+  Project.findById(projectId)
+    .then(project => {
+      deviceList.map(deviceId => {
+        Device.findById(deviceId).then(device => {
+          const updatedProjectList = device.projects.filter(id => {
+            return id !== projectId;
+          });
+          device.projects = updatedProjectList;
+          device.save();
+        });
+      });
+      const upDatedDeviceList = project.devices.filter(device => {
+        return !deviceList.includes(device._id.toString());
+      });
+      project.devices = upDatedDeviceList;
+      project.save();
+      res.status(200).json(project);
     })
     .catch(err => {
       throw err;
