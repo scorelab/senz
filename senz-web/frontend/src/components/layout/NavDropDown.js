@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import { Select, MenuItem, InputLabel, FormControl } from "@material-ui/core";
 import { fetchProjectAction, setProjectAction } from "../../_actions/project";
+import { fetchAllDeviceAction } from "../../_actions/device";
 import { connect } from "react-redux";
+import _ from "lodash";
 
 const styles = theme => ({
   root: {
@@ -15,6 +17,9 @@ const styles = theme => ({
   },
   selectEmpty: {
     marginTop: theme.spacing(2)
+  },
+  drop: {
+    color: "#ffffff"
   }
 });
 
@@ -24,6 +29,7 @@ class NavDropDown extends Component {
   };
   componentWillMount = () => {
     this.props.fetchProjectAction(this.props.user.id, this.props.user.token);
+    this.props.fetchAllDeviceAction(this.props.user.id, this.props.user.token);
   };
   handleChange = e => {
     this.setState(prevState => {
@@ -34,10 +40,9 @@ class NavDropDown extends Component {
       };
     });
   };
-  //this.props.projects
   render() {
     const { classes } = this.props;
-    const selectProject = this.props.projects.map((project, index) => {
+    const selectProject = this.props.projects.map(project => {
       return (
         <MenuItem key={project._id} value={project._id}>
           {project.name}
@@ -47,7 +52,11 @@ class NavDropDown extends Component {
     return (
       <form autoComplete="off">
         <FormControl className={classes.formControl}>
-          <InputLabel htmlFor="Selection">Select Project</InputLabel>
+          <InputLabel htmlFor="Selection" className={classes.drop}>
+            {_.isEmpty(this.props.project)
+              ? "Select Project"
+              : this.props.project.name}
+          </InputLabel>
           <Select
             inputProps={{
               name: "project",
@@ -55,10 +64,8 @@ class NavDropDown extends Component {
             }}
             onChange={this.handleChange}
             value={this.state.project}
+            className={classes.drop}
           >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
             {selectProject}
           </Select>
         </FormControl>
@@ -71,11 +78,12 @@ const styledNavDrop = withStyles(styles, { withTheme: true })(NavDropDown);
 const MapStateToProp = state => {
   return {
     projects: state.project.AllProject,
+    project: state.project.SelectedProject,
     user: state.auth.user
   };
 };
 
 export default connect(
   MapStateToProp,
-  { fetchProjectAction, setProjectAction }
+  { fetchProjectAction, setProjectAction, fetchAllDeviceAction }
 )(styledNavDrop);

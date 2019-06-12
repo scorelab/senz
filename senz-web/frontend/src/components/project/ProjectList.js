@@ -25,6 +25,10 @@ const styles = theme => ({
   },
   noClick: {
     cursor: "initial"
+  },
+  header: {
+    backgroundColor: "#23344e",
+    color: "#fafafa"
   }
 });
 
@@ -72,7 +76,8 @@ class MuiVirtualizedTable extends React.PureComponent {
         className={clsx(
           classes.tableCell,
           classes.flexContainer,
-          classes.noClick
+          classes.noClick,
+          classes.header
         )}
         variant="head"
         style={{ height: headerHeight }}

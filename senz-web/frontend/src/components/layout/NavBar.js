@@ -23,7 +23,10 @@ const styles = theme => ({
     marginLeft: "auto",
     marginRight: 25
   },
-  navDrop: {}
+  navDrop: {
+    marginLeft: "auto",
+    marginRight: -600
+  }
 });
 
 class NavBar extends React.Component {

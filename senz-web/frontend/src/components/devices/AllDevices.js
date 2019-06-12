@@ -25,14 +25,29 @@ const styles = theme => ({
   }
 });
 
+//TODO: Add switch functionality
 class AllDevice extends Component {
   state = {};
   componentWillMount = () => {
     //Update devices from the redux store
     this.props.toggleHeadingAction({ heading: "All Devices" });
-    this.props.fetchAllDeviceAction(this.props.user.token);
+    this.props.fetchAllDeviceAction(this.props.user.id, this.props.user.token);
+    const modifiedDevice = this.props.devices.map(device => {
+      if (device.status)
+        return {
+          ...device,
+          status: "ON",
+          date: device.date.substr(0, 10)
+        };
+      else
+        return {
+          ...device,
+          status: "OFF",
+          date: device.date.substr(0, 10)
+        };
+    });
     this.setState({
-      devices: this.props.devices
+      devices: modifiedDevice
     });
   };
   render() {

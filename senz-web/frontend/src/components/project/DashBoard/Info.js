@@ -1,13 +1,16 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Typography from "@material-ui/core/Typography";
+import { Paper, Typography, Divider } from "@material-ui/core/";
 
 const useStyles = makeStyles(theme => ({
   root: {
     padding: theme.spacing(3, 2),
-    backgroundColor: "rgba(33, 150, 243, 0.7)",
+    backgroundColor: "#23344e",
     color: "#fafafa"
+  },
+  divider: {
+    backgroundColor: "#fafafa",
+    height: 2
   }
 }));
 
@@ -17,8 +20,11 @@ const PaperSheet = props => {
   return (
     <div>
       <Paper className={classes.root}>
-        <Typography variant="subtitle2">{props.firstLine}</Typography>
-        <Typography variant="subtitle2">{props.secondLine}</Typography>
+        <Typography variant="subtitle1">{props.firstLine}</Typography>
+        <Typography variant="subtitle1">{props.secondLine}</Typography>
+        <br />
+        <Divider className={classes.divider} />
+        <Typography variant="body2">{props.heading}</Typography>
       </Paper>
     </div>
   );

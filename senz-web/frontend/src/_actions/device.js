@@ -3,10 +3,10 @@ import axios from "axios";
 
 const URL = "http://localhost:8080/device";
 
-export const addDeviceAction = (name, pubkey, token) => {
+export const addDeviceAction = (name, pubkey, token, userId) => {
   return async dispatch => {
     const response = await axios.post(
-      `${URL}/new`,
+      `${URL}/${userId}/new`,
       {
         name,
         pubkey
@@ -22,9 +22,9 @@ export const addDeviceAction = (name, pubkey, token) => {
 };
 
 //All devices action
-export const fetchAllDeviceAction = token => {
+export const fetchAllDeviceAction = (userId, token) => {
   return async dispatch => {
-    const response = await axios.get(`${URL}/all`, {
+    const response = await axios.get(`${URL}/${userId}/all`, {
       headers: {
         Authorization: token
       }

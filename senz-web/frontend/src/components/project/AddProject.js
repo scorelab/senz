@@ -6,14 +6,9 @@ import NavBar from "../layout/NavBar";
 import SideBar from "../layout/SideBar";
 import { withStyles } from "@material-ui/core/styles";
 import Intro from "./Intro";
-import {
-  Paper,
-  TextField,
-  Button,
-  Typography,
-  Snackbar
-} from "@material-ui/core";
+import { Paper, TextField, Button, Typography } from "@material-ui/core";
 import { reduxForm, Field } from "redux-form";
+import Notifier from "../Notifier";
 
 const drawerWidth = 240;
 const styles = theme => ({
@@ -136,20 +131,12 @@ class AddProject extends Component {
               </Button>
             </form>
           </main>
+          <Notifier
+            message="Project Created"
+            done={this.state.done}
+            handleClose={this.handleClose}
+          />
         </Paper>
-        <Snackbar
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "left"
-          }}
-          open={this.state.done}
-          autoHideDuration={3000}
-          onClose={this.handleClose}
-          ContentProps={{
-            "aria-describedby": "message-id"
-          }}
-          message={<span id="message-id">Project Created</span>}
-        />
       </Fragment>
     );
   }
