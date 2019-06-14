@@ -1,13 +1,12 @@
-import React from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import { withStyles } from "@material-ui/core/styles";
 import TableCell from "@material-ui/core/TableCell";
 import Paper from "@material-ui/core/Paper";
-import Checkbox from "@material-ui/core/Checkbox";
 import { AutoSizer, Column, Table } from "react-virtualized";
+import { connect } from "react-redux";
 
-//TODO: solve duplicate rows bug
 const styles = theme => ({
   flexContainer: {
     display: "flex",
@@ -31,6 +30,9 @@ const styles = theme => ({
   header: {
     backgroundColor: "#23344e",
     color: "#fafafa"
+  },
+  selectedRow: {
+    backgroundColor: "#E65555"
   }
 });
 
@@ -39,61 +41,34 @@ class MuiVirtualizedTable extends React.PureComponent {
     headerHeight: 48,
     rowHeight: 48
   };
-
+  state = { devices: [] };
   getRowClassName = ({ index }) => {
     const { classes, onRowClick } = this.props;
 
     return clsx(classes.tableRow, classes.flexContainer, {
-      [classes.tableRowHover]: index !== -1 && onRowClick != null
+      [classes.tableRowHover]: index !== -1 && onRowClick != null,
+      [classes.selectedRow]: this.state.devices.includes(index)
     });
   };
   cellRenderer = ({ cellData, columnIndex }) => {
     const { columns, classes, rowHeight, onRowClick } = this.props;
-
-    if (columnIndex === 0) {
-      return (
-        <TableCell
-          component="div"
-          className={clsx(classes.tableCell, classes.flexContainer, {
-            [classes.noClick]: onRowClick == null
-          })}
-          variant="body"
-          style={{ height: rowHeight }}
-          align={
-            (columnIndex != null && columns[columnIndex].numeric) || false
-              ? "right"
-              : "left"
-          }
-        >
-          <span>{cellData}</span>
-          <Checkbox
-            value="checkedA"
-            inputProps={{
-              "aria-label": "primary checkbox"
-            }}
-            onChange={this.props.handleCheck(cellData)}
-          />
-        </TableCell>
-      );
-    } else {
-      return (
-        <TableCell
-          component="div"
-          className={clsx(classes.tableCell, classes.flexContainer, {
-            [classes.noClick]: onRowClick == null
-          })}
-          variant="body"
-          style={{ height: rowHeight }}
-          align={
-            (columnIndex != null && columns[columnIndex].numeric) || false
-              ? "right"
-              : "left"
-          }
-        >
-          <span>{cellData}</span>
-        </TableCell>
-      );
-    }
+    return (
+      <TableCell
+        component="div"
+        className={clsx(classes.tableCell, classes.flexContainer, {
+          [classes.noClick]: onRowClick == null
+        })}
+        variant="body"
+        style={{ height: rowHeight }}
+        align={
+          (columnIndex != null && columns[columnIndex].numeric) || false
+            ? "right"
+            : "left"
+        }
+      >
+        <span>{cellData}</span>
+      </TableCell>
+    );
   };
 
   headerRenderer = ({ label, columnIndex }) => {
@@ -116,6 +91,18 @@ class MuiVirtualizedTable extends React.PureComponent {
       </TableCell>
     );
   };
+  handleRow = ({ index, rowData }) => {
+    if (this.state.devices.includes(index)) {
+      const modDevices = this.state.devices.filter(stateIndex => {
+        return index !== stateIndex;
+      });
+      this.setState({ devices: modDevices });
+    } else {
+      const modeDevices = [...this.state.devices, index];
+      this.setState({ devices: modeDevices });
+    }
+    this.props.handleCheck(rowData._id);
+  };
 
   render() {
     const { classes, columns, ...tableProps } = this.props;
@@ -127,6 +114,7 @@ class MuiVirtualizedTable extends React.PureComponent {
             width={width}
             {...tableProps}
             rowClassName={this.getRowClassName}
+            onRowClick={this.handleRow}
           >
             {columns.map(({ dataKey, ...other }, index) => {
               return (
@@ -162,44 +150,58 @@ MuiVirtualizedTable.propTypes = {
 
 const VirtualizedTable = withStyles(styles)(MuiVirtualizedTable);
 
-function ReactVirtualizedTable(props) {
-  const rows = props.devices;
-  return (
-    <Paper style={{ height: 400, width: 800 }}>
-      <VirtualizedTable
-        rowCount={rows.length}
-        rowGetter={({ index }) => rows[index]}
-        handleCheck={props.handleCheck}
-        columns={[
-          {
-            width: 100,
-            dataKey: "index",
-            type: Number
-          },
-          {
-            width: 200,
-            label: "Name",
-            dataKey: "name"
-          },
-          {
-            width: 200,
-            label: "Public Key",
-            dataKey: "pubkey"
-          },
-          {
-            width: 200,
-            label: "Added On",
-            dataKey: "date"
-          },
-          {
-            width: 200,
-            label: "Status",
-            dataKey: "status"
-          }
-        ]}
-      />
-    </Paper>
-  );
+class ReactVirtualizedTable extends Component {
+  render() {
+    const rows = this.props.project.devices.map((device, index) => {
+      if (device.status) device.status = "ON";
+      else device.status = "OFF";
+      device.index = index + 1;
+      return device;
+    });
+    return (
+      <Paper style={{ height: 400, width: 800 }}>
+        <VirtualizedTable
+          rowCount={rows.length}
+          rowGetter={({ index }) => rows[index]}
+          handleCheck={this.props.handleCheck}
+          columns={[
+            {
+              width: 150,
+              dataKey: "index",
+              label: "Serial No.",
+              type: Number
+            },
+            {
+              width: 200,
+              label: "Name",
+              dataKey: "name"
+            },
+            {
+              width: 200,
+              label: "Public Key",
+              dataKey: "pubkey"
+            },
+            {
+              width: 200,
+              label: "Added On",
+              dataKey: "date"
+            },
+            {
+              width: 200,
+              label: "Status",
+              dataKey: "status"
+            }
+          ]}
+        />
+      </Paper>
+    );
+  }
 }
+const MapStateToProp = ({ auth, project }) => {
+  return {
+    user: auth.user,
+    project: project.SelectedProject
+  };
+};
 
-export default ReactVirtualizedTable;
+export default connect(MapStateToProp)(ReactVirtualizedTable);

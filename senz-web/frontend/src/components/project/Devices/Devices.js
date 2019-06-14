@@ -8,52 +8,30 @@ import { removeProjectDevices } from "../../../_actions/project";
 
 class Devices extends Component {
   state = {
-    devices: [],
-    idDict: [],
-    remDevices: [],
-    done: false
+    done: false,
+    devices: [] //This should have id of devices to be removed
   };
   componentWillMount = () => {
-    //Fetch all devices of the project from the store
-    var modidDict = [];
     this.props.toggleHeadingAction({ heading: "Devices" });
-    const modifiedDevices = this.props.devices.map((device, index) => {
-      if (device.status) {
-        device.status = "ON";
-        device.date = new Date(device.date).toLocaleDateString();
-      } else {
-        device.status = "OFF";
-        device.date = new Date(device.date).toLocaleDateString();
-      }
-      const obj = { id: device._id };
-      modidDict.push(obj);
-      device.index = index + 1;
-      return device;
-    });
-    this.setState({ devices: modifiedDevices, idDict: modidDict });
   };
-  handleCheck = i => e => {
-    const { idDict, remDevices } = this.state;
-    if (remDevices.includes(idDict[i - 1].id)) {
-      const modRemDevices = remDevices.filter(deviceId => {
-        return deviceId !== idDict[i - 1].id;
+  handleCheck = id => {
+    var remDevices = [];
+    if (this.state.devices.includes(id)) {
+      remDevices = this.state.devices.filter(stateId => {
+        return id !== stateId;
       });
-      this.setState({ remDevices: modRemDevices });
+      this.setState({ devices: remDevices });
     } else {
-      const modRemDevices = [...remDevices, idDict[i - 1].id];
-      this.setState({ remDevices: modRemDevices });
+      remDevices = [...this.state.devices, id];
+      this.setState({ devices: remDevices });
     }
   };
   handleRemove = () => {
     this.props.removeProjectDevices(
       this.props.project._id,
-      this.state.remDevices,
+      this.state.devices,
       this.props.user.token
     );
-    const modDevices = this.state.devices.filter(device => {
-      return !this.state.remDevices.includes(device._id);
-    });
-    this.setState({ done: true, devices: modDevices });
   };
   render() {
     return (
@@ -79,10 +57,7 @@ class Devices extends Component {
               </Button>
             </Grid>
             <Grid item xs={12} style={{ padding: 30 }}>
-              <DevicesList
-                devices={this.state.devices}
-                handleCheck={this.handleCheck}
-              />
+              <DevicesList handleCheck={this.handleCheck} />
             </Grid>
           </Grid>
         </Container>

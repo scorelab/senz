@@ -98,6 +98,21 @@ router.put("/:projectId/status", jwtVerify, (req, res) => {
       throw err;
     });
 });
+const giveDate = date => {
+  return (
+    date.getDate() +
+    "/" +
+    (date.getMonth() + 1) +
+    "/" +
+    (date.getYear() + 1900) +
+    " " +
+    date.getHours() +
+    ":" +
+    date.getMinutes() +
+    ":" +
+    date.getSeconds()
+  );
+};
 //Add a device to the project
 router.post("/:projectId/deviceAdd", jwtVerify, (req, res) => {
   const { pubkey } = req.body;
@@ -105,7 +120,13 @@ router.post("/:projectId/deviceAdd", jwtVerify, (req, res) => {
   Device.findOne({ pubkey }).then(foundDevice => {
     // //Create the device
     const { name, _id, status, pubkey } = foundDevice;
-    const device = { name, _id, status, pubkey, date: Date.now() };
+    const device = {
+      name,
+      _id,
+      status,
+      pubkey,
+      date: giveDate(new Date(Date.now()))
+    };
     //Find the project and push to the devices array
     Project.findByIdAndUpdate(
       projectId,
