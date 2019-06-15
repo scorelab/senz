@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import _ from "lodash";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
@@ -39,7 +38,7 @@ function SimpleTabs(props) {
     setValue(newValue);
   }
   const project = props.project;
-  if (_.isEmpty(project)) {
+  if (!project.name) {
     return <div>Select a Project</div>;
   }
   return (

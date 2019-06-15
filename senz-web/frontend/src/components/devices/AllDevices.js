@@ -7,11 +7,28 @@ import { toggleHeadingAction } from "../../_actions/heading";
 import { fetchAllDeviceAction } from "../../_actions/device";
 import DeviceList from "./DeviceList";
 import Intro from "../project/Intro";
-
+import { switchDevice } from "../../_actions/device";
+import {
+  FormControl,
+  MenuItem,
+  Button,
+  InputLabel,
+  Select
+} from "@material-ui/core";
 const drawerWidth = 240;
 const styles = theme => ({
   root: {
-    display: "flex"
+    display: "flex",
+    flexWrap: "wrap"
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120
+  },
+  button: {
+    margin: theme.spacing(1),
+    color: "#2196F3",
+    borderColor: "#2196F3"
   },
   content: {
     flexGrow: 1,
@@ -25,30 +42,36 @@ const styles = theme => ({
   }
 });
 
-//TODO: Add switch functionality
+//TODO: Remove wrong status display bug
 class AllDevice extends Component {
-  state = {};
+  state = { devices: [], status: 0 };
+  handleCheck = id => {
+    if (this.state.devices.includes(id)) {
+      const modDevices = this.state.devices.filter(sId => {
+        return sId !== id;
+      });
+      this.setState({ devices: modDevices });
+    } else {
+      const modDevices = [...this.state.devices, id];
+      this.setState({ devices: modDevices });
+    }
+  };
+  handleChange = e => {
+    this.setState(prevState => {
+      return {
+        ...prevState,
+        [e.target.name]: e.target.value
+      };
+    });
+  };
   componentWillMount = () => {
     //Update devices from the redux store
     this.props.toggleHeadingAction({ heading: "All Devices" });
     this.props.fetchAllDeviceAction(this.props.user.id, this.props.user.token);
-    const modifiedDevice = this.props.devices.map(device => {
-      if (device.status)
-        return {
-          ...device,
-          status: "ON",
-          date: device.date.substr(0, 10)
-        };
-      else
-        return {
-          ...device,
-          status: "OFF",
-          date: device.date.substr(0, 10)
-        };
-    });
-    this.setState({
-      devices: modifiedDevice
-    });
+  };
+  handleSwitch = () => {
+    const status = this.state.status ? true : false;
+    this.props.switchDevice(this.state.devices, status, this.props.user.token);
   };
   render() {
     const { classes } = this.props;
@@ -64,7 +87,33 @@ class AllDevice extends Component {
             description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it."
           />
           <div className={classes.table}>
-            <DeviceList devices={this.state.devices} />
+            <form className={classes.root} autoComplete="off">
+              <FormControl className={classes.formControl}>
+                <InputLabel htmlFor="Action">
+                  {this.state.status === 0 ? "OFF" : "ON"}
+                </InputLabel>
+                <Select
+                  value={this.state.status}
+                  onChange={this.handleChange}
+                  inputProps={{
+                    name: "status",
+                    id: "Action"
+                  }}
+                >
+                  <MenuItem value={0}>OFF</MenuItem>
+                  <MenuItem value={1}>ON</MenuItem>
+                </Select>
+              </FormControl>
+              <Button
+                variant="outlined"
+                color="primary"
+                className={classes.button}
+                onClick={this.handleSwitch}
+              >
+                Switch
+              </Button>
+            </form>
+            <DeviceList handleCheck={this.handleCheck} />
           </div>
         </main>
       </Fragment>
@@ -74,12 +123,11 @@ class AllDevice extends Component {
 
 const MapStateToProp = state => {
   return {
-    user: state.auth.user,
-    devices: state.device.AllDevices
+    user: state.auth.user
   };
 };
 
 export default connect(
   MapStateToProp,
-  { toggleHeadingAction, fetchAllDeviceAction }
+  { toggleHeadingAction, fetchAllDeviceAction, switchDevice }
 )(withStyles(styles, { withTheme: true })(AllDevice));
