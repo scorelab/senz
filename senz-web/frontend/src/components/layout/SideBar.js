@@ -12,7 +12,7 @@ import {
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { Folder, Storage, Person, Help, People } from "@material-ui/icons";
-//TODO: style the sidebar
+
 const drawerWidth = 240;
 
 const styles = theme => ({

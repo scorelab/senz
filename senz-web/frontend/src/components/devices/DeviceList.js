@@ -1,10 +1,11 @@
-import React from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import { withStyles } from "@material-ui/core/styles";
 import TableCell from "@material-ui/core/TableCell";
 import Paper from "@material-ui/core/Paper";
 import { AutoSizer, Column, Table } from "react-virtualized";
+import { connect } from "react-redux";
 
 const styles = theme => ({
   flexContainer: {
@@ -29,6 +30,9 @@ const styles = theme => ({
   header: {
     backgroundColor: "#23344e",
     color: "#fafafa"
+  },
+  selectedRow: {
+    backgroundColor: "#55BDE6"
   }
 });
 
@@ -37,12 +41,15 @@ class MuiVirtualizedTable extends React.PureComponent {
     headerHeight: 48,
     rowHeight: 48
   };
-
+  state = {
+    devices: []
+  };
   getRowClassName = ({ index }) => {
     const { classes, onRowClick } = this.props;
 
     return clsx(classes.tableRow, classes.flexContainer, {
-      [classes.tableRowHover]: index !== -1 && onRowClick != null
+      [classes.tableRowHover]: index !== -1 && onRowClick != null,
+      [classes.selectedRow]: this.state.devices.includes(index)
     });
   };
 
@@ -88,8 +95,16 @@ class MuiVirtualizedTable extends React.PureComponent {
     );
   };
   handleClick = ({ index, rowData }) => {
-    //Do nothing as of now
-    console.log(index, rowData);
+    if (this.state.devices.includes(index)) {
+      const modDevices = this.state.devices.filter(stateIndex => {
+        return stateIndex !== index;
+      });
+      this.setState({ devices: modDevices });
+    } else {
+      const modDevices = [...this.state.devices, index];
+      this.setState({ devices: modDevices });
+    }
+    this.props.handleCheck(rowData._id);
   };
   render() {
     const { classes, columns, ...tableProps } = this.props;
@@ -137,46 +152,63 @@ MuiVirtualizedTable.propTypes = {
 
 const VirtualizedTable = withStyles(styles)(MuiVirtualizedTable);
 
-function ReactVirtualizedTable(props) {
-  const rows = props.devices;
-  return (
-    <Paper style={{ height: 400, width: 800 }}>
-      <VirtualizedTable
-        rowCount={rows.length}
-        rowGetter={({ index }) => rows[index]}
-        columns={[
-          {
-            width: 200,
-            label: "Name",
-            dataKey: "name"
-          },
-          {
-            width: 200,
-            label: "Number of Sents",
-            dataKey: "sent",
-            numeric: true
-          },
-          {
-            width: 200,
-            label: "Number of Receives",
-            dataKey: "received",
-            numeric: true
-          },
-          {
-            width: 200,
-            label: "Public Key",
-            dataKey: "pubkey",
-            numeric: true
-          },
-          {
-            width: 200,
-            label: "Created On",
-            dataKey: "date"
-          }
-        ]}
-      />
-    </Paper>
-  );
+class ReactVirtualizedTable extends Component {
+  render() {
+    const rows = this.props.devices.map(device => {
+      if (device.status)
+        return { ...device, date: device.date.substr(0, 10), active: "ON" };
+      else return { ...device, date: device.date.substr(0, 10), active: "OFF" };
+    });
+    return (
+      <Paper style={{ height: 400, width: 800 }}>
+        <VirtualizedTable
+          rowCount={rows.length}
+          rowGetter={({ index }) => rows[index]}
+          handleCheck={this.props.handleCheck}
+          columns={[
+            {
+              width: 150,
+              label: "Name",
+              dataKey: "name"
+            },
+            {
+              width: 150,
+              label: "Number of Sents",
+              dataKey: "sent",
+              numeric: true
+            },
+            {
+              width: 150,
+              label: "Number of Receives",
+              dataKey: "received",
+              numeric: true
+            },
+            {
+              width: 200,
+              label: "Public Key",
+              dataKey: "pubkey",
+              numeric: true
+            },
+            {
+              width: 200,
+              label: "Created On",
+              dataKey: "date"
+            },
+            {
+              width: 100,
+              label: "Status",
+              dataKey: "active"
+            }
+          ]}
+        />
+      </Paper>
+    );
+  }
 }
 
-export default ReactVirtualizedTable;
+const MapStateToProp = state => {
+  return {
+    devices: state.device.AllDevices
+  };
+};
+export default connect(MapStateToProp)(ReactVirtualizedTable);

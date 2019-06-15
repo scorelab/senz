@@ -22,7 +22,6 @@ import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import { reduxForm, Field } from "redux-form";
 import Notifier from "../../Notifier";
-//TODO: Solve switch bug
 
 const IOSSwitch = withStyles(theme => ({
   root: {
@@ -107,16 +106,18 @@ class Form extends Component {
     this.setState({ [name]: false });
   };
   handleChange = name => event => {
-    this.setState({
-      ...this.state,
-      [name]: event.target.checked,
-      switch: true
-    });
+    // this.setState({
+    //   ...this.state,
+    //   [name]: event.target.checked,
+    //   switch: true
+    // });
+    this.props.project.status = !this.props.project.status;
     this.props.switchProjectStatus(
       this.props.project._id,
-      !this.state.checkedB,
+      this.props.project.status,
       this.props.user.token
     );
+    this.setState({ switch: true });
   };
   handleChangeInfo = e => {
     this.setState({
@@ -133,8 +134,9 @@ class Form extends Component {
       description
     );
   };
-  renderInputError = ({ error, touched }) => {
+  renderInputError = ({ error, touched, active }) => {
     if (error && touched) return { error: true, message: error };
+    if (error && active) return { error: true, message: error };
     else return { error: false, message: "" };
   };
   renderPublicKeyInput = ({ input, label, variant, margin, type, meta }) => {
@@ -259,7 +261,7 @@ class Form extends Component {
                       <FormControlLabel
                         control={
                           <IOSSwitch
-                            checked={this.state.checkedB}
+                            checked={this.props.project.status}
                             onChange={this.handleChange("checkedB")}
                             value="checkedB"
                           />

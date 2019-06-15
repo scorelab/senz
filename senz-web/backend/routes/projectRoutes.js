@@ -37,11 +37,11 @@ router.post("/:userid/new", jwtVerify, (req, res) => {
 router.delete("/:userId/delete/:projectId", jwtVerify, (req, res) => {
   const userId = req.params.userId;
   const projectId = req.params.projectId;
-  //Remove the project from all the devices it included
+  //Remove the project from all the devices it was included in
   Project.findById(projectId)
     .then(project => {
-      project.devices.map(deviceId => {
-        Device.findById(deviceId)
+      project.devices.map(proDevice => {
+        Device.findById(proDevice._id)
           .then(device => {
             device.projects = device.projects.filter(devProjectId => {
               return projectId !== devProjectId;
@@ -55,7 +55,7 @@ router.delete("/:userId/delete/:projectId", jwtVerify, (req, res) => {
     .catch(err => {
       throw err;
     });
-  //Remove the device from the user list
+  //Remove the project from the user list
   User.findById(userId).then(user => {
     user.projects.remove(mongoose.Types.ObjectId(projectId));
     user
@@ -84,7 +84,7 @@ router.get("/:projectId/info", jwtVerify, (req, res) => {
   });
 });
 //Update the status of the project
-router.put("/:projectId/status", jwtVerify, (req, res) => {
+router.put("/:projectId/status", (req, res) => {
   const projectId = req.params.projectId;
   Project.findByIdAndUpdate(
     projectId,
@@ -98,6 +98,21 @@ router.put("/:projectId/status", jwtVerify, (req, res) => {
       throw err;
     });
 });
+const giveDate = date => {
+  return (
+    date.getDate() +
+    "/" +
+    (date.getMonth() + 1) +
+    "/" +
+    (date.getYear() + 1900) +
+    " " +
+    date.getHours() +
+    ":" +
+    date.getMinutes() +
+    ":" +
+    date.getSeconds()
+  );
+};
 //Add a device to the project
 router.post("/:projectId/deviceAdd", jwtVerify, (req, res) => {
   const { pubkey } = req.body;
@@ -105,7 +120,13 @@ router.post("/:projectId/deviceAdd", jwtVerify, (req, res) => {
   Device.findOne({ pubkey }).then(foundDevice => {
     // //Create the device
     const { name, _id, status, pubkey } = foundDevice;
-    const device = { name, _id, status, pubkey, date: Date.now() };
+    const device = {
+      name,
+      _id,
+      status,
+      pubkey,
+      date: giveDate(new Date(Date.now()))
+    };
     //Find the project and push to the devices array
     Project.findByIdAndUpdate(
       projectId,
@@ -158,8 +179,9 @@ router.put("/:projectId/delDevice", jwtVerify, (req, res) => {
         return !deviceList.includes(device._id.toString());
       });
       project.devices = upDatedDeviceList;
-      project.save();
-      res.status(200).json(project);
+      project.save().then(savedProject => {
+        res.status(200).json(savedProject);
+      });
     })
     .catch(err => {
       throw err;
