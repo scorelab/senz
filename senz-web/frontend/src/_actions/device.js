@@ -1,4 +1,4 @@
-import { ADD_DEVICE, FETCH_DEVICES } from "./types/index";
+import { ADD_DEVICE, FETCH_DEVICES, SWITCH_DEVICE } from "./types/index";
 import axios from "axios";
 
 const URL = "http://localhost:8080/device";
@@ -30,5 +30,23 @@ export const fetchAllDeviceAction = (userId, token) => {
       }
     });
     dispatch({ type: FETCH_DEVICES, payload: response.data });
+  };
+};
+//Switch device
+export const switchDevice = (devices, status, token) => {
+  return async dispatch => {
+    const response = await axios.put(
+      `${URL}/switch`,
+      {
+        devices,
+        status
+      },
+      {
+        headers: {
+          Authorization: token
+        }
+      }
+    );
+    dispatch({ type: SWITCH_DEVICE, payload: response.data });
   };
 };

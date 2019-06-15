@@ -7,6 +7,7 @@ import {
   ADD_DEVICE_PROJECT,
   HANDLE_SWITCH,
   REMOVE_DEVICE_PROJECT,
+  SWITCH_DEVICE,
   CLEAR_ALL
 } from "../_actions/types/index";
 export const projectReducers = (
@@ -50,6 +51,10 @@ export const projectReducers = (
         SelectedProject: action.payload
       };
     case ADD_DEVICE_PROJECT:
+      var modDevices = [];
+      if (state.SelectedProject.devices.includes(action.payload._id))
+        modDevices = state.SelectedProject.devices;
+      else modDevices = [...state.SelectedProject.devices, action.payload];
       return {
         AllProject: [
           ...state.AllProject.map(project => {
@@ -61,7 +66,7 @@ export const projectReducers = (
         ],
         SelectedProject: {
           ...state.SelectedProject,
-          devices: [...state.SelectedProject.devices, action.payload]
+          devices: modDevices
         }
       };
     case REMOVE_DEVICE_PROJECT:
@@ -89,6 +94,26 @@ export const projectReducers = (
         SelectedProject: {
           ...action.payload
         }
+      };
+    case SWITCH_DEVICE:
+      const modDeviceList = state.SelectedProject.devices.map(device => {
+        for (var i = 0; i < action.payload.length; i++) {
+          if (device._id === action.payload[i]._id) {
+            device.status = action.payload[i].status;
+          }
+        }
+        return device;
+      });
+      return {
+        AllProject: [
+          ...state.AllProject.map(project => {
+            if (project._id === state.SelectedProject._id) {
+              project.devices = modDeviceList;
+            }
+            return project;
+          })
+        ],
+        SelectedProject: { ...state.SelectedProject, devices: modDeviceList }
       };
     default:
       return state;

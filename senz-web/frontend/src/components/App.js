@@ -42,13 +42,13 @@ class App extends Component {
         <PersistGate persistor={persistor}>
           <BrowserRouter>
             <div>
-              <Route path="/" exact component={authNotRequired(Register)} />
+              <Route path="/" exact component={Register} />
               <Route
                 path="/register"
                 exact
                 component={authNotRequired(Register)}
               />
-              <Route path="/login" exact component={authNotRequired(Login)} />
+              <Route path="/login" exact component={Login} />
               <Route path="/home" exact component={Home} />
 
               <Route path="/addProject" exact component={AddProject} />

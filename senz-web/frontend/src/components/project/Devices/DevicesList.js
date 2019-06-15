@@ -152,11 +152,9 @@ const VirtualizedTable = withStyles(styles)(MuiVirtualizedTable);
 
 class ReactVirtualizedTable extends Component {
   render() {
-    const rows = this.props.project.devices.map((device, index) => {
-      if (device.status) device.status = "ON";
-      else device.status = "OFF";
-      device.index = index + 1;
-      return device;
+    const rows = this.props.project.devices.map(device => {
+      if (device.status) return { ...device, active: "ON" };
+      else return { ...device, active: "OFF" };
     });
     return (
       <Paper style={{ height: 400, width: 800 }}>
@@ -165,12 +163,6 @@ class ReactVirtualizedTable extends Component {
           rowGetter={({ index }) => rows[index]}
           handleCheck={this.props.handleCheck}
           columns={[
-            {
-              width: 150,
-              dataKey: "index",
-              label: "Serial No.",
-              type: Number
-            },
             {
               width: 200,
               label: "Name",
@@ -189,7 +181,7 @@ class ReactVirtualizedTable extends Component {
             {
               width: 200,
               label: "Status",
-              dataKey: "status"
+              dataKey: "active"
             }
           ]}
         />

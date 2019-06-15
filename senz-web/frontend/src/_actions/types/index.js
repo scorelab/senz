@@ -14,4 +14,5 @@ export const REMOVE_PROJECT_DEVICE = "remove_project_device";
 export const UPDATE_USER = "update_user_info";
 export const ADD_DEVICE = "add_device";
 export const FETCH_DEVICES = "fetch_devices";
+export const SWITCH_DEVICE = "switch_device";
 export const CLEAR_ALL = "clear_all";
