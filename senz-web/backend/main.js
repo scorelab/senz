@@ -13,7 +13,7 @@ const config = require("config");
 Use the given URI from the environment file if given,
 or else use the uri for docker
 */
-const URI = config.dbURI || "mongodb://mongo:27017/senzAdmin";
+const URI = "mongodb://mongo:27017/senzAdmin";
 mongoose
   .connect(URI, { useNewUrlParser: true })
   .then(e => {
