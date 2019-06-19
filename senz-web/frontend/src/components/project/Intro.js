@@ -1,6 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography, Divider } from "@material-ui/core";
+import PropTypes from "prop-types";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -16,7 +17,7 @@ function PaperSheet(props) {
   const classes = useStyles();
 
   return (
-    <div>
+    <div data-test="IntroComponent">
       <div className={classes.root}>
         <Typography variant="h6" component="h3">
           <b>{props.heading}</b>
@@ -29,5 +30,10 @@ function PaperSheet(props) {
     </div>
   );
 }
+
+PaperSheet.propTypes = {
+  heading: PropTypes.string,
+  description: PropTypes.string
+};
 
 export default PaperSheet;
