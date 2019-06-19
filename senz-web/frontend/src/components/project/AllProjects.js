@@ -7,6 +7,7 @@ import { toggleHeadingAction } from "../../_actions/heading";
 import { fetchProjectAction } from "../../_actions/project";
 import ProjectList from "./ProjectList";
 import Intro from "./Intro";
+import PropTypes from "prop-types";
 
 const drawerWidth = 240;
 const styles = theme => ({
@@ -72,6 +73,13 @@ class AllProject extends Component {
 
 const MapStateToProp = state => {
   return { projects: state.project.AllProject, user: state.auth.user };
+};
+
+AllProject.propTypes = {
+  toggleHeadingAction: PropTypes.func,
+  fetchProjectAction: PropTypes.func,
+  projects: PropTypes.arrayOf(PropTypes.object),
+  user: PropTypes.object
 };
 
 export default connect(

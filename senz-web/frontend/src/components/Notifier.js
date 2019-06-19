@@ -1,10 +1,11 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { Snackbar } from "@material-ui/core";
+import PropTypes from "prop-types";
 
 class Notifier extends Component {
   render() {
     return (
-      <Fragment>
+      <div data-test="NotifierComponent">
         <Snackbar
           anchorOrigin={{
             vertical: "bottom",
@@ -18,9 +19,14 @@ class Notifier extends Component {
           }}
           message={<span id="message-id">{this.props.message}</span>}
         />
-      </Fragment>
+      </div>
     );
   }
 }
+
+Notifier.propTypes = {
+  open: PropTypes.bool,
+  onClose: PropTypes.func
+};
 
 export default Notifier;

@@ -156,6 +156,7 @@ class ReactVirtualizedTable extends Component {
       if (device.status) return { ...device, active: "ON" };
       else return { ...device, active: "OFF" };
     });
+    if (rows === null) return null;
     return (
       <Paper style={{ height: 400, width: 800 }}>
         <VirtualizedTable

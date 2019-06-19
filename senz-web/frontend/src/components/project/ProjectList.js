@@ -88,7 +88,7 @@ class MuiVirtualizedTable extends React.PureComponent {
     );
   };
   handleClick = ({ index, rowData }) => {
-    //Navigate to the project
+    //TODO:Navigate to the project
     console.log(index, rowData);
   };
   render() {
@@ -127,49 +127,50 @@ class MuiVirtualizedTable extends React.PureComponent {
   }
 }
 
-MuiVirtualizedTable.propTypes = {
-  classes: PropTypes.object.isRequired,
-  columns: PropTypes.arrayOf(PropTypes.object).isRequired,
-  headerHeight: PropTypes.number,
-  onRowClick: PropTypes.func,
-  rowHeight: PropTypes.number
-};
-
 const VirtualizedTable = withStyles(styles)(MuiVirtualizedTable);
 
 function ReactVirtualizedTable(props) {
   const rows = props.projects;
+  if (rows === undefined) {
+    return null;
+  }
   return (
-    <Paper style={{ height: 400, width: 800 }}>
-      <VirtualizedTable
-        rowCount={rows.length}
-        rowGetter={({ index }) => rows[index]}
-        columns={[
-          {
-            width: 200,
-            label: "Name",
-            dataKey: "name"
-          },
-          {
-            width: 200,
-            label: "Number of Devices",
-            dataKey: "devices",
-            numeric: true
-          },
-          {
-            width: 200,
-            label: "Created On",
-            dataKey: "date"
-          },
-          {
-            width: 200,
-            label: "Status",
-            dataKey: "status"
-          }
-        ]}
-      />
-    </Paper>
+    <div data-test="ProjectListComponent">
+      <Paper style={{ height: 400, width: 800 }}>
+        <VirtualizedTable
+          rowCount={rows.length}
+          rowGetter={({ index }) => rows[index]}
+          columns={[
+            {
+              width: 200,
+              label: "Name",
+              dataKey: "name"
+            },
+            {
+              width: 200,
+              label: "Number of Devices",
+              dataKey: "devices",
+              numeric: true
+            },
+            {
+              width: 200,
+              label: "Created On",
+              dataKey: "date"
+            },
+            {
+              width: 200,
+              label: "Status",
+              dataKey: "status"
+            }
+          ]}
+        />
+      </Paper>
+    </div>
   );
 }
+
+ReactVirtualizedTable.propTypes = {
+  projects: PropTypes.arrayOf(PropTypes.object)
+};
 
 export default ReactVirtualizedTable;

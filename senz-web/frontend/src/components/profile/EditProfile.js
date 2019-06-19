@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
 import { toggleHeadingAction } from "../../_actions/heading";
@@ -91,11 +91,12 @@ class EditProfile extends Component {
       oldPassword,
       newPassword
     );
+    this.setState({ done: true });
   };
   render() {
     const { classes } = this.props;
     return (
-      <Fragment>
+      <div data-test="ProfileComponent">
         <NavBar />
         <SideBar />
 
@@ -169,7 +170,7 @@ class EditProfile extends Component {
           done={this.state.done}
           handleClose={this.handleClose}
         />
-      </Fragment>
+      </div>
     );
   }
 }

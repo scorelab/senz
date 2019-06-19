@@ -88,7 +88,7 @@ class AddProject extends Component {
     const { classes } = this.props;
     return (
       <Fragment>
-        <NavBar />
+        <NavBar data-test="NavBarComponent" />
         <SideBar />
         <Paper>
           <main className={classes.content}>

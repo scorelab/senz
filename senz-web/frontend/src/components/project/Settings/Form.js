@@ -106,11 +106,6 @@ class Form extends Component {
     this.setState({ [name]: false });
   };
   handleChange = name => event => {
-    // this.setState({
-    //   ...this.state,
-    //   [name]: event.target.checked,
-    //   switch: true
-    // });
     this.props.project.status = !this.props.project.status;
     this.props.switchProjectStatus(
       this.props.project._id,
