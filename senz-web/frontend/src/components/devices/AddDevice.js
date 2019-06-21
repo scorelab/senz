@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toggleHeadingAction } from "../../_actions/heading";
 import NavBar from "../layout/NavBar";
@@ -81,7 +81,7 @@ class AddDevice extends Component {
   render() {
     const { classes } = this.props;
     return (
-      <Fragment>
+      <div data-test="AddDeviceComponent">
         <NavBar />
         <SideBar />
         <Paper>
@@ -131,7 +131,7 @@ class AddDevice extends Component {
           message="Device Registered"
           handleClose={this.handleClose}
         />
-      </Fragment>
+      </div>
     );
   }
 }

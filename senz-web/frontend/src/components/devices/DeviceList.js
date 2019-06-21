@@ -159,12 +159,17 @@ class ReactVirtualizedTable extends Component {
         return { ...device, date: device.date.substr(0, 10), active: "ON" };
       else return { ...device, date: device.date.substr(0, 10), active: "OFF" };
     });
+    if (rows.length === 0) return null;
     return (
-      <Paper style={{ height: 400, width: 800 }}>
+      <Paper
+        style={{ height: 400, width: 800 }}
+        data-test="DeviceListComponent"
+      >
         <VirtualizedTable
           rowCount={rows.length}
           rowGetter={({ index }) => rows[index]}
           handleCheck={this.props.handleCheck}
+          data-test="TableComponent"
           columns={[
             {
               width: 150,
