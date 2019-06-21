@@ -7,6 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import Logout from "./Logout";
 import { connect } from "react-redux";
 import NavDropDown from "./NavDropDown";
+import PropTypes from "prop-types";
 
 const drawerWidth = 240;
 
@@ -33,9 +34,13 @@ class NavBar extends React.Component {
   render() {
     const { classes } = this.props;
     return (
-      <div className={classes.root}>
+      <div className={classes.root} data-test="NavBarComponent">
         <CssBaseline />
-        <AppBar position="fixed" className={classes.appBar}>
+        <AppBar
+          position="fixed"
+          className={classes.appBar}
+          data-test="AppBarComponent"
+        >
           <Toolbar>
             <Typography variant="h6" noWrap>
               {this.props.heading}
@@ -55,6 +60,10 @@ class NavBar extends React.Component {
 
 const MapStateToProp = state => {
   return { heading: state.heading.heading };
+};
+
+NavBar.propTypes = {
+  heading: PropTypes.string
 };
 
 export default connect(MapStateToProp)(
