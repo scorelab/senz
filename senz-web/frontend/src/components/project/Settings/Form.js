@@ -178,7 +178,7 @@ class Form extends Component {
       <Container>
         <CssBaseline />
         <Paper>
-          <div className={classes.main}>
+          <div className={classes.main} data-test="ProjectDetailSection">
             <div className={classes.subSection}>
               <Typography variant="h6">Project Details</Typography>
               <Divider />
@@ -242,7 +242,10 @@ class Form extends Component {
             <div className={classes.subSection}>
               <Typography variant="h6">Danger Zone</Typography>
               <Divider />
-              <div className={classes.subHeadDelete}>
+              <div
+                className={classes.subHeadDelete}
+                data-test="ProjectSettingsSection"
+              >
                 <Typography variant="body1">Project Switch</Typography>
                 <FormGroup>
                   <Grid
