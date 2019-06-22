@@ -6,17 +6,24 @@ import {
   AUTHENTICATED,
   FETCH_PROJECTS,
   ADD_PROJECT,
+  UPDATE_PROJECT_INFO,
   DELETE_PROJECT,
   ADD_DEVICE,
-  FETCH_DEVICES
+  FETCH_DEVICES,
+  SWITCH_DEVICE
 } from "../_actions/types";
 import decode from "jwt-decode";
 import {
   addProjectAction,
   fetchProjectAction,
-  deleteProjectAction
+  deleteProjectAction,
+  updateProjectInfoAction
 } from "../_actions/project";
-import { addDeviceAction, fetchAllDeviceAction } from "../_actions/device";
+import {
+  addDeviceAction,
+  fetchAllDeviceAction,
+  switchDevice
+} from "../_actions/device";
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
 
@@ -192,6 +199,37 @@ describe("ACTION CREATORS", () => {
         expect(actualAction[0]).toEqual(expectedAction);
       });
     });
+    it("Should update the project information", () => {
+      const mockResponse = {
+        name: "test",
+        description: "test",
+        _id: "test"
+      };
+      moxios.wait(() => {
+        const request = moxios.requests.mostRecent();
+        request.respondWith({
+          status: 200,
+          response: mockResponse
+        });
+      });
+      const store = mockStore({});
+      const updateArg = {
+        projectId: "test",
+        token: token,
+        name: "test",
+        description: "test"
+      };
+      const expectedAction = {
+        type: UPDATE_PROJECT_INFO,
+        payload: mockResponse
+      };
+      return store
+        .dispatch(updateProjectInfoAction({ ...updateArg }))
+        .then(() => {
+          const actualAction = store.getActions();
+          expect(actualAction[0]).toEqual(expectedAction);
+        });
+    });
   });
   describe("DEVICE ACTION CREATORS", () => {
     let user;
@@ -249,6 +287,29 @@ describe("ACTION CREATORS", () => {
       };
       const expectedAction = { type: FETCH_DEVICES, payload: mockResponse };
       return store.dispatch(fetchAllDeviceAction({ ...fetchArg })).then(() => {
+        const actualAction = store.getActions();
+        expect(actualAction[0]).toEqual(expectedAction);
+      });
+    });
+    it("Should switch the status of array of devices", () => {
+      const mockResponse = [
+        { name: "test", description: "test", status: false, _id: "test" }
+      ];
+      moxios.wait(() => {
+        const request = moxios.requests.mostRecent();
+        request.respondWith({
+          status: 200,
+          response: mockResponse
+        });
+      });
+      const store = mockStore({});
+      const switchArg = {
+        devices: ["test1", "test2"],
+        status: false,
+        token
+      };
+      const expectedAction = { type: SWITCH_DEVICE, payload: mockResponse };
+      return store.dispatch(switchDevice({ ...switchArg })).then(() => {
         const actualAction = store.getActions();
         expect(actualAction[0]).toEqual(expectedAction);
       });
