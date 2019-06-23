@@ -131,7 +131,7 @@ router.post("/:projectId/deviceAdd", jwtVerify, (req, res) => {
     Project.findByIdAndUpdate(
       projectId,
       { $push: { devices: device } },
-      { new: true }
+      { new: true, useFindAndModify: false }
     )
       .then(updatedProject => {
         foundDevice.projects.push(projectId);

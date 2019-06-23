@@ -75,7 +75,7 @@ router.put("/switch", jwtVerify, (req, res) => {
     });
   });
   Promise.all(allUpdation).then(result => {
-    res.json(result);
+    res.status(200).json(result);
   });
 });
 
