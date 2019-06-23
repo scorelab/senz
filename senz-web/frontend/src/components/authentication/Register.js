@@ -84,7 +84,7 @@ class Register extends Component {
   render() {
     const { classes } = this.props;
     return (
-      <Container component="main" maxWidth="xs">
+      <Container component="main" maxWidth="xs" data-test="RegisterComponent">
         <CssBaseline />
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
@@ -96,6 +96,7 @@ class Register extends Component {
           <form
             className={classes.form}
             onSubmit={this.props.handleSubmit(this.submit)}
+            data-test="RegisterForm"
           >
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>

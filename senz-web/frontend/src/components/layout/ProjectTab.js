@@ -42,9 +42,9 @@ function SimpleTabs(props) {
     return <div>Select a Project</div>;
   }
   return (
-    <div className={classes.root}>
+    <div className={classes.root} data-test="ProjectTabComponent">
       <AppBar position="static" style={{ backgroundColor: "#2196F3" }}>
-        <Tabs value={value} onChange={handleChange}>
+        <Tabs value={value} onChange={handleChange} data-test="TabsComponent">
           <Tab label="Dashboard" />
           <Tab label="Devices" />
           <Tab label="Analytics" />
