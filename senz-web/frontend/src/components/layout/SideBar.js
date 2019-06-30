@@ -88,7 +88,7 @@ class SideBar extends React.Component {
     const { classes } = this.props;
 
     return (
-      <div>
+      <div data-test="SideBarComponent">
         <Drawer
           className={classes.drawer}
           variant="permanent"
