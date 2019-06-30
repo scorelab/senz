@@ -2,9 +2,14 @@
   "name": "senz-admin-backend",
   "version": "1.0.0",
   "description": "This is the backend-API of the senz-admin panel.",
+  "husky": {
+    "hooks": {
+      "pre-push": "CI=true npm test"
+    }
+  },
   "main": "main.js",
   "scripts": {
-    "test": "export NODE_ENV=test && mocha --timeout 10000 && node main.js",
+    "test": "export NODE_ENV=test && mocha --timeout 10000 && nodemon main.js",
     "start": "export NODE_ENV=dev && nodemon main.js",
     "dev": "export NODE_ENV=dev && nodemon main.js"
   },

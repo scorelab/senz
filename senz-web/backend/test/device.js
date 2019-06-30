@@ -1,73 +1,63 @@
-const mongoose = require("mongoose")
-const Project = require("../models/project")
-const Device=require("../models/device")
-const chai = require('chai');
-const chaiHttp = require('chai-http');
-const server = require('../main');
+const Project = require("../models/project");
+const Device = require("../models/device");
+const User = require("../models/user");
+const chai = require("chai");
+const chaiHttp = require("chai-http");
+const server = require("../main");
 const should = chai.should();
-const decode = require('jwt-decode')
+const decode = require("jwt-decode");
 chai.use(chaiHttp);
 
-describe('Projects', () => {
-    beforeEach(function() {
-        // run and erase the test database
-        Project.deleteMany({}).then((p) => {
-            console.log("Cleared the database");
-        }).catch((err) => {
-            throw err;
-        })
-
-    });
-    describe('/GET device/:id devices', () => {
-        it('it should REGISTER, LOGIN and GET all the devices of the project', (done) => {
-            let user = {
-                email: "gargi@gmail.com",
-                name: "Gargi",
-                password: 'gargi123'
-            }
-            chai.request(server)
-                .post('/api/register')
-                .send(user)
-                .end((err, res) => {
-                    res.should.have.status(200);
-                    res.body.should.be.a('object');
-                    res.body.should.have.property('auth').eql(true);
-                    let user = {
-                        email: "gargi@gmail.com",
-                        password: 'gargi123'
-                    }
-                    chai.request(server)
-                        .post('/api/login')
-                        .send(user)
-                        .end((err, res) => {
-                            res.should.have.status(200);
-                            res.body.should.be.a('object');
-                            res.body.should.have.property('auth').eql(true);
-                            res.body.should.have.property('token');
-                            let project = new Project({
-                                name: 'TestProject'
-                            });
-                            project.save((err, project) => {
-                                chai.request(server)
-                                    .get('/device/' + project.id)
-                                    .send(project)
-                                    .set('Authorization', res.body.token)
-                                    .end((err, res) => {
-                                        res.should.have.status(200);
-                                        res.body.should.be.an('array');
-
-
-                                        done();
-                                    });
-                            });
-                        });
-
-                });
-        });
-
-    })
-
-
-
-
+describe("Devices", () => {
+  const mockUser = {
+    name: "test",
+    email: "test@test.com",
+    password: "test"
+  };
+  const mockDevice = {
+    name: "testDevice",
+    pubkey: "testkey"
+  };
+  let token;
+  let user;
+  before(done => {
+    chai
+      .request(server)
+      .post("/api/register")
+      .send(mockUser)
+      .end((err, res) => {
+        if (err) throw err;
+        token = res.body.token;
+        user = decode(res.body.token);
+        done();
+      });
+    User.deleteMany({});
+    Project.deleteMany({});
+    Device.deleteMany({});
+  });
+  it("Should POST a new device", done => {
+    chai
+      .request(server)
+      .post(`/device/${user.id}/new`)
+      .set("Authorization", token)
+      .send(mockDevice)
+      .end((err, res) => {
+        if (err) throw err;
+        res.should.have.status(200);
+        res.body.should.be.a("object");
+        done();
+      });
+  });
+  it("Should GET all devices of a particular user", done => {
+    chai
+      .request(server)
+      .get(`/device/${user.id}/all`)
+      .set("Authorization", token)
+      .end((err, res) => {
+        if (err) throw err;
+        res.should.have.status(200);
+        res.body.should.be.a("array");
+        done();
+      });
+  });
 });
