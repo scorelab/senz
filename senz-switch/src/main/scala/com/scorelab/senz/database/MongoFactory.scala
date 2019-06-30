@@ -16,4 +16,5 @@ object MongoFactory {
   // DB Collections
   val clientsCollection = db("clients")
   val senzCollection = db("senz")
+  val logCollection=db("logs")
 }
