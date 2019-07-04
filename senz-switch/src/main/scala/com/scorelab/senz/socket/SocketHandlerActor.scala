@@ -9,7 +9,7 @@ import com.scorelab.senz.utils.MessageUtils
 import java.util.Calendar
 import com.scorelab.senz.database.MongoFactory.logCollection
 import com.mongodb.casbah.Imports._
-
+import com.scorelab.senz.utils.ErrorHandling._
 //Senz Socket handler
 class SocketHandlerActor(device: ActorRef) extends Actor with ActorLogging {
   device ! Tcp.Register(self)
@@ -25,7 +25,13 @@ class SocketHandlerActor(device: ActorRef) extends Actor with ActorLogging {
       if (message.messageType == MessageType.SHARE && message.attributes.contains("#pubkey")){
         onShare(message)
       } else if (message.messageType == MessageType.DATA){ // Send message
+        val statusCode=errorHandler(query)
+        if(statusCode==500){
         onData(message, data)
+        } else{
+        val reply = MessageUtils.createQuery(DATA, Map("#msg" -> errorMapper(statusCode)), message.sender)
+        device ! Tcp.Write(ByteString(reply))
+        }
       }else if (message.messageType == MessageType.UNSHARE && message.attributes.contains("#pubkey")){
         onUnshare(message)
       }
