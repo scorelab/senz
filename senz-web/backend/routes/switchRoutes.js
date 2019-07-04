@@ -42,15 +42,20 @@ router.post("/check", (req, res) => {
   //Check if sender exists and is online
   const senderChecker = Device.findOne({ pubkey: sender });
   senderChecker.then(device => {
-    if (!device.status) errorObj["error"] = 505;
+    if (device) {
+      if (!device.status) errorObj["error"] = 505;
+    }
   });
   promiseArray.push(senderChecker);
   //Check if receiver exists and is online
   const receiverChecker = Device.findOne({ pubkey: receiver });
   receiverChecker.then(device => {
-    if (!device.status) errorObj["error"] = 505;
+    if (device) {
+      if (!device.status) errorObj["error"] = 505;
+    }
   });
   promiseArray.push(receiverChecker);
+  if (sender === receiver) errorObj["error"] = 507;
   //Finally
   Promise.all(promiseArray).then(result => {
     res.json(errorObj);
