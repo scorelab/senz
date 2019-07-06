@@ -16,7 +16,7 @@ const generator = num => {
 };
 
 //TODO:fetch 24 hour status and feed
-
+//TODO:Write delete device components
 class HourReport extends Component {
   state = {
     data: {
