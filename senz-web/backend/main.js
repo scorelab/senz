@@ -13,7 +13,7 @@ const config = require("config");
 Use the given URI from the environment file if given,
 or else use the uri for docker
 */
-const URI = config.dbURI || "mongodb://mongo:27017/senzAdmin";
+const URI = config.dbURI || "mongodb://mongo:27017/senz";
 mongoose
   .connect(URI, { useNewUrlParser: true })
   .then(e => {
@@ -46,13 +46,11 @@ if (config.util.getEnv("NODE_ENV") !== "test") {
 const userRoutes = require("./routes/userRoutes");
 const projectRoutes = require("./routes/projectRoutes");
 const deviceRoutes = require("./routes/deviceRoutes");
-const switchRoutes = require("./routes/switchRoutes");
 
 //Using Routes
 app.use("/api", userRoutes);
 app.use("/project", projectRoutes);
 app.use("/device", deviceRoutes);
-app.use("/switch", switchRoutes);
 
 //Starting the server
 app.listen(port, err => {

@@ -4,10 +4,17 @@ const jwtVerify = require("./verifyTokens");
 const Project = require("../models/project");
 const Device = require("../models/device");
 const User = require("../models/user");
+const pkMap = require("../models/publicKeyMap");
 
 //Create a new device for a particular user
+//TODO:Use something else as the signature in place of userId
 router.post("/:userId/new", jwtVerify, (req, res) => {
   const userId = req.params.userId;
+  //Enter in the pkMaps
+  const pkEntry = { publicKey: req.body.pubkey, signature: req.params.userId };
+  pkMap.create(pkEntry).catch(err => {
+    throw err;
+  });
   User.findById(userId)
     .then(user => {
       Device.create(req.body)
@@ -29,6 +36,17 @@ router.post("/:userId/new", jwtVerify, (req, res) => {
 router.delete("/:userId/delete/:deviceId", jwtVerify, (req, res) => {
   const userId = req.params.userId;
   const deviceId = req.params.deviceId;
+  //Remove from the pkMap
+  Device.findById(deviceId).then(foundDevice => {
+    pkMap.findOneAndDelete({ publicKey: foundDevice.pubkey }).catch(err => {
+      throw err;
+    });
+  });
+  //Remove the device
+  Device.findByIdAndDelete(deviceId).catch(err => {
+    throw err;
+  });
+  //Remove from user device's list
   User.findById(userId)
     .then(user => {
       user.devices.remove(deviceId);
@@ -62,16 +80,18 @@ router.put("/switch", jwtVerify, (req, res) => {
     );
     //Change the status of the devices in all the projects it was a part of
     Device.findById(deviceId).then(foundDevice => {
-      foundDevice.projects.map(projectId => {
-        Project.findById(projectId).then(foundProject => {
-          foundProject.devices.map(device => {
-            if (device._id === deviceId) {
-              device.status = status;
-            }
+      if (foundDevice) {
+        foundDevice.projects.map(projectId => {
+          Project.findById(projectId).then(foundProject => {
+            foundProject.devices.map(device => {
+              if (device._id === deviceId) {
+                device.status = status;
+              }
+            });
+            foundProject.save();
           });
-          foundProject.save();
         });
-      });
+      }
     });
   });
   Promise.all(allUpdation).then(result => {

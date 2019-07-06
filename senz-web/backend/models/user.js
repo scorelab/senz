@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 /*
-This is the user schema,it will contain list of projects for 
+This is the user schema,it will contain list of projects and devices for 
 a particular user
 */
 const userSchema = new mongoose.Schema({
