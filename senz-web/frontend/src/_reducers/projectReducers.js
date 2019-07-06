@@ -96,14 +96,17 @@ export const projectReducers = (
         }
       };
     case SWITCH_DEVICE:
-      const modDeviceList = state.SelectedProject.devices.map(device => {
-        for (var i = 0; i < action.payload.length; i++) {
-          if (device._id === action.payload[i]._id) {
-            device.status = action.payload[i].status;
+      var modDeviceList = [];
+      if (state.SelectedProject.devices) {
+        modDeviceList = state.SelectedProject.devices.map(device => {
+          for (var i = 0; i < action.payload.length; i++) {
+            if (device._id === action.payload[i]._id) {
+              device.status = action.payload[i].status;
+            }
           }
-        }
-        return device;
-      });
+          return device;
+        });
+      }
       return {
         AllProject: [
           ...state.AllProject.map(project => {
