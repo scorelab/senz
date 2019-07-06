@@ -5,6 +5,7 @@ const Project = require("../models/project");
 const User = require("../models/user");
 const Device = require("../models/device");
 const mongoose = require("mongoose");
+const pkMaps = require("../models/publicKeyMap");
 
 //Get all the projects of a particular user
 router.get("/:userid/all", jwtVerify, (req, res) => {
@@ -67,6 +68,21 @@ router.delete("/:userId/delete/:projectId", jwtVerify, (req, res) => {
         throw err;
       });
   });
+  //Remove the project from the pkMaps
+  Project.findById(projectId).then(foundProject => {
+    foundProject.devices.forEach(device => {
+      Device.findById(device._id).then(foundDevice => {
+        pkMaps.find({ publicKey: foundDevice.pubkey }).then(arrayMaps => {
+          arrayMaps.forEach(pkMap => {
+            pkMap.projects = pkMap.projects.filter(pId => {
+              return pId !== projectId;
+            });
+            pkMap.save();
+          });
+        });
+      });
+    });
+  });
   //Remove the project
   Project.findByIdAndDelete(projectId)
     .then(delProject => {
@@ -117,6 +133,11 @@ const giveDate = date => {
 router.post("/:projectId/deviceAdd", jwtVerify, (req, res) => {
   const { pubkey } = req.body;
   const projectId = req.params.projectId;
+  //Add the project to the pkMaps
+  pkMaps.findOne({ publicKey: pubkey }).then(foundLog => {
+    foundLog.projects.push(projectId);
+    foundLog.save();
+  });
   Device.findOne({ pubkey }).then(foundDevice => {
     // //Create the device
     const { name, _id, status, pubkey } = foundDevice;
@@ -164,6 +185,18 @@ router.put("/:projectId/info", jwtVerify, (req, res) => {
 router.put("/:projectId/delDevice", jwtVerify, (req, res) => {
   const projectId = req.params.projectId;
   const deviceList = req.body.devices;
+  //Remove them from the pkMaps
+  deviceList.forEach(deviceId => {
+    Device.findById(deviceId).then(foundDevice => {
+      pkMaps.findOne({ publicKey: foundDevice.pubkey }).then(pkMap => {
+        pkMap.projects = pkMap.projects.filter(pId => {
+          return pId !== projectId;
+        });
+        pkMap.save();
+      });
+    });
+  });
+  //Remove them from the projects
   Project.findById(projectId)
     .then(project => {
       deviceList.map(deviceId => {
