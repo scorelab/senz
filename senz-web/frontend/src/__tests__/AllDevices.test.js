@@ -1,7 +1,7 @@
 import React from "react";
-import AllDevices from "./AllDevices";
+import AllDevices from "../components/devices/AllDevices";
 import { createShallow } from "@material-ui/core/test-utils";
-import { testStore, findByTestAttr } from "../../../Utils";
+import { testStore, findByTestAttr } from "../../Utils";
 
 describe("AllDevices Component", () => {
   describe("Should render the component", () => {

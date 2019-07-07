@@ -1,6 +1,6 @@
 import React from "react";
-import Form from "./Form";
-import { testStore, findByTestAttr } from "../../../../Utils";
+import Form from "../components/project/Settings/Form";
+import { testStore, findByTestAttr } from "../../Utils";
 import { createShallow } from "@material-ui/core/test-utils";
 
 describe("AllProject Component", () => {

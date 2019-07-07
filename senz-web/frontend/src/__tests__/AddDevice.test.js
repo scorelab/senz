@@ -1,6 +1,6 @@
 import React from "react";
-import AddDevice from "./AddDevice";
-import { testStore, findByTestAttr } from "../../../Utils";
+import AddDevice from "../components/devices/AddDevice";
+import { testStore, findByTestAttr } from "../../Utils";
 import { createShallow } from "@material-ui/core/test-utils";
 
 describe("AddDevice Component", () => {

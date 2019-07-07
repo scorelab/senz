@@ -1,16 +1,16 @@
 import React from "react";
-import Register from "./Register";
-import { testStore, findByTestAttr } from "../../../Utils";
+import Login from "../components/authentication/Login";
+import { testStore, findByTestAttr } from "../../Utils";
 import { createShallow } from "@material-ui/core/test-utils";
 
-describe("Register Component", () => {
+describe("Login Component", () => {
   describe("Component Renders", () => {
     let shallow;
     let shallowComponent;
     beforeEach(() => {
       shallow = createShallow({ dive: true });
       const store = testStore({});
-      shallowComponent = shallow(<Register store={store} />)
+      shallowComponent = shallow(<Login store={store} />)
         .dive()
         .dive()
         .dive()
@@ -23,12 +23,12 @@ describe("Register Component", () => {
         .dive();
     });
     it("Should render the component correctly", () => {
-      const register = findByTestAttr(shallowComponent, "RegisterComponent");
-      expect(register.length).toBe(1);
+      const login = findByTestAttr(shallowComponent, "LoginComponent");
+      expect(login.length).toBe(1);
     });
     it("Should render the login form", () => {
-      const register = findByTestAttr(shallowComponent, "RegisterForm");
-      expect(register.length).toBe(1);
+      const login = findByTestAttr(shallowComponent, "LoginForm");
+      expect(login.length).toBe(1);
     });
   });
 });

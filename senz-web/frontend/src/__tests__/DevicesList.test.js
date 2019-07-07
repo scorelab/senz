@@ -1,6 +1,6 @@
 import React from "react";
-import { testStore } from "../../../../Utils";
-import DeviceList from "./DevicesList";
+import { testStore } from "../../Utils";
+import DeviceList from "../components/project/Devices/DevicesList";
 import { createShallow } from "@material-ui/core/test-utils";
 
 describe("Device List Component", () => {

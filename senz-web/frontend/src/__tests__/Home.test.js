@@ -1,7 +1,7 @@
 import React from "react";
 import { shallow } from "enzyme";
 import { findByTestAttr } from "../../Utils";
-import Home from "./Home";
+import Home from "../components/Home";
 
 const setUp = () => {
   const wrapper = shallow(<Home />).dive();

@@ -1,7 +1,7 @@
 import React from "react";
-import ProjectTab from "./ProjectTab";
+import ProjectTab from "../components/layout/ProjectTab";
 import { createShallow } from "@material-ui/core/test-utils";
-import { testStore, findByTestAttr } from "../../../Utils";
+import { testStore, findByTestAttr } from "../../Utils";
 
 describe("ProjectTab Component", () => {
   describe("Component renders ", () => {
