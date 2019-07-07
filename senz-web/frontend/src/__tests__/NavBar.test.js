@@ -1,6 +1,6 @@
 import React from "react";
-import NavBar from "./NavBar";
-import { testStore, findByTestAttr } from "../../../Utils";
+import NavBar from "../components/layout/NavBar";
+import { testStore, findByTestAttr } from "../../Utils";
 import { createShallow } from "@material-ui/core/test-utils";
 
 describe("NavBar component", () => {

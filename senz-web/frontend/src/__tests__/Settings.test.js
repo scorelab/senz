@@ -1,6 +1,6 @@
 import React from "react";
-import Settings from "./Settings";
-import { testStore } from "../../../../Utils";
+import Settings from "../components/project/Settings/Settings";
+import { testStore } from "../../Utils";
 import { createShallow } from "@material-ui/core/test-utils";
 
 describe("AllProject Component", () => {

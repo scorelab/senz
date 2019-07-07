@@ -1,7 +1,7 @@
 import React from "react";
-import DeviceList from "./DeviceList";
+import DeviceList from "../components/devices/DeviceList";
 import { createShallow } from "@material-ui/core/test-utils";
-import { testStore, findByTestAttr } from "../../../Utils";
+import { testStore, findByTestAttr } from "../../Utils";
 
 describe("DeviceList Component", () => {
   describe("Renders Correctly", () => {

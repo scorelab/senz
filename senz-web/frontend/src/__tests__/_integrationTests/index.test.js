@@ -1,7 +1,7 @@
 import moxios from "moxios";
 import configureStore from "redux-mock-store";
 import thunk from "redux-thunk";
-import { RegisterAction, LoginAction } from "../_actions/auth";
+import { RegisterAction, LoginAction } from "../../_actions/auth";
 import {
   AUTHENTICATED,
   FETCH_PROJECTS,
@@ -11,19 +11,19 @@ import {
   ADD_DEVICE,
   FETCH_DEVICES,
   SWITCH_DEVICE
-} from "../_actions/types";
+} from "../../_actions/types/index";
 import decode from "jwt-decode";
 import {
   addProjectAction,
   fetchProjectAction,
   deleteProjectAction,
   updateProjectInfoAction
-} from "../_actions/project";
+} from "../../_actions/project";
 import {
   addDeviceAction,
   fetchAllDeviceAction,
   switchDevice
-} from "../_actions/device";
+} from "../../_actions/device";
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
 

@@ -1,7 +1,7 @@
 import React from "react";
-import SideBar from "./SideBar";
+import SideBar from "../components/layout/SideBar";
 import { createShallow } from "@material-ui/core/test-utils";
-import { findByTestAttr } from "../../../Utils";
+import { findByTestAttr } from "../../Utils";
 
 describe("SideBar component", () => {
   describe("Component should render without errors", () => {

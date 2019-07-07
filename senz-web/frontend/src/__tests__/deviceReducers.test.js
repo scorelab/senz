@@ -1,5 +1,5 @@
 import { ADD_DEVICE, FETCH_DEVICES } from "../_actions/types";
-import { deviceReducers } from "./deviceReducers";
+import { deviceReducers } from "../_reducers/deviceReducers";
 
 describe("Device Reducer", () => {
   it("Should return the default state", () => {

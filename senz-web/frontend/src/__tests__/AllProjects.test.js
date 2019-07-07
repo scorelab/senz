@@ -1,6 +1,6 @@
 import React from "react";
-import AllProject from "./AllProjects";
-import { checkProps, testStore } from "../../../Utils";
+import AllProject from "../components/project/AllProjects";
+import { checkProps, testStore } from "../../Utils";
 import { createShallow } from "@material-ui/core/test-utils";
 
 describe("AllProject Component", () => {
