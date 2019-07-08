@@ -1,5 +1,5 @@
 import { AUTHENTICATED, UNAUTHENTICATED } from "../_actions/types/index";
-import authReducers from "./authReducers";
+import authReducers from "../_reducers/authReducers";
 describe("Authentication Reducers", () => {
   it("Should return the default state", () => {
     const newState = authReducers(undefined, {});

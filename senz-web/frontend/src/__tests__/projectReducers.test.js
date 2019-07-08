@@ -4,7 +4,7 @@ import {
   DELETE_PROJECT,
   UPDATE_PROJECT_INFO
 } from "../_actions/types";
-import { projectReducers } from "./projectReducers";
+import { projectReducers } from "../_reducers/projectReducers";
 
 describe("Project Reducer", () => {
   it("Should return the default state", () => {

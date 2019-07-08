@@ -1,5 +1,5 @@
 import { NAV_HEADING, CLEAR_ALL } from "../_actions/types";
-import headingReducer from "./headingReducer";
+import headingReducer from "../_reducers/headingReducer";
 
 describe("Heading reducer", () => {
   it("Should return the default state", () => {

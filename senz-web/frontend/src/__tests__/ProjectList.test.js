@@ -1,7 +1,7 @@
 import React from "react";
 import { shallow } from "enzyme";
-import ProjectList from "./ProjectList";
-import { findByTestAttr, checkProps } from "../../../Utils";
+import ProjectList from "../components/project/ProjectList";
+import { findByTestAttr, checkProps } from "../../Utils";
 
 const setUp = props => {
   const wrapper = shallow(<ProjectList {...props} />);

@@ -1,6 +1,6 @@
 import React from "react";
-import { testStore } from "../../../Utils";
-import EditProfile from "./EditProfile";
+import { testStore } from "../../Utils";
+import EditProfile from "../components/profile/EditProfile";
 import { createShallow } from "@material-ui/core/test-utils";
 
 describe("EditProfile Component", () => {
