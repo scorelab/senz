@@ -13,7 +13,6 @@ libraryDependencies ++= Seq(
   "org.mongodb" %% "casbah" % "3.1.1",
   "org.slf4j" % "slf4j-simple" % "1.6.4",
   "javax.xml.bind" % "jaxb-api" % "2.2.6",
-  "org.scalaj" %% "scalaj-http" % "2.4.2",
   "com.typesafe.play" %% "play-json" % "2.7.3"
 )
 
