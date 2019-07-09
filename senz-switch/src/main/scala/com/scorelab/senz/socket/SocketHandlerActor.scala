@@ -13,7 +13,6 @@ import com.scorelab.senz.utils.ErrorHandling._
 //Senz Socket handler
 class SocketHandlerActor(device: ActorRef) extends Actor with ActorLogging {
   device ! Tcp.Register(self)
-
   def receive = {
     case Tcp.Received(data) =>
       print("RECEIVED: " + data.utf8String)
@@ -23,15 +22,18 @@ class SocketHandlerActor(device: ActorRef) extends Actor with ActorLogging {
 
       // Handle message
       if (message.messageType == MessageType.SHARE && message.attributes.contains("#pubkey")){
-        onShare(message)
-      } else if (message.messageType == MessageType.DATA){ // Send message
-        val statusCode=errorHandler(query)
+        val statusCode=registerHandler(query)
         if(statusCode==500){
-        onData(message, data)
-        } else{
-        val reply = MessageUtils.createQuery(DATA, Map("#msg" -> errorMapper(statusCode)), message.sender)
-        device ! Tcp.Write(ByteString(reply))
+        //Register device with the switch
+        onShare(message)
         }
+        else{
+          //Send error message
+          val reply = MessageUtils.createQuery(DATA, Map("#msg" -> errorMapper(statusCode)), message.sender)
+          device ! Tcp.Write(ByteString(reply))
+        }
+      } else if (message.messageType == MessageType.DATA){ // Send message
+        onData(message, data)       
       }else if (message.messageType == MessageType.UNSHARE && message.attributes.contains("#pubkey")){
         onUnshare(message)
       }
