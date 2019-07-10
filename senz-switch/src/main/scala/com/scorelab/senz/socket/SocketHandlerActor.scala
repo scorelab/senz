@@ -32,8 +32,15 @@ class SocketHandlerActor(device: ActorRef) extends Actor with ActorLogging {
           val reply = MessageUtils.createQuery(DATA, Map("#msg" -> errorMapper(statusCode)), message.sender)
           device ! Tcp.Write(ByteString(reply))
         }
-      } else if (message.messageType == MessageType.DATA){ // Send message
-        onData(message, data)       
+      } else if (message.messageType == MessageType.DATA){ 
+        val statusCode=shareHandler(query)
+        if(statusCode==500){
+        //Send message  
+        onData(message, data)
+        }else{
+         val reply = MessageUtils.createQuery(DATA, Map("#msg" -> errorMapper(statusCode)), message.sender)
+         device ! Tcp.Write(ByteString(reply))
+        }       
       }else if (message.messageType == MessageType.UNSHARE && message.attributes.contains("#pubkey")){
         onUnshare(message)
       }
