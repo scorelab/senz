@@ -35,8 +35,11 @@ const uuidv4 = require("uuid/v4");
 //Signature producing function
 const getSignature = username => {
   const uniqueId = uuidv4();
+  const fullUsername = username.split(" ");
+  const firstName = fullUsername[0];
+  const tillFlag = firstName.length > 4 ? 4 : firstName.length;
   return (
-    username.substr(0, 4) +
+    username.substr(0, tillFlag) +
     String(Date.now()).substr(
       String(Date.now()).length - 4,
       String(Date.now()).length
@@ -64,7 +67,7 @@ router.post("/register", function(req, res) {
         name: req.body.name,
         email: req.body.email,
         password: hashedPass,
-        signature: getSignature(req.body.name)
+        signature: getSignature(String(req.body.name))
       },
       function(err, user) {
         if (err)
