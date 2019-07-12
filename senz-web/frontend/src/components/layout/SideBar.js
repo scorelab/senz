@@ -168,6 +168,13 @@ class SideBar extends React.Component {
                   </ListItem>
                 </Link>
               </List>
+              <List className={classes.nestedList}>
+                <Link to="/viewProfile" className={classes.links}>
+                  <ListItem className={classes.nested} button>
+                    <ListItemText>View Profile</ListItemText>
+                  </ListItem>
+                </Link>
+              </List>
             </Collapse>
           </List>
           <List>
