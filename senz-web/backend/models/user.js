@@ -24,6 +24,7 @@ const userSchema = new mongoose.Schema({
       ref: "project"
     }
   ],
+  signature: { required: true, type: String },
   devices: [
     {
       type: mongoose.Schema.Types.ObjectId,
