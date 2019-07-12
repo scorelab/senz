@@ -79,7 +79,8 @@ router.post("/register", function(req, res) {
           {
             id: user._id,
             name: user.name,
-            signature: user.signature
+            signature: user.signature,
+            email: user.email
           },
           config.secretKey,
           {
@@ -162,7 +163,8 @@ router.post("/login", function(req, res) {
           {
             id: user._id,
             name: user.name,
-            signature: user.signature
+            signature: user.signature,
+            email: user.email
           },
           config.secretKey,
           {
@@ -203,7 +205,7 @@ router.put("/:userId/update", jwtVerify, (req, res) => {
       User.findByIdAndUpdate(
         userId,
         {
-          $set: { name: req.body.name, password: hashedPass }
+          $set: { password: hashedPass }
         },
         { new: true }
       ).then(updatedUser => {
