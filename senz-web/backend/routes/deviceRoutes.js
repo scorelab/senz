@@ -7,7 +7,6 @@ const User = require("../models/user");
 const pkMap = require("../models/publicKeyMap");
 
 //Create a new device for a particular user
-//TODO:Use something else as the signature in place of userId
 router.post("/:userId/new", jwtVerify, (req, res) => {
   const userId = req.params.userId;
   //Enter in the pkMaps

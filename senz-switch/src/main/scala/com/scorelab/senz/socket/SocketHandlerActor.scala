@@ -34,7 +34,14 @@ class SocketHandlerActor(device: ActorRef) extends Actor with ActorLogging {
         }
       } else if (message.messageType == MessageType.DATA){ 
         val statusCode=shareHandler(query)
-        if(statusCode==500){
+        //Log the query
+        val log=MongoDBObject("sender"->message.sender,
+                              "receiver"->message.receiver,
+                              "signature"->message.signature,
+                              "statusCode"->statusCode,
+                              "timestamp"->Calendar.getInstance.getTime())
+        logCollection.insert(log)    
+        if(statusCode==500){                  
         //Send message  
         onData(message, data)
         }else{
@@ -90,11 +97,6 @@ class SocketHandlerActor(device: ActorRef) extends Actor with ActorLogging {
     if (SessionManager.sessions.contains(message.receiver)){
       val receiverActor: ActorRef = SessionManager.getSession(message.receiver).value
       receiverActor ! Tcp.Write(data)
-      //Log Entry
-      val entry=MongoDBObject("sender" -> message.sender,
-                              "receiver"->message.receiver,
-                              "timestamp"->Calendar.getInstance.getTime())
-      logCollection.insert(entry)
       device ! Tcp.Write(ByteString("Message is sent to the device " + message.receiver + "\n"))
     } else {
       device ! Tcp.Write(ByteString("Device is not logged in\n"))

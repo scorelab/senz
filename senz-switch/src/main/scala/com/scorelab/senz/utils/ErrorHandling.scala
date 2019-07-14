@@ -17,22 +17,28 @@ object ErrorHandling{
   )
   var registerError=500
   var shareError=500
-  private def signatureIntegrity(pkMap:String,givenDevice:String):Unit={
-    val pkMapJson:JsValue=Json.parse(pkMap)
-    val actualDevice=(pkMapJson \ "publicKey").as[String]
-    if(givenDevice!=actualDevice){
-      registerError=501
-    }else{
-      registerError=500
-    }  
-  }
-  private def signatureValid(signature:String,givenDevice:String):Unit={
+  private def signatureValid(signature:String,givenDevice:String):Int={
     val query=MongoDBObject("signature"->signature)
-    val result=publicKeyCollection.findOne(query)
-    result match {
-      case None => registerError=502
-      case Some(pkMap)=> signatureIntegrity(pkMap.toString,givenDevice)
+    val result=publicKeyCollection.find(query)
+    if(result.size==0)
+    {
+      shareError=502
+      return shareError
     }
+    else
+    {
+        result.foreach(entry=>{
+        val json:JsValue=Json.parse(entry.toString)
+        val publicKey=(json \ "publicKey").as[String]
+        if(publicKey==givenDevice){
+          shareError=500
+          return shareError
+        }
+      })
+    
+  }
+  shareError=501
+  shareError
   }
   private def signatureValid(signature:String,sender:String,receiver:String):Int={
     //Project List
@@ -89,8 +95,8 @@ object ErrorHandling{
       val signature=query.split(" ")(7)
       val device=query.split(" ")(2)
       //Call different methods and assign registerError
-      signatureValid(signature,device)
-      registerError
+      val statusCode=signatureValid(signature,device)
+      statusCode
   }
   def shareHandler(query:String):Int={
     //Check if query is valid
