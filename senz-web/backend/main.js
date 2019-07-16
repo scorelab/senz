@@ -46,11 +46,13 @@ if (config.util.getEnv("NODE_ENV") !== "test") {
 const userRoutes = require("./routes/userRoutes");
 const projectRoutes = require("./routes/projectRoutes");
 const deviceRoutes = require("./routes/deviceRoutes");
+const logRoutes = require("./routes/logRoutes");
 
 //Using Routes
 app.use("/api", userRoutes);
 app.use("/project", projectRoutes);
 app.use("/device", deviceRoutes);
+app.use("/log", logRoutes);
 
 //Starting the server
 app.listen(port, err => {
