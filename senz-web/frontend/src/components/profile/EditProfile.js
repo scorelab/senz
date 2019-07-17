@@ -116,14 +116,6 @@ class EditProfile extends Component {
                   onSubmit={this.props.handleSubmit(this.submit)}
                   className={classes.innercontainer}
                 >
-                  <Field
-                    name="name"
-                    id="name"
-                    label="Enter Name"
-                    component={this.renderInput}
-                    type="text"
-                  />
-                  <br />
                   <br />
                   <Field
                     name="oldPassword"

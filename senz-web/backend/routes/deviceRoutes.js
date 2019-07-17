@@ -9,11 +9,17 @@ const pkMap = require("../models/publicKeyMap");
 //Create a new device for a particular user
 router.post("/:userId/new", jwtVerify, (req, res) => {
   const userId = req.params.userId;
-  //Enter in the pkMaps
-  const pkEntry = { publicKey: req.body.pubkey, signature: req.params.userId };
-  pkMap.create(pkEntry).catch(err => {
-    throw err;
+  User.findById(userId).then(foundUser => {
+    //Enter in the pkMaps
+    const pkEntry = {
+      publicKey: req.body.pubkey,
+      signature: foundUser.signature
+    };
+    pkMap.create(pkEntry).catch(err => {
+      throw err;
+    });
   });
+
   User.findById(userId)
     .then(user => {
       Device.create(req.body)

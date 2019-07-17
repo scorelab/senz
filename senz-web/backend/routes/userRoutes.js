@@ -5,6 +5,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 const jwtVerify = require("./verifyTokens");
+const uuidv4 = require("uuid/v4");
 
 /**
  * @api {post} api/register Register a new user
@@ -31,6 +32,21 @@ const jwtVerify = require("./verifyTokens");
  *      "auth":false
  *    }
  */
+//Signature producing function
+const getSignature = username => {
+  const uniqueId = uuidv4();
+  const fullUsername = username.split(" ");
+  const firstName = fullUsername[0];
+  const tillFlag = firstName.length > 4 ? 4 : firstName.length;
+  return (
+    username.substr(0, tillFlag) +
+    String(Date.now()).substr(
+      String(Date.now()).length - 4,
+      String(Date.now()).length
+    ) +
+    uniqueId.substr(0, 6)
+  );
+};
 //Register a new user
 router.post("/register", function(req, res) {
   var { name, email, password } = req.body;
@@ -50,7 +66,8 @@ router.post("/register", function(req, res) {
       {
         name: req.body.name,
         email: req.body.email,
-        password: hashedPass
+        password: hashedPass,
+        signature: getSignature(String(req.body.name))
       },
       function(err, user) {
         if (err)
@@ -61,7 +78,9 @@ router.post("/register", function(req, res) {
         var token = jwt.sign(
           {
             id: user._id,
-            name: user.name
+            name: user.name,
+            signature: user.signature,
+            email: user.email
           },
           config.secretKey,
           {
@@ -143,7 +162,9 @@ router.post("/login", function(req, res) {
         var token = jwt.sign(
           {
             id: user._id,
-            name: user.name
+            name: user.name,
+            signature: user.signature,
+            email: user.email
           },
           config.secretKey,
           {
@@ -184,7 +205,7 @@ router.put("/:userId/update", jwtVerify, (req, res) => {
       User.findByIdAndUpdate(
         userId,
         {
-          $set: { name: req.body.name, password: hashedPass }
+          $set: { password: hashedPass }
         },
         { new: true }
       ).then(updatedUser => {

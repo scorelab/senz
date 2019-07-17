@@ -10,6 +10,7 @@ import AddDevice from "./devices/AddDevice";
 import AllProject from "./project/AllProjects";
 import AllDevice from "./devices/AllDevices";
 import EditProfile from "./profile/EditProfile";
+import ViewProfile from "./profile/ViewProfile";
 
 //TODO: Update all note cards
 class App extends Component {
@@ -38,6 +39,11 @@ class App extends Component {
             path="/editProfile"
             exact
             component={authRequired(EditProfile)}
+          />
+          <Route
+            path="/viewProfile"
+            exact
+            component={authRequired(ViewProfile)}
           />
         </div>
       </BrowserRouter>
