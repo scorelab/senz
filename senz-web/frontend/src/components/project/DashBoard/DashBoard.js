@@ -10,9 +10,6 @@ import { connect } from "react-redux";
 import { toggleHeadingAction } from "../../../_actions/heading";
 
 class DashBoard extends Component {
-  componentWillMount = () => {
-    this.props.toggleHeadingAction({ heading: "Dashboard" });
-  };
   render() {
     return (
       <div>
@@ -32,8 +29,8 @@ class DashBoard extends Component {
             </Grid>
             <Grid item xs={6}>
               <Info
-                firstLine="Number of Devices Online: 10  "
-                secondLine="Number of Devices Offline: 4"
+                firstLine={`Number of devices online: ${this.props.online}`}
+                secondLine={`Number of devices offline: ${this.props.offline}`}
                 heading="Device Details"
               />
             </Grid>
@@ -54,7 +51,18 @@ class DashBoard extends Component {
   }
 }
 
+const MapStateToProp = state => {
+  return {
+    online: state.project.SelectedProject.devices.filter(device => {
+      return device.status === true;
+    }).length,
+    offline: state.project.SelectedProject.devices.filter(device => {
+      return device.status === false;
+    }).length
+  };
+};
+
 export default connect(
-  null,
+  MapStateToProp,
   { toggleHeadingAction }
 )(DashBoard);
