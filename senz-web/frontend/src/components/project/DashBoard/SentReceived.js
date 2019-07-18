@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Polar } from "react-chartjs-2";
 import { withStyles } from "@material-ui/core/styles";
 import { Paper, Typography } from "@material-ui/core";
+import { connect } from "react-redux";
+import { fetchProjectBasedLog } from "../../../_actions/log";
 
 const styles = theme => ({
   root: {
@@ -27,6 +29,13 @@ class SentReceived extends Component {
       maintainAspectRatio: false
     }
   };
+  componentWillMount = () => {
+    const { token, signature } = this.props.user;
+    const devices = this.props.project.devices.map(device => {
+      return device.pubkey;
+    });
+    this.props.fetchProjectBasedLog(signature, devices, token);
+  };
   render() {
     const { classes } = this.props;
     return (
@@ -48,5 +57,16 @@ class SentReceived extends Component {
     );
   }
 }
+const styledComponent = withStyles(styles)(SentReceived);
+const MapStateToProp = state => {
+  return {
+    projectLog: state.log.projectLogArr,
+    user: state.auth.user,
+    project: state.project.SelectedProject
+  };
+};
 
-export default withStyles(styles)(SentReceived);
+export default connect(
+  MapStateToProp,
+  { fetchProjectBasedLog }
+)(styledComponent);
