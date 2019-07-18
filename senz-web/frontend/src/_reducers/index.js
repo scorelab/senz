@@ -3,6 +3,7 @@ import toggleHeadingReducer from "./headingReducer";
 import authReducer from "./authReducers";
 import { deviceReducers } from "./deviceReducers";
 import { projectReducers } from "./projectReducers";
+import { logReducers } from "./logReducers";
 import { reducer as formReducer } from "redux-form";
 
 export default combineReducers({
@@ -10,5 +11,6 @@ export default combineReducers({
   form: formReducer,
   auth: authReducer,
   project: projectReducers,
-  device: deviceReducers
+  device: deviceReducers,
+  log: logReducers
 });
