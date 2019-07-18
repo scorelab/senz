@@ -15,7 +15,7 @@ or else use the uri for docker
 */
 const URI = config.dbURI || "mongodb://mongo:27017/senz";
 mongoose
-  .connect(URI, { useNewUrlParser: true })
+  .connect(URI, { useNewUrlParser: true, useFindAndModify: false })
   .then(e => {
     console.log("Database Connected");
   })

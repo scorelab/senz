@@ -75,32 +75,54 @@ router.get("/:userid/all", jwtVerify, (req, res) => {
 });
 
 //Switch the devices of the user
-router.put("/switch", jwtVerify, (req, res) => {
-  const { devices, status } = req.body;
-  var allUpdation = [];
-  //Loop through the list of devices and change their status
-  devices.map(deviceId => {
-    allUpdation.push(
-      Device.findByIdAndUpdate(deviceId, { $set: { status } }, { new: true })
-    );
-    //Change the status of the devices in all the projects it was a part of
-    Device.findById(deviceId).then(foundDevice => {
-      if (foundDevice) {
-        foundDevice.projects.map(projectId => {
-          Project.findById(projectId).then(foundProject => {
-            foundProject.devices.map(device => {
-              if (device._id === deviceId) {
-                device.status = status;
-              }
-            });
-            foundProject.save();
+const switchProjects = (projectArray, deviceId, status) => {
+  return new Promise((resolve, reject) => {
+    const promiseArray = [];
+    if (projectArray.length) {
+      projectArray.forEach(projectId => {
+        Project.findById(projectId).then((project, prIndex, prArr) => {
+          project.devices.forEach((device, index, arr) => {
+            if (device._id == deviceId) {
+              device.status = status;
+            }
+            project.devices.set(index, device);
           });
+          promiseArray.push(project.save());
         });
-      }
+      });
+    } else {
+      resolve("done");
+    }
+    Promise.all(promiseArray).then(result => {
+      resolve("done");
     });
   });
-  Promise.all(allUpdation).then(result => {
-    res.status(200).json(result);
+};
+router.put("/switch", (req, res) => {
+  const promiseArray = [];
+  const { devices, status } = req.body;
+  devices.forEach(deviceId => {
+    const deviceUpdate = Device.findByIdAndUpdate(
+      deviceId,
+      { $set: { status } },
+      { new: true }
+    );
+    promiseArray.push(deviceUpdate);
+  });
+
+  Promise.all(promiseArray).then(result => {
+    const subPromiseArray = [];
+    result.forEach(device => {
+      const projectUpdate = switchProjects(
+        device.projects,
+        device._id,
+        device.status
+      );
+      subPromiseArray.push(projectUpdate);
+    });
+    Promise.all(subPromiseArray).then(projectResult => {
+      res.json(result).status(200);
+    });
   });
 });
 

@@ -5,6 +5,7 @@ const Log = require("../models/log");
 
 //TODO:Work on the online-offline error handler
 //TODO:Work on the project switch on/off handler
+//TODO:Work on mappings from device name to public key
 
 //Get all the SUCCESSFULL sends and receives of a particular device of a particular user
 router.get("/:publicKey/:signature", jwtVerify, (req, res) => {
