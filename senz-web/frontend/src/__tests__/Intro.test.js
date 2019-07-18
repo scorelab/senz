@@ -1,7 +1,7 @@
 import React from "react";
 import { shallow } from "enzyme";
-import Intro from "./Intro";
-import { findByTestAttr, checkProps } from "../../../Utils";
+import Intro from "../components/project/Intro";
+import { findByTestAttr, checkProps } from "../../Utils";
 
 describe("Intro Component", () => {
   describe("Checking proptypes", () => {
