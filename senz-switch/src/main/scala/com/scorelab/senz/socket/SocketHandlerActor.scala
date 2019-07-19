@@ -25,7 +25,7 @@ class SocketHandlerActor(device: ActorRef) extends Actor with ActorLogging {
         val statusCode=registerHandler(query)
         if(statusCode==500){
         //Register device with the switch
-        onShare(message)
+        onShare(message,query)
         }
         else{
           //Send error message
@@ -57,10 +57,11 @@ class SocketHandlerActor(device: ActorRef) extends Actor with ActorLogging {
       context stop self
   }
 
-  def onShare(message: Message) = {
+  def onShare(message: Message,query:String) = {
     if (message.attributes.contains("#pubkey")){
       val deviceName = message.sender
-
+      val publicKey=query.split(" ")(2)
+      keyNameMapper+=(deviceName->publicKey)
       if (SessionManager.contains(deviceName)){
         // Send error message
         val reply = MessageUtils.createQuery(DATA, Map("#msg" -> "ERR:DEVICE_ALREADY_EXISTS"), deviceName)
@@ -77,7 +78,7 @@ class SocketHandlerActor(device: ActorRef) extends Actor with ActorLogging {
   def onUnshare(message: Message) = {
     if (message.attributes.contains("#pubkey")){
       val deviceName = message.sender
-
+      keyNameMapper-=deviceName
       if (!SessionManager.contains(deviceName)){
         // Send error message
         val reply = MessageUtils.createQuery(DATA, Map("#msg" -> "ERR:DEVICE_UNIDENTIFIED"), deviceName)
