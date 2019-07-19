@@ -2,10 +2,12 @@ package com.scorelab.senz.utils
 import com.mongodb.casbah.Imports._
 import play.api.libs.json._
 import scala.collection.mutable.Set
+import scala.collection.mutable.Map
 import com.scorelab.senz.database.MongoFactory.publicKeyCollection
 
 
 object ErrorHandling{
+  var keyNameMapper=Map[String,String]()
   val errorMapper=Map(
   500->"OK",
   501->"#ERR->SIGNATURE_NOT_AUTHORISED",
@@ -13,7 +15,8 @@ object ErrorHandling{
   503->"#ERR->DEVICES_NOT_COMPATIBLE",
   504->"#ERR->DEVICE_NOT_VALID",
   505->"#ERR->SENDER_RECEIVER_SAME",
-  508->"#ERR->SYNTAX_INCORRECT"
+  508->"#ERR->SYNTAX_INCORRECT",
+  509->"#ERR->DEVICES_OFFLINE"
   )
   var registerError=500
   var shareError=500
@@ -106,8 +109,8 @@ object ErrorHandling{
     //Break the query
     val queryArray=query.split(" ")
     val signature=queryArray(7)
-    val sender=queryArray(3).substring(1,queryArray(3).length)
-    val receiver=queryArray(6).substring(1,queryArray(6).length)
+    val sender=keyNameMapper(queryArray(3).substring(1,queryArray(3).length))
+    val receiver=keyNameMapper(queryArray(6).substring(1,queryArray(6).length))
     if(sender==receiver){
       return 505
     }
