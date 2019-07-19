@@ -13,7 +13,7 @@ imagePathToStore = "received.jpg"
 
 # Register device
 print("Registering...")
-msg = "SHARE #pubkey dev2 @senz #time {} ^{} kite57010de4fd".format(getTimestamp(), deviceName)
+msg = "SHARE #pubkey KEY @senz #time {} ^{} signature".format(getTimestamp(), deviceName)
 sendMessage(msg)
 
 # Receive message
@@ -35,5 +35,5 @@ print("Image saved ({})".format(imagePathToStore))
 
 # Unregister device
 print("Unregistering...")
-msg = "UNSHARE #pubkey dev2 @senz #time {} ^{} kite57010de4fd".format(getTimestamp(), deviceName)
+msg = "UNSHARE #pubkey KEY @senz #time {} ^{} signature".format(getTimestamp(), deviceName)
 sendMessage(msg)
