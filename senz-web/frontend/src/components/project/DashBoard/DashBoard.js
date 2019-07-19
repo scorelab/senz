@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import Intro from "../Intro";
 import { Grid, Container } from "@material-ui/core";
-import SentReceived from "./SentReceived";
 import NumDevices from "./NumDevices";
-import HourReport from "./24HourReport";
+import HourReport from "./weeklyReport";
 import Info from "./Info";
 import ProjectList from "./ProjectStat";
 import { connect } from "react-redux";
@@ -25,6 +24,12 @@ class DashBoard extends Component {
         <Container maxWidth="md">
           <Grid container spacing={1}>
             <Grid item xs={6}>
+              <HourReport />
+            </Grid>
+            <Grid item xs={6}>
+              <NumDevices />
+            </Grid>
+            <Grid item xs={6}>
               <ProjectList />
             </Grid>
             <Grid item xs={6}>
@@ -33,15 +38,6 @@ class DashBoard extends Component {
                 secondLine={`Number of devices offline: ${this.props.offline}`}
                 heading="Device Details"
               />
-            </Grid>
-            <Grid item xs={6}>
-              <SentReceived />
-            </Grid>
-            <Grid item xs={6}>
-              <NumDevices />
-            </Grid>
-            <Grid item xs={12}>
-              <HourReport />
             </Grid>
             <Grid item xs={6} />
           </Grid>

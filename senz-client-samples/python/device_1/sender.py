@@ -13,7 +13,7 @@ imagePathToSend = "sample.jpg"
 
 # Register device
 print("Registering device...")
-msg = "SHARE #pubkey KEY @senz #time {} ^{} signature".format(getTimestamp(), deviceName)
+msg = "SHARE #pubkey dev1 @senz #time {} ^{} kite57010de4fd".format(getTimestamp(), deviceName)
 sendMessage(msg)
 
 # Convert image to byte string
@@ -27,10 +27,10 @@ byteString = aes.encrypt(byteString)
 print("Press enter to send the image...")
 input()
 
-msg = "DATA $image {} @dev2 #time {} ^dev1 signature\n".format(byteString, getTimestamp())
+msg = "DATA $image {} @dev2 #time {} ^dev1 kite57010de4fd".format(byteString, getTimestamp())
 sendMessage(msg)
 
 # Unregister device
 print("Unregistering device...")
-msg = "UNSHARE #pubkey KEY @senz #time {} ^{} signature".format(getTimestamp(), deviceName)
+msg = "UNSHARE #pubkey dev1 @senz #time {} ^{} kite57010de4fd".format(getTimestamp(), deviceName)
 sendMessage(msg)
