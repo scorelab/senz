@@ -17,4 +17,4 @@ export const FETCH_DEVICES = "fetch_devices";
 export const SWITCH_DEVICE = "switch_device";
 export const CLEAR_ALL = "clear_all";
 export const FETCH_LOG_PROJECT = "fetch_log_project";
-export const FETCH_STATUS_LOG = "fetch_status_log";
+export const FETCH_ALL_LOG = "fetch_all_log";

@@ -33,14 +33,16 @@ router.post("/project/:signature", jwtVerify, (req, res) => {
     });
 });
 
-//Get all the logs of a particular user based on specific status code
-router.get("/status/:signature/:code", (req, res) => {
-  const statusCode = req.params.code;
+//Get all the logs of a particular signature
+router.post("/all/:signature", (req, res) => {
   const signature = req.params.signature;
   const response = [];
+  const { devices } = req.body;
   Log.find({ signature }).then(logArr => {
     logArr.forEach((indLog, index, arr) => {
-      if (indLog.statusCode == statusCode) {
+      if (devices.includes(indLog.sender)) {
+        response.push(indLog);
+      } else if (devices.includes(indLog.receiver)) {
         response.push(indLog);
       }
       if (index == arr.length - 1) {
