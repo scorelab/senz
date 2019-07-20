@@ -9,6 +9,9 @@ import { connect } from "react-redux";
 import { toggleHeadingAction } from "../../../_actions/heading";
 
 class DashBoard extends Component {
+  componentWillMount = () => {
+    this.props.toggleHeadingAction({ heading: "Dashboard" });
+  };
   render() {
     return (
       <div>

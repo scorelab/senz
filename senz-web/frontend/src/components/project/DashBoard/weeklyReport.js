@@ -16,7 +16,7 @@ const weeklyLabel = projectLog => {
   const lastSeven = [];
   const response = {};
   //Get the last seven days in lastSeven array
-  for (var i = 0; i < 7; i++) {
+  for (var i = 6; i >= 0; i--) {
     var date = new Date();
     var last = new Date(date.getTime() - i * 24 * 60 * 60 * 1000);
     var day = last.getDate();
