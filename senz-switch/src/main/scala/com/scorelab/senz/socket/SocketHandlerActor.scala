@@ -35,8 +35,8 @@ class SocketHandlerActor(device: ActorRef) extends Actor with ActorLogging {
       } else if (message.messageType == MessageType.DATA){ 
         val statusCode=shareHandler(query)
         //Log the query
-        val log=MongoDBObject("sender"->message.sender,
-                              "receiver"->message.receiver,
+        val log=MongoDBObject("sender"->keyNameMapper(message.sender),
+                              "receiver"->keyNameMapper(message.receiver),
                               "signature"->message.signature,
                               "statusCode"->statusCode,
                               "timestamp"->Calendar.getInstance.getTime())
