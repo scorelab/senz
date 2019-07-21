@@ -21,7 +21,7 @@ const styles = theme => ({
   },
   toolbar: theme.mixins.toolbar,
   table: {
-    marginLeft: 100
+    marginLeft: 10
   },
   paper: {
     border: "1px solid #9e9e9e",

@@ -11,42 +11,64 @@ import AllProject from "./project/AllProjects";
 import AllDevice from "./devices/AllDevices";
 import EditProfile from "./profile/EditProfile";
 import ViewProfile from "./profile/ViewProfile";
-
+import "./App.css";
+import { createMuiTheme } from "@material-ui/core/styles";
+import { ThemeProvider } from "@material-ui/styles";
 //TODO: Update all note cards
+const theme = createMuiTheme({
+  typography: {
+    // Use the system font.
+    fontFamily: "Fira Sans"
+  }
+});
 class App extends Component {
   render() {
     return (
-      <BrowserRouter data-test="AppComponent">
-        <div>
-          <Route path="/" exact component={Register} />
-          <Route path="/register" exact component={authNotRequired(Register)} />
-          <Route path="/login" exact component={Login} />
-          <Route path="/home" exact component={authRequired(Home)} />
+      <ThemeProvider theme={theme}>
+        <BrowserRouter data-test="AppComponent">
+          <div>
+            <Route path="/" exact component={Register} />
+            <Route
+              path="/register"
+              exact
+              component={authNotRequired(Register)}
+            />
+            <Route path="/login" exact component={Login} />
+            <Route path="/home" exact component={authRequired(Home)} />
 
-          <Route
-            path="/addProject"
-            exact
-            component={authRequired(AddProject)}
-          />
-          <Route path="/addDevice" exact component={authRequired(AddDevice)} />
-          <Route
-            path="/allProject"
-            exact
-            component={authRequired(AllProject)}
-          />
-          <Route path="/allDevice" exact component={authRequired(AllDevice)} />
-          <Route
-            path="/editProfile"
-            exact
-            component={authRequired(EditProfile)}
-          />
-          <Route
-            path="/viewProfile"
-            exact
-            component={authRequired(ViewProfile)}
-          />
-        </div>
-      </BrowserRouter>
+            <Route
+              path="/addProject"
+              exact
+              component={authRequired(AddProject)}
+            />
+            <Route
+              path="/addDevice"
+              exact
+              component={authRequired(AddDevice)}
+            />
+            <Route
+              path="/allProject"
+              exact
+              component={authRequired(AllProject)}
+            />
+            <Route
+              path="/allDevice"
+              exact
+              component={authRequired(AllDevice)}
+            />
+            <Route
+              path="/editProfile"
+              exact
+              component={authRequired(EditProfile)}
+            />
+            <Route
+              path="/viewProfile"
+              exact
+              component={authRequired(ViewProfile)}
+            />
+          </div>
+        </BrowserRouter>
+      </ThemeProvider>
     );
   }
 }
