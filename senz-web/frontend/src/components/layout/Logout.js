@@ -19,6 +19,9 @@ function SimpleMenu(props) {
   function handleNav() {
     props.history.push("/home");
   }
+  function handlePro() {
+    props.history.push("/viewProfile");
+  }
   return (
     <div>
       <Button
@@ -35,6 +38,7 @@ function SimpleMenu(props) {
         onClose={handleClose}
       >
         <MenuItem onClick={handleNav}>Dashboard</MenuItem>
+        <MenuItem onClick={handlePro}>My Signature</MenuItem>
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>
     </div>
