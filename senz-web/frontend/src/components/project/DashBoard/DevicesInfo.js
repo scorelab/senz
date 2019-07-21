@@ -31,33 +31,25 @@ const useStyles = makeStyles(theme => ({
 
 function DenseTable(props) {
   const classes = useStyles();
-  const { name, status, date, devices } = props.project;
+
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
         <Table className={classes.table} size="small">
           <TableHead className={classes.head}>
             <TableRow>
-              <TableCell className={classes.head}>Property</TableCell>
-              <TableCell className={classes.head}>Value</TableCell>
+              <TableCell className={classes.head}>Status</TableCell>
+              <TableCell className={classes.head}>Number of devices</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell> {name}</TableCell>
+              <TableCell>Online</TableCell>
+              <TableCell>{props.online}</TableCell>
             </TableRow>
             <TableRow>
-              <TableCell>Number of devices</TableCell>
-              <TableCell>{devices.length}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Status</TableCell>
-              <TableCell>{status ? "ON" : "OFF"}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Created On</TableCell>
-              <TableCell>{date.substr(0, 10)}</TableCell>
+              <TableCell>Offline</TableCell>
+              <TableCell>{props.offline}</TableCell>
             </TableRow>
           </TableBody>
         </Table>
@@ -67,7 +59,12 @@ function DenseTable(props) {
 }
 const MapStateToProp = state => {
   return {
-    project: state.project.SelectedProject
+    online: state.project.SelectedProject.devices.filter(device => {
+      return device.status === true;
+    }).length,
+    offline: state.project.SelectedProject.devices.filter(device => {
+      return device.status === false;
+    }).length
   };
 };
 export default connect(MapStateToProp)(DenseTable);

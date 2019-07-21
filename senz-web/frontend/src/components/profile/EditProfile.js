@@ -29,7 +29,7 @@ const styles = theme => ({
   },
   toolbar: theme.mixins.toolbar,
   table: {
-    marginLeft: 100
+    marginLeft: 10
   },
   formcontainer: {
     padding: 30,

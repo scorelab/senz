@@ -3,8 +3,8 @@ import Intro from "../Intro";
 import { Grid, Container } from "@material-ui/core";
 import NumDevices from "./NumDevices";
 import HourReport from "./weeklyReport";
-import Info from "./Info";
 import ProjectList from "./ProjectStat";
+import DevicesInfo from "./DevicesInfo";
 import { connect } from "react-redux";
 import { toggleHeadingAction } from "../../../_actions/heading";
 
@@ -36,11 +36,7 @@ class DashBoard extends Component {
               <ProjectList />
             </Grid>
             <Grid item xs={6}>
-              <Info
-                firstLine={`Number of devices online: ${this.props.online}`}
-                secondLine={`Number of devices offline: ${this.props.offline}`}
-                heading="Device Details"
-              />
+              <DevicesInfo />
             </Grid>
             <Grid item xs={6} />
           </Grid>
