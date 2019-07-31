@@ -1,6 +1,6 @@
 {
   "name": "senz",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "This is the npm module for the senz-switch and the senz-web.",
   "main": "main.js",
   "scripts": {
