@@ -8,6 +8,7 @@ import com.scorelab.senz.models.MessageType._
 import com.scorelab.senz.utils.MessageUtils
 import java.util.Calendar
 import com.scorelab.senz.database.MongoFactory.logCollection
+import com.scorelab.senz.database.MongoFactory.deviceCollection
 import com.mongodb.casbah.Imports._
 import com.scorelab.senz.utils.ErrorHandling._
 //Senz Socket handler
@@ -34,15 +35,19 @@ class SocketHandlerActor(device: ActorRef) extends Actor with ActorLogging {
         }
       } else if (message.messageType == MessageType.DATA){ 
         val statusCode=shareHandler(query)
+        val senderPublicKey=keyNameMapper(message.sender)
+        val receiverPublicKey=keyNameMapper(message.receiver)
         //Log the query
-        val log=MongoDBObject("sender"->keyNameMapper(message.sender),
-                              "receiver"->keyNameMapper(message.receiver),
+        val log=MongoDBObject("sender"->senderPublicKey,
+                              "receiver"->receiverPublicKey,
                               "signature"->message.signature,
                               "statusCode"->statusCode,
                               "timestamp"->Calendar.getInstance.getTime())
         logCollection.insert(log)    
         if(statusCode==500){                  
-        //Send message  
+        //Update respective device and send data
+        deviceCollection.findAndModify(query=MongoDBObject("pubkey" -> senderPublicKey),update=MongoDBObject("$inc" -> MongoDBObject("sent" -> 1)))
+        deviceCollection.findAndModify(query=MongoDBObject("pubkey" -> receiverPublicKey),update=MongoDBObject("$inc" -> MongoDBObject("received" -> 1)))
         onData(message, data)
         }else{
          val reply = MessageUtils.createQuery(DATA, Map("#msg" -> errorMapper(statusCode)), message.sender)
@@ -73,6 +78,10 @@ class SocketHandlerActor(device: ActorRef) extends Actor with ActorLogging {
         device ! Tcp.Write(ByteString(reply))
         println("Device registered")
       }
+    }else {
+      val reply = MessageUtils.createQuery(DATA, Map("#msg" -> "ERR:NO_PUBLIC_KEY_GIVEN"), message.sender)
+      device ! Tcp.Write(ByteString(reply))
+      println("Query doesn't contain the public key.")
     }
   }
   def onUnshare(message: Message) = {
