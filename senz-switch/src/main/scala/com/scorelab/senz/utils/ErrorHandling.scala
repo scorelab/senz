@@ -4,6 +4,7 @@ import play.api.libs.json._
 import scala.collection.mutable.Set
 import scala.collection.mutable.Map
 import com.scorelab.senz.database.MongoFactory.publicKeyCollection
+import com.scorelab.senz.database.MongoFactory.deviceCollection
 
 
 object ErrorHandling{
@@ -16,7 +17,7 @@ object ErrorHandling{
   504->"#ERR->DEVICE_NOT_VALID",
   505->"#ERR->SENDER_RECEIVER_SAME",
   508->"#ERR->SYNTAX_INCORRECT",
-  509->"#ERR->DEVICES_OFFLINE"
+  509->"#ERR->DEVICE_OFFLINE"
   )
   var registerError=500
   var shareError=500
@@ -54,7 +55,7 @@ object ErrorHandling{
       case None=> {return 502}
       case Some(pkMap)=>shareError=500
     }
-    //Check sender
+    //Check if sender exists and is online
     val senderQuery=MongoDBObject("publicKey"->sender)
     val senResult=publicKeyCollection.findOne(senderQuery)
     senResult match{
@@ -65,7 +66,20 @@ object ErrorHandling{
         shareError=500    
       }
     }
-    //Check receiver
+    val senderStatusQuery=MongoDBObject("pubkey"->sender)
+    val senStatusResult=deviceCollection.findOne(senderStatusQuery)
+    senStatusResult match{
+      case None=>{return 504}
+      case Some(device)=>{
+        val json:JsValue=Json.parse(device.toString)
+        val status=(json \ "status").as[Boolean]
+        if(status==false){
+          return 509
+        }
+      }
+    }
+
+    //Check if receiver exists and is online
     val receiverQuery=MongoDBObject("publicKey"->receiver)
     val recResult=publicKeyCollection.findOne(receiverQuery)
     recResult match{
@@ -74,6 +88,18 @@ object ErrorHandling{
         val json:JsValue=Json.parse(pkMap.toString)
         receiverProjects=(json \ "projects").as[List[String]].to[collection.mutable.Set]
         shareError=500
+    }
+    val receiverStatusQuery=MongoDBObject("pubkey"->receiver)
+    val recStatusResult=deviceCollection.findOne(receiverStatusQuery)
+    recStatusResult match{
+      case None=>{return 504}
+      case Some(device)=>{
+        val json:JsValue=Json.parse(device.toString)
+        val status=(json \ "status").as[Boolean]
+        if(status==false){
+          return 509
+        }
+      }
     }
     //Check the list of projects of sender and receiver
     if(senderProjects.intersect(receiverProjects).size==0)
