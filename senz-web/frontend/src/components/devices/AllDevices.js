@@ -42,7 +42,6 @@ const styles = theme => ({
   }
 });
 
-//TODO: Remove wrong status display bug
 class AllDevice extends Component {
   state = { devices: [], status: 0 };
   handleCheck = id => {
