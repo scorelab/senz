@@ -3,10 +3,6 @@ const router = express.Router();
 const jwtVerify = require("./verifyTokens");
 const Log = require("../models/log");
 
-//TODO:Work on the online-offline error handler
-//TODO:Work on the project switch on/off handler
-//TODO:Work on mappings from device name to public key
-
 //Get all the SUCCESSFULL logs of a particular signature and project(list of devices)
 router.post("/project/:signature", jwtVerify, (req, res) => {
   const allDevices = req.body.devices;

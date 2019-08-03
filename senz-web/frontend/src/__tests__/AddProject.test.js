@@ -14,6 +14,5 @@ describe("AllProject Component", () => {
       const component = MaterialShallow(<AddProject store={store} />);
       expect(component.length).toBe(1);
     });
-    //TODO:Write method test
   });
 });
