@@ -32,7 +32,7 @@ const styles = theme => ({
     color: "#fafafa"
   },
   selectedRow: {
-    backgroundColor: "#E65555"
+    backgroundColor: "#fa877a"
   }
 });
 
