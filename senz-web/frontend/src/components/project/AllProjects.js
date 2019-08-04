@@ -4,11 +4,10 @@ import SideBar from "../layout/SideBar";
 import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import { toggleHeadingAction } from "../../_actions/heading";
-import { fetchProjectAction } from "../../_actions/project";
+import { fetchProjectAction, setProjectAction } from "../../_actions/project";
 import ProjectList from "./ProjectList";
 import Intro from "./Intro";
 import PropTypes from "prop-types";
-
 const drawerWidth = 240;
 const styles = theme => ({
   root: {
@@ -27,6 +26,7 @@ const styles = theme => ({
 });
 
 class AllProject extends Component {
+  state = { pId: "" };
   componentWillMount = () => {
     //Update projects from the redux store
     this.props.toggleHeadingAction({ heading: "All Projects" });
@@ -49,6 +49,12 @@ class AllProject extends Component {
     });
     this.setState({ projects: modifiedProject });
   };
+  handleClick = () => {
+    this.props.setProjectAction(this.state.pId, this.props.user.token);
+  };
+  handleOpen = pId => {
+    this.setState({ pId });
+  };
   render() {
     const { classes } = this.props;
     return (
@@ -63,7 +69,11 @@ class AllProject extends Component {
             description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it."
           />
           <div className={classes.table}>
-            <ProjectList projects={this.state.projects} />
+            <ProjectList
+              handleClick={this.handleClick}
+              handleOpen={this.handleOpen}
+              projects={this.state.projects}
+            />
           </div>
         </main>
       </Fragment>
@@ -84,5 +94,5 @@ AllProject.propTypes = {
 
 export default connect(
   MapStateToProp,
-  { toggleHeadingAction, fetchProjectAction }
+  { toggleHeadingAction, fetchProjectAction, setProjectAction }
 )(withStyles(styles, { withTheme: true })(AllProject));

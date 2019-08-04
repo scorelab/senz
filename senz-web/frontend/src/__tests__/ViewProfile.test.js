@@ -1,9 +1,9 @@
 import React from "react";
 import { testStore } from "../../Utils";
-import EditProfile from "../components/profile/EditProfile";
+import ViewProfile from "../components/profile/ViewProfile";
 import { createShallow } from "@material-ui/core/test-utils";
 
-describe("EditProfile Component", () => {
+describe("ViewProfile Component", () => {
   describe("Renders without errors", () => {
     let shallow;
     beforeEach(() => {
@@ -11,7 +11,7 @@ describe("EditProfile Component", () => {
     });
     it("Should render the component", () => {
       const store = testStore({});
-      const component = shallow(<EditProfile store={store} />);
+      const component = shallow(<ViewProfile store={store} />);
       expect(component.length).toBe(1);
     });
   });

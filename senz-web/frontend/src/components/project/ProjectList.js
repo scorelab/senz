@@ -4,7 +4,10 @@ import clsx from "clsx";
 import { withStyles } from "@material-ui/core/styles";
 import TableCell from "@material-ui/core/TableCell";
 import Paper from "@material-ui/core/Paper";
+import Button from "@material-ui/core/Button";
 import { AutoSizer, Column, Table } from "react-virtualized";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
 const styles = theme => ({
   flexContainer: {
@@ -29,6 +32,12 @@ const styles = theme => ({
   header: {
     backgroundColor: "#23344e",
     color: "#fafafa"
+  },
+  selectedRow: {
+    backgroundColor: "#a2d8f5"
+  },
+  links: {
+    textDecoration: "none"
   }
 });
 
@@ -37,12 +46,16 @@ class MuiVirtualizedTable extends React.PureComponent {
     headerHeight: 48,
     rowHeight: 48
   };
-
+  state = {
+    projectId: "",
+    index: -1
+  };
   getRowClassName = ({ index }) => {
     const { classes, onRowClick } = this.props;
 
     return clsx(classes.tableRow, classes.flexContainer, {
-      [classes.tableRowHover]: index !== -1 && onRowClick != null
+      [classes.tableRowHover]: index !== -1 && onRowClick != null,
+      [classes.selectedRow]: this.state.index === index
     });
   };
 
@@ -87,10 +100,17 @@ class MuiVirtualizedTable extends React.PureComponent {
       </TableCell>
     );
   };
+
   handleClick = ({ index, rowData }) => {
-    //TODO:Navigate to the project
-    console.log(index, rowData);
+    if (this.state.index === index) {
+      this.props.handleOpen("");
+      this.setState({ index: -1, projectId: "" });
+    } else {
+      this.props.handleOpen(rowData._id);
+      this.setState({ index, projectId: rowData._id });
+    }
   };
+
   render() {
     const { classes, columns, ...tableProps } = this.props;
     return (
@@ -129,48 +149,68 @@ class MuiVirtualizedTable extends React.PureComponent {
 
 const VirtualizedTable = withStyles(styles)(MuiVirtualizedTable);
 
-function ReactVirtualizedTable(props) {
-  const rows = props.projects;
-  if (rows === undefined) {
-    return null;
+class ReactVirtualizedTable extends React.Component {
+  render() {
+    const rows = this.props.projects;
+    if (rows === undefined) {
+      return null;
+    }
+    return (
+      <div data-test="ProjectListComponent">
+        <Link to="/home" style={{ textDecoration: "none" }}>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={this.props.handleClick}
+          >
+            View
+          </Button>
+        </Link>
+        <br />
+        <br />
+        <Paper style={{ height: 400, width: 800 }}>
+          <VirtualizedTable
+            handleOpen={this.props.handleOpen}
+            rowCount={rows.length}
+            rowGetter={({ index }) => rows[index]}
+            columns={[
+              {
+                width: 200,
+                label: "Name",
+                dataKey: "name"
+              },
+              {
+                width: 200,
+                label: "Number of Devices",
+                dataKey: "devices",
+                numeric: true
+              },
+              {
+                width: 200,
+                label: "Created On",
+                dataKey: "date"
+              },
+              {
+                width: 200,
+                label: "Status",
+                dataKey: "status"
+              }
+            ]}
+          />
+        </Paper>
+      </div>
+    );
   }
-  return (
-    <div data-test="ProjectListComponent">
-      <Paper style={{ height: 400, width: 800 }}>
-        <VirtualizedTable
-          rowCount={rows.length}
-          rowGetter={({ index }) => rows[index]}
-          columns={[
-            {
-              width: 200,
-              label: "Name",
-              dataKey: "name"
-            },
-            {
-              width: 200,
-              label: "Number of Devices",
-              dataKey: "devices",
-              numeric: true
-            },
-            {
-              width: 200,
-              label: "Created On",
-              dataKey: "date"
-            },
-            {
-              width: 200,
-              label: "Status",
-              dataKey: "status"
-            }
-          ]}
-        />
-      </Paper>
-    </div>
-  );
 }
+
+const MapStateToProp = state => {
+  return {
+    user: state.auth.user
+  };
+};
 
 ReactVirtualizedTable.propTypes = {
   projects: PropTypes.arrayOf(PropTypes.object)
 };
 
-export default ReactVirtualizedTable;
+export default connect(MapStateToProp)(ReactVirtualizedTable);
