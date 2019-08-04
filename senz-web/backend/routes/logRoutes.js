@@ -7,6 +7,44 @@ const Log = require("../models/log");
 //TODO:Work on the project switch on/off handler
 //TODO:Work on mappings from device name to public key
 
+/**
+ * @api {post} log/project/:signature Get all the successfull logs of a user and project
+ * @apiGroup Logs
+ * @apiHeaderExample {json} Header-Example:
+ *     {
+ *       "Authorization": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjYTUxMzFmOTUzYmNmMGNhOThlN2Q3OCIsIm5hbWUiOiJ5YXNoIiwiaWF0IjoxNTU0MzIyNDQyLCJleHAiOjE1NTQ0MDg4NDJ9.9lQ_IN0AZjfcJoGh-f9F8HmG3Yt-RghMGhLxqGpYJJs"
+ *
+ *     }
+ * @apiParam {String} signature User signature
+ * @apiParam {String[]} devices List of device public keys
+ * @apiSuccess {String} sender Public key of sender
+ * @apiSuccess {String} receiver Public key of receiver
+ * @apiSuccess {String} _id Id of the log
+ * @apiSuccess {String} signature signature of the user
+ * @apiSuccess {Number} statusCode status code of the log
+ * @apiSuccess {Date} date Date of creation
+ * @apiParamExample {json} Input
+ *    {
+ *      "devices":[]
+ *    }
+ * @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ *  [
+ *   {
+ *       "_id": "5d426995c043f32d5595ea6d",
+ *       "sender": "mouse",
+ *       "receiver": "fan",
+ *       "signature": "holm56290ecfef",
+ *       "statusCode": 500,
+ *       "timestamp": "2019-08-01T04:24:53.042Z"
+ *   }
+ *   ]
+ * @apiErrorExample {json} Task not found
+ *    HTTP/1.1 404 Not Found
+ * @apiErrorExample {json} Find error
+ *    HTTP/1.1 500 Internal Server Error
+ */
+
 //Get all the SUCCESSFULL logs of a particular signature and project(list of devices)
 router.post("/project/:signature", jwtVerify, (req, res) => {
   const allDevices = req.body.devices;
@@ -32,7 +70,38 @@ router.post("/project/:signature", jwtVerify, (req, res) => {
       res.json({ message: "Internal server error" }).status(500);
     });
 });
-
+/**
+ * @api {post} log/all/:signature Get all the logs of a signature
+ * @apiGroup Logs
+ * @apiHeaderExample {json} Header-Example:
+ *     {
+ *       "Authorization": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjYTUxMzFmOTUzYmNmMGNhOThlN2Q3OCIsIm5hbWUiOiJ5YXNoIiwiaWF0IjoxNTU0MzIyNDQyLCJleHAiOjE1NTQ0MDg4NDJ9.9lQ_IN0AZjfcJoGh-f9F8HmG3Yt-RghMGhLxqGpYJJs"
+ *
+ *     }
+ * @apiParam {String} signature User signature
+ * @apiSuccess {String} sender Public key of sender
+ * @apiSuccess {String} receiver Public key of receiver
+ * @apiSuccess {String} _id Id of the log
+ * @apiSuccess {String} signature signature of the user
+ * @apiSuccess {Number} statusCode status code of the log
+ * @apiSuccess {Date} date Date of creation
+ * @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ *  [
+ *   {
+ *       "_id": "5d426995c043f32d5595ea6d",
+ *       "sender": "mouse",
+ *       "receiver": "fan",
+ *       "signature": "holm56290ecfef",
+ *       "statusCode": 500,
+ *       "timestamp": "2019-08-01T04:24:53.042Z"
+ *   }
+ *   ]
+ * @apiErrorExample {json} Task not found
+ *    HTTP/1.1 404 Not Found
+ * @apiErrorExample {json} Find error
+ *    HTTP/1.1 500 Internal Server Error
+ */
 //Get all the logs of a particular signature
 router.post("/all/:signature", (req, res) => {
   const signature = req.params.signature;

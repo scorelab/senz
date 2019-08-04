@@ -7,6 +7,21 @@ const config = require("config");
 const jwtVerify = require("./verifyTokens");
 const uuidv4 = require("uuid/v4");
 
+//Signature producing function
+const getSignature = username => {
+  const uniqueId = uuidv4();
+  const fullUsername = username.split(" ");
+  const firstName = fullUsername[0];
+  const tillFlag = firstName.length > 4 ? 4 : firstName.length;
+  return (
+    username.substr(0, tillFlag) +
+    String(Date.now()).substr(
+      String(Date.now()).length - 4,
+      String(Date.now()).length
+    ) +
+    uniqueId.substr(0, 6)
+  );
+};
 /**
  * @api {post} api/register Register a new user
  * @apiGroup Users
@@ -32,21 +47,6 @@ const uuidv4 = require("uuid/v4");
  *      "auth":false
  *    }
  */
-//Signature producing function
-const getSignature = username => {
-  const uniqueId = uuidv4();
-  const fullUsername = username.split(" ");
-  const firstName = fullUsername[0];
-  const tillFlag = firstName.length > 4 ? 4 : firstName.length;
-  return (
-    username.substr(0, tillFlag) +
-    String(Date.now()).substr(
-      String(Date.now()).length - 4,
-      String(Date.now()).length
-    ) +
-    uniqueId.substr(0, 6)
-  );
-};
 //Register a new user
 router.post("/register", function(req, res) {
   var { name, email, password } = req.body;
@@ -187,7 +187,24 @@ router.get("/logout", function(req, res) {
     token: null
   });
 });
-
+/**
+ * @api {put} api/:userId/update Update password of the user
+ * @apiGroup Users
+ * @apiSuccess {String} name name
+ * @apiSuccess {String} id user id
+ * @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ *    {
+ *      "name": "Yash",
+ *      "id":"userId"
+ *    }
+ * @apiErrorExample {json} Login error
+ *    HTTP/1.1 401 Unauthorized
+ *    {
+ *      "auth":false
+ *    }
+ *
+ */
 //Updating the user
 router.put("/:userId/update", jwtVerify, (req, res) => {
   const userId = req.params.userId;
