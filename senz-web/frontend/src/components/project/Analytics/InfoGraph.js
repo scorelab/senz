@@ -33,7 +33,7 @@ const weeklyLabel = projectLog => {
       var month = logData.getMonth() + 1;
       var year = logData.getFullYear();
       const fullDate = day + "-" + month + "-" + year;
-      response[fullDate].push(log.statusCode);
+      if (response[fullDate] != null) response[fullDate].push(log.statusCode);
       if (index === arr.length - 1) {
         resolve(response);
       }
