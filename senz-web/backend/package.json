@@ -9,7 +9,7 @@
   },
   "main": "main.js",
   "scripts": {
-    "test": "export NODE_ENV=test && mocha --timeout 10000 && nodemon main.js",
+    "test": "export NODE_ENV=test && mocha  --exit --timeout 10000",
     "start": "export NODE_ENV=dev && nodemon main.js",
     "dev": "export NODE_ENV=dev && nodemon main.js"
   },
@@ -42,6 +42,7 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "chai-http": "^4.2.1",
-    "mocha": "^6.0.2"
+    "mocha": "^6.0.2",
+    "husky": "^2.4.1"
   }
 }

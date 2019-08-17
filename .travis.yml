@@ -8,10 +8,25 @@ matrix:
         - cd senz-switch
       script:
         - sbt ++$TRAVIS_SCALA_VERSION test
-        
+
     - language: python
       python: 3.6
       before_install:
         - pip install pytest
       script:
         - pytest
+    - language: node_js
+      node_js: 10.16.2
+      services: mongodb
+      before_install:
+        - cd senz-web/backend
+        - mkdir config
+        - cd config/ && touch  test.json
+        - echo '{"dbURI":"mongodb://localhost/senz-test","secretKey":"yash123"}' >>test.json
+        - cd ..
+        - npm install
+    - language: node_js
+      node_js: 10.16.2
+      before_install:
+        - cd senz-web/frontend
+        - npm install
