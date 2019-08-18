@@ -89,7 +89,7 @@ class AddDevice extends Component {
             <div className={classes.toolbar} />
             <Intro
               heading="Register Device"
-              description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it."
+              description="Create devices by providing the name and a unique public key to it. Public key of devices should be unique and will be used to identify the device on the switch."
             />
             <form
               className={classes.form}
