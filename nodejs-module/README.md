@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://raw.githubusercontent.com/YashMeh/AdminPanel/master/bottom_text.png" height=300 width=200  alt="senz logo" />
+<img src="https://raw.githubusercontent.com/scorelab/senz/master/logo/bottom_text.png" height=300 width=200  alt="senz logo" />
 <p align="center">
 A npm package to connect your devices to the senz switch for secure data transfer.
 <p align="center">
