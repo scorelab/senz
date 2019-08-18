@@ -15,8 +15,8 @@ class Analytics extends Component {
     return (
       <div>
         <Intro
-          heading="Devices"
-          description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it."
+          heading="Analytics"
+          description="This contains all the error codes alongwith their meaning. The graph plots the respective errors from the past 7 days in different colors as given in the table."
         />
         <Grid item xs={12}>
           <Container maxWidth="md">

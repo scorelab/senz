@@ -18,10 +18,7 @@ class DashBoard extends Component {
         <Grid item xs={12}>
           <Intro
             heading="Dashboard"
-            description="Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galley of type and
-          scrambled it."
+            description="This contains the details about the selected project.The graph represents the number of requests in the past 7  days and number of devices offline and online respectively."
           />
         </Grid>
         <Container maxWidth="md">

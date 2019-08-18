@@ -104,7 +104,7 @@ class EditProfile extends Component {
           <div className={classes.toolbar} />
           <Intro
             heading="Edit Profile"
-            description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it."
+            description="Change your password by providing the old password."
           />
           <div className={classes.table}>
             <Paper>

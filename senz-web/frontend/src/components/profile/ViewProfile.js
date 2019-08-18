@@ -48,7 +48,7 @@ class MyProfile extends Component {
           <div className={classes.toolbar} />
           <Intro
             heading="View Profile"
-            description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it."
+            description="View your account information.It includes a signature which will be used to verify the query while sending it through the senz switch."
           />
           <div className={classes.table}>
             <Paper className={classes.paper}>

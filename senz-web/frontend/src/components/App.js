@@ -14,7 +14,6 @@ import ViewProfile from "./profile/ViewProfile";
 import "./App.css";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
-//TODO: Update all note cards
 const theme = createMuiTheme({
   typography: {
     // Use the system font.

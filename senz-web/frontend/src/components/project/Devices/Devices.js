@@ -39,10 +39,7 @@ class Devices extends Component {
         <Grid item xs={12}>
           <Intro
             heading="Devices"
-            description="Lorem Ipsum is simply dummy text of the printing and typesetting
-        industry. Lorem Ipsum has been the industry's standard dummy text ever
-        since the 1500s, when an unknown printer took a galley of type and
-        scrambled it."
+            description="This contains the list of devices contained in the selected project. You can select multiple devices and can remove them from the project."
           />
         </Grid>
         <Container maxWidth="lg">

@@ -83,7 +83,7 @@ class AllDevice extends Component {
           <div className={classes.toolbar} />
           <Intro
             heading="Devices"
-            description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it."
+            description="Each entry contains the name,public key,number of times data sent and received of a device alongwith their status. You can switch a device ON or OFF and the same will be reflected while sending data using the senz switch."
           />
           <div className={classes.table}>
             <form className={classes.root} autoComplete="off">
