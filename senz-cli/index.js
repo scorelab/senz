@@ -21,37 +21,44 @@ const createSocket = async (socketPort, socketAddress) => {
 };
 
 const run = async () => {
+
+  clear();
+
   console.log(
       chalk.yellow(
           figlet.textSync('senz CLI', {horizontalLayout: 'full'}),
       ),
   );
-  clear();
 
   // Initial information
   const {queryType} = await inquirer.getQueryType();
   const {socketPort, socketAddress} = await inquirer.getSocketInfo();
-  // Get query
-  const {shareQuery} = await inquirer.getQueryContent();
+  
 
   // Socket creation and connection
   const socket = await createSocket(socketPort, socketAddress);
 
   if (queryType === 'sendQuery') {
+    // Get query
+    const {shareQuery} = await inquirer.getQueryContent();
+
+    // Send Query
+    console.log(`Sending ${queryType} to ${socketAddress}:${socketPort}`);
+
     senz.query.sendQuery(socket, shareQuery).then((res) => {
-      console.log(chalk.bgGreen('Response Received'));
-      console.log(chalk.bgWhite(res));
+      console.log(chalk.bgGreen(chalk.black('Query Sent')));
+      console.log(chalk.bgWhite(chalk.black(res)));
     });
   } else if (queryType === 'recResponse') {
+    console.log(`Awaiting ${queryType} to ${socketAddress}:${socketPort}`);
+
     senz.query.recResponse(socket).then((res) => {
       console.log(chalk.bgGreen('Response Received'));
-      console.log(chalk.bgWhite(res));
+      console.log(chalk.bgWhite(chalk.black(res)));
     });
   } else {
     console.log(chalk.bgRed(res));
   }
-
-  console.log(queryType, socketPort, socketAddress);
 };
 
 run();
