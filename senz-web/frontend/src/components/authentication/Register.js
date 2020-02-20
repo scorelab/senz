@@ -10,6 +10,8 @@ import {
   Avatar
 } from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import IconButton from '@material-ui/core/IconButton';
+import InfoIcon from '@material-ui/icons/Info';
 
 import { Field, reduxForm } from "redux-form";
 import { withStyles } from "@material-ui/core/styles";
@@ -81,6 +83,10 @@ class Register extends Component {
     const name = `${firstName} ${lastName}`;
     this.props.RegisterAction({ name, email, password }, this.props.history);
   };
+
+  passwordCheckHandler = () => {
+    alert(" Rules for a valid Password : \n 1- Minimum password length is 6. \n 2- Password must contain atleast an uppercase letter \n 3- Password must contain atleast an lowercase letter. \n 4- Password must contain atleast a digit. \n 5- Password must contain atleast a special character. (@,$,#,%,&)")
+  }
   render() {
     const { classes } = this.props;
     return (
@@ -126,7 +132,7 @@ class Register extends Component {
                   type="text"
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={10}>
                 <Field
                   name="password"
                   id="password"
@@ -135,6 +141,9 @@ class Register extends Component {
                   component={this.renderInput}
                 />
               </Grid>
+              <IconButton aria-label="info" onClick = {this.passwordCheckHandler}>
+                <InfoIcon/>
+              </IconButton>
               <Grid item xs={12}>
                 <Field
                   name="cPassword"
@@ -176,8 +185,9 @@ const emailValid = email => {
 };
 
 const passwordValid = password => {
-  if (password === undefined) return false;
-  return password.length > 4;
+  const passwordCheck = new RegExp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$")
+  if (password === undefined || !(passwordCheck.test(password))) return false;
+  return true;
 };
 
 const validate = ({ firstName, lastName, email, password, cPassword }) => {
@@ -185,7 +195,7 @@ const validate = ({ firstName, lastName, email, password, cPassword }) => {
   if (!firstName) errors.firstName = "Not given";
   if (!lastName) errors.lastName = "Not given";
   if (!emailValid(email)) errors.email = "Email not valid";
-  if (!passwordValid(password)) errors.password = "Password too short";
+  if (!passwordValid(password)) errors.password = "Password invalid";
   if (cPassword !== password) errors.cPassword = "Password don't match";
   return errors;
 };
