@@ -11,7 +11,9 @@
   "scripts": {
     "test": "export NODE_ENV=test && mocha  --exit --timeout 10000",
     "start": "export NODE_ENV=dev && nodemon main.js",
-    "dev": "export NODE_ENV=dev && nodemon main.js"
+    "dev": "export NODE_ENV=dev && nodemon main.js",
+    "coverage": "nyc --reporter=html --reporter=text npm test",
+    "coverage-html-report": "nyc --reporter=lcov --reporter=text-lcov npm test"
   },
   "repository": {
     "type": "git"
@@ -29,6 +31,7 @@
     "ejs": "^2.6.1",
     "express": "^4.16.4",
     "helmet": "^3.16.0",
+    "istanbul": "^0.4.5",
     "jsonwebtoken": "^8.5.0",
     "jwt-decode": "^2.2.0",
     "mongoose": "^5.4.18",
@@ -42,7 +45,8 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "chai-http": "^4.2.1",
+    "husky": "^2.4.1",
     "mocha": "^6.0.2",
-    "husky": "^2.4.1"
+    "nyc": "^15.0.0"
   }
 }
