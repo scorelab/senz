@@ -88,7 +88,7 @@ class Register extends Component {
     alert(" Rules for a valid Password : \n 1- Minimum password length is 6. \n 2- Password must contain atleast an uppercase letter \n 3- Password must contain atleast an lowercase letter. \n 4- Password must contain atleast a digit. \n 5- Password must contain atleast a special character. (@,$,#,%,&)")
   }
   render() {
-    const { classes } = this.props;
+    const { classes, invalid } = this.props;
     return (
       <Container component="main" maxWidth="xs" data-test="RegisterComponent">
         <CssBaseline />
@@ -141,8 +141,8 @@ class Register extends Component {
                   component={this.renderInput}
                 />
               </Grid>
-              <IconButton aria-label="info" onClick = {this.passwordCheckHandler}>
-                <InfoIcon/>
+              <IconButton aria-label="info" onClick={this.passwordCheckHandler}>
+                <InfoIcon />
               </IconButton>
               <Grid item xs={12}>
                 <Field
@@ -160,6 +160,7 @@ class Register extends Component {
               variant="contained"
               color="primary"
               className={classes.submit}
+              disabled={invalid}
             >
               Sign Up
             </Button>
@@ -172,7 +173,7 @@ class Register extends Component {
             </Grid>
           </form>
         </div>
-      </Container>
+      </Container >
     );
   }
 }
