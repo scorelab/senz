@@ -157,15 +157,9 @@ const emailValid = email => {
   return pattern.test(email);
 };
 
-const passwordValid = password => {
-  if (password === undefined) return false;
-  return password.length > 4;
-};
-
 const validate = ({ firstName, lastName, email, password, cPassword }) => {
   const errors = {};
   if (!emailValid(email)) errors.email = "Email not valid";
-  if (!passwordValid(password)) errors.password = "Password too short";
   return errors;
 };
 
