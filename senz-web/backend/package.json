@@ -9,7 +9,7 @@
   },
   "main": "main.js",
   "scripts": {
-    "test": "export NODE_ENV=test && mocha  --exit --timeout 10000",
+    "test": "export NODE_ENV=test && mocha  --exit --timeout 30000",
     "start": "export NODE_ENV=dev && nodemon main.js",
     "dev": "export NODE_ENV=dev && nodemon main.js",
     "coverage": "nyc --reporter=html --reporter=text npm test",
@@ -47,6 +47,7 @@
     "chai-http": "^4.2.1",
     "husky": "^2.4.1",
     "mocha": "^6.0.2",
+    "mockgoose": "^8.0.4",
     "nyc": "^15.0.0"
   }
 }
