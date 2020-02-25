@@ -12,6 +12,8 @@ import {
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import IconButton from '@material-ui/core/IconButton';
 import InfoIcon from '@material-ui/icons/Info';
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 
 import { Field, reduxForm } from "redux-form";
 import { withStyles } from "@material-ui/core/styles";
@@ -44,6 +46,19 @@ const styles = theme => ({
 });
 
 class Register extends Component {
+
+  state = {
+    type: 'password',
+    Icon: <VisibilityOffIcon/>
+  }
+
+
+  handleClick = () => this.setState(({type}) => ({
+    Icon: type === 'text' ? <VisibilityOffIcon/> : <VisibilityIcon/> ,
+    type: type === 'text' ? 'password' : 'text'
+    
+  }))
+
   renderInputError = ({ error, touched }) => {
     if (error && touched) return { error: true, message: error };
     else return { error: false, message: "" };
@@ -132,17 +147,20 @@ class Register extends Component {
                   type="text"
                 />
               </Grid>
-              <Grid item xs={10}>
+              <Grid item xs={8}>
                 <Field
                   name="password"
                   id="password"
                   label="Password"
-                  type="password"
+                  type={this.state.type}
                   component={this.renderInput}
                 />
               </Grid>
-              <IconButton aria-label="info" onClick={this.passwordCheckHandler}>
-                <InfoIcon />
+              <IconButton aria-label="info" onClick = {this.handleClick}>
+                  {this.state.Icon}
+              </IconButton>
+              <IconButton aria-label="info" onClick = {this.passwordCheckHandler}>
+                <InfoIcon/>
               </IconButton>
               <Grid item xs={12}>
                 <Field
