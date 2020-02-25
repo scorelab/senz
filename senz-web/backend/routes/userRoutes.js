@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const config = require("config");
 const jwtVerify = require("./verifyTokens");
 const uuidv4 = require("uuid/v4");
+var validator = require("email-validator");
 
 //Signature producing function
 const getSignature = username => {
@@ -55,7 +56,8 @@ router.post("/register", function(req, res) {
     name == "" ||
     email == "" ||
     password == "" ||
-    (name == undefined || email == undefined || password == undefined)
+    (name == undefined || email == undefined || password == undefined) ||
+    !validator.validate(email)
   ) {
     res.status(500).json({
       auth: false,
@@ -137,7 +139,8 @@ router.post("/login", function(req, res) {
   if (
     email == "" ||
     password == "" ||
-    (email == undefined || password == undefined)
+    (email == undefined || password == undefined) ||
+    !validator.validate(email)
   ) {
     res.status(500).json({
       auth: false,
