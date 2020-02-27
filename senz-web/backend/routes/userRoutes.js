@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 const config = require("config");
 const jwtVerify = require("./verifyTokens");
 const uuidv4 = require("uuid/v4");
-var validator = require("email-validator");
+const validator = require("email-validator");
 
 //Signature producing function
 const getSignature = username => {
