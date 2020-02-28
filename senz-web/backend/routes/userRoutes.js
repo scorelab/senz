@@ -6,6 +6,8 @@ const jwt = require("jsonwebtoken");
 const config = require("config");
 const jwtVerify = require("./verifyTokens");
 const uuidv4 = require("uuid/v4");
+const nodemailer = require("nodemailer")
+const { verify } =  require('jsonwebtoken');
 
 //Signature producing function
 const getSignature = username => {
@@ -49,7 +51,7 @@ const getSignature = username => {
  */
 
 //Register a new user
-router.post("/register", function(req, res) {
+router.post("/register", async function(req, res) {
   var { name, email, password } = req.body;
   if (
     name == "" ||
@@ -62,38 +64,65 @@ router.post("/register", function(req, res) {
       token: null
     });
   } else {
-    var hashedPass = bcrypt.hashSync(req.body.password, 8);
-    User.create(
-      {
+    try {
+      var hashedPass = bcrypt.hashSync(req.body.password, 8);
+
+      let user = new User({
         name: req.body.name,
         email: req.body.email,
         password: hashedPass,
         signature: getSignature(String(req.body.name))
-      },
-      function(err, user) {
-        if (err)
-          res.status(500).json({
-            auth: false,
-            token: null
-          });
-        var token = jwt.sign(
-          {
-            id: user._id,
-            name: user.name,
-            signature: user.signature,
-            email: user.email
-          },
-          config.secretKey,
-          {
-            expiresIn: 86400 // expires in 24 hours
-          }
-        );
-        res.status(200).json({
-          auth: true,
-          token: token
-        });
-      }
-    );
+      });
+
+      await user.save();  //save the user in the database..
+
+      var token = jwt.sign(
+        {
+          id: user._id,
+        },
+        config.secretKey,
+        {
+          expiresIn: 86400 // expires in 24 hours
+        }
+      );
+
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: `${config.EMAIL_ADDRESS}`,
+          pass: `${config.EMAIL_PASSWORD}`,
+        }
+      });
+
+      const mailOptions = {
+        from: `${config.EMAIL_ADDRESS}`,
+        to: `${user.email}`,
+        subject: 'Account Verification for Senz',
+        text:
+          'Click on the link below to verify your account.\n\n'
+          + `http://localhost:8080/api/verify/${token}\n\n`
+          + 'If you did not request this, please ignore this email.\n',
+      };
+
+      console.log('Mail is being sent now');
+
+      var response = await transporter.sendMail(mailOptions);
+
+      console.log('Details about the sent mail: ', response);
+
+      // We dont want the user to log in directly
+      res.status(200).json({
+        auth: false,
+        token: null
+      });
+    }
+    catch(err) {
+      console.log(err);
+      res.status(500).json({
+        auth: false,
+        token: null
+      });
+    }
   }
 });
 
@@ -151,6 +180,7 @@ router.post("/login", function(req, res) {
       function(err, user) {
         if (err) return res.status(500).send("Error on the server.");
         if (!user) return res.status(404).send("No user found.");
+        if (!user.isverified) return res.status(401).send("Account not verified");
         var passwordIsValid = bcrypt.compareSync(
           req.body.password,
           user.password
@@ -232,6 +262,33 @@ router.put("/:userId/update", jwtVerify, (req, res) => {
       });
     }
   });
+});
+
+router.get("/verify/:jwt", async (req, res) => {
+  
+  const token = req.params.jwt;
+
+  if (!token) {
+    return res
+      .status(401)
+      .json({ msg: "Authorization denied as no token present" });
+  }
+
+  try {
+    const decoded = verify(token, config.secretKey);
+    const founduser = await User.findOne({_id : decoded.id}).select("-password");
+    founduser.isverified = true;
+    await founduser.save();
+    res
+      .status(200)
+      .json({
+        msg:
+          "Your account has been verified..Please login to access your account"
+      });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ msg: "Token not valid" });
+  }
 });
 
 module.exports = router;
