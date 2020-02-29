@@ -29,6 +29,7 @@
     "config": "^3.0.1",
     "cors": "^2.8.5",
     "ejs": "^2.6.1",
+    "email-validator": "^2.0.4",
     "express": "^4.16.4",
     "helmet": "^3.16.0",
     "istanbul": "^0.4.5",

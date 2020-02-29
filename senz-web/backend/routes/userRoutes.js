@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const config = require("config");
 const jwtVerify = require("./verifyTokens");
 const uuidv4 = require("uuid/v4");
+const validator = require("email-validator");
 const crypto = require('crypto')
 const nodemailer = require('nodemailer');
 
@@ -57,7 +58,8 @@ router.post("/register", function (req, res) {
     name == "" ||
     email == "" ||
     password == "" ||
-    (name == undefined || email == undefined || password == undefined)
+    (name == undefined || email == undefined || password == undefined) ||
+    !validator.validate(email)
   ) {
     res.status(500).json({
       auth: false,
@@ -139,7 +141,8 @@ router.post("/login", function (req, res) {
   if (
     email == "" ||
     password == "" ||
-    (email == undefined || password == undefined)
+    (email == undefined || password == undefined) ||
+    !validator.validate(email)
   ) {
     res.status(500).json({
       auth: false,
