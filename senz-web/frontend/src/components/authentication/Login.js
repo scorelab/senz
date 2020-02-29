@@ -9,6 +9,9 @@ import {
   Avatar
 } from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import IconButton from '@material-ui/core/IconButton';
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 
 import { Field, reduxForm } from "redux-form";
 import { withStyles } from "@material-ui/core/styles";
@@ -41,6 +44,18 @@ const styles = theme => ({
 });
 
 class Register extends Component {
+
+  state = {
+    type: 'password',
+    Icon: <VisibilityOffIcon/>
+  }
+
+  handleClick = () => this.setState(({type}) => ({
+    Icon: type === 'text' ? <VisibilityOffIcon/> : <VisibilityIcon/> ,
+    type: type === 'text' ? 'password' : 'text'
+    
+  }))
+
   renderInputError = ({ error, touched }) => {
     if (error && touched) return { error: true, message: error };
     else return { error: false, message: "" };
@@ -80,7 +95,7 @@ class Register extends Component {
     this.props.LoginAction({ email, password }, this.props.history);
   };
   render() {
-    const { classes } = this.props;
+    const { classes} = this.props;
     return (
       <Container component="main" maxWidth="xs" data-test="LoginComponent">
         <CssBaseline />
@@ -106,15 +121,18 @@ class Register extends Component {
                   type="text"
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={10}>
                 <Field
                   name="password"
                   id="password"
                   label="Password"
-                  type="password"
+                  type={this.state.type}
                   component={this.renderInput}
                 />
               </Grid>
+              <IconButton aria-label="info" onClick = {this.handleClick}>
+                  {this.state.Icon}
+              </IconButton>
             </Grid>
             <Button
               type="submit"
@@ -139,15 +157,9 @@ const emailValid = email => {
   return pattern.test(email);
 };
 
-const passwordValid = password => {
-  if (password === undefined) return false;
-  return password.length > 4;
-};
-
 const validate = ({ firstName, lastName, email, password, cPassword }) => {
   const errors = {};
   if (!emailValid(email)) errors.email = "Email not valid";
-  if (!passwordValid(password)) errors.password = "Password too short";
   return errors;
 };
 

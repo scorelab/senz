@@ -17,6 +17,14 @@ const userSchema = new mongoose.Schema({
     required: true,
     type: String
   },
+  resetPasswordToken:{
+		type: String,
+		required: false
+  },
+	resetPasswordExpires:{
+		type: Date,
+		required: false
+	},
   //One to many relation between user,projects and devices
   projects: [
     {

@@ -14,15 +14,29 @@ Use the given URI from the environment file if given,
 or else use the uri for docker
 */
 const URI = config.dbURI || "mongodb://mongo:27017/senz";
-mongoose
-  .connect(URI, { useNewUrlParser: true, useFindAndModify: false })
-  .then(e => {
-    console.log("Database Connected");
-  })
-  .catch(err => {
-    throw err;
-  });
 
+if (config.util.getEnv("NODE_ENV") === "test") {
+  let Mockgoose = require('mockgoose').Mockgoose;
+  let mockgoose = new Mockgoose(mongoose);
+  mockgoose.helper.setDbVersion("4.0.3");
+  mockgoose.prepareStorage().then(function () {
+    mongoose.connect(config.testDbURI, { useNewUrlParser: true, useCreateIndex: true }).then(e => {
+      console.log("Test Database Connected");
+    })
+      .catch(err => {
+        throw err;
+      });;
+  })
+} else {
+  mongoose
+    .connect(URI, { useNewUrlParser: true, useFindAndModify: false })
+    .then(e => {
+      console.log("Database Connected");
+    })
+    .catch(err => {
+      throw err;
+    });
+}
 //Configuring the express instance
 // enhance your app security with Helmet
 app.use(helmet());
