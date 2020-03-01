@@ -158,9 +158,16 @@ const emailValid = email => {
   return pattern.test(email);
 };
 
+const passwordNullityCheck = password => {
+  if(password == null)
+    return true;
+  return false;
+}
+
 const validate = ({ firstName, lastName, email, password, cPassword }) => {
   const errors = {};
   if (!emailValid(email)) errors.email = "Email not valid";
+  if (passwordNullityCheck(password)) errors.password = "Enter password" ;
   return errors;
 };
 
