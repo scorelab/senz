@@ -95,7 +95,7 @@ class Register extends Component {
     this.props.LoginAction({ email, password }, this.props.history);
   };
   render() {
-    const { classes} = this.props;
+    const { classes, invalid } = this.props;
     return (
       <Container component="main" maxWidth="xs" data-test="LoginComponent">
         <CssBaseline />
@@ -140,6 +140,7 @@ class Register extends Component {
               variant="contained"
               color="primary"
               className={classes.submit}
+              disabled = {invalid}
             >
               Sign In
             </Button>
