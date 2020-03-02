@@ -49,16 +49,24 @@ class Register extends Component {
 
   state = {
     type: 'password',
-    Icon: <VisibilityOffIcon/>
+    Icon: <VisibilityIcon/>,
+    cType: 'password',
+    cIcon: <VisibilityIcon/>
   }
 
 
   handleClick = () => this.setState(({type}) => ({
-    Icon: type === 'text' ? <VisibilityOffIcon/> : <VisibilityIcon/> ,
+    Icon: type === 'text' ? <VisibilityIcon/> : <VisibilityOffIcon/> ,
     type: type === 'text' ? 'password' : 'text'
     
   }))
 
+  confirmPassowrdShow = () => this.setState(({cType}) => ({
+    cIcon: cType === 'text' ? <VisibilityIcon/> : <VisibilityOffIcon/> ,
+    cType: cType === 'text' ? 'password' : 'text'
+    
+  }))
+  
   renderInputError = ({ error, touched }) => {
     if (error && touched) return { error: true, message: error };
     else return { error: false, message: "" };
@@ -162,15 +170,18 @@ class Register extends Component {
               <IconButton aria-label="info" onClick = {this.passwordCheckHandler}>
                 <InfoIcon/>
               </IconButton>
-              <Grid item xs={12}>
+              <Grid item xs={10}>
                 <Field
                   name="cPassword"
                   id="cPassword"
                   label="Confirm Password"
-                  type="password"
+                  type={this.state.cType}
                   component={this.renderInput}
                 />
               </Grid>
+              <IconButton aria-label="info" onClick = {this.confirmPassowrdShow}>
+                  {this.state.cIcon}
+              </IconButton>
             </Grid>
             <Button
               type="submit"
@@ -191,7 +202,7 @@ class Register extends Component {
             </Grid>
           </form>
         </div>
-      </Container >
+      </Container>
     );
   }
 }
