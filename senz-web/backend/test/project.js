@@ -32,6 +32,12 @@ describe("Projects", () => {
     Device.deleteMany({});
     User.deleteMany({});
   });
+  // clears the mockDatabase after tests in this module are complete
+  after(async () => {
+    await Project.deleteMany({});
+    await Device.deleteMany({});
+    await User.deleteMany({});
+  });
   it("Should GET all the projects of a user GET /project/:userid/all", done => {
     chai
       .request(server)

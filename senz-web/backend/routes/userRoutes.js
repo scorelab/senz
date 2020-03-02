@@ -65,39 +65,52 @@ router.post("/register", function (req, res) {
       auth: false,
       token: null
     });
-  } else {
-    var hashedPass = bcrypt.hashSync(req.body.password, 8);
-    User.create(
-      {
-        name: req.body.name,
-        email: req.body.email,
-        password: hashedPass,
-        signature: getSignature(String(req.body.name))
-      },
-      function (err, user) {
-        if (err)
-          res.status(500).json({
-            auth: false,
-            token: null
-          });
-        var token = jwt.sign(
-          {
-            id: user._id,
-            name: user.name,
-            signature: user.signature,
-            email: user.email
-          },
-          config.secretKey,
-          {
-            expiresIn: 86400 // expires in 24 hours
-          }
-        );
-        res.status(200).json({
-          auth: true,
-          token: token
-        });
-      }
-    );
+  }else {
+    User.findOne({ email: req.body.email }) 
+      .then(user => {
+        if (user) { //unique email check
+          return res.status(409).json({ auth: false, token: null });
+        } else {
+          var hashedPass = bcrypt.hashSync(req.body.password, 8);
+          User.create(
+            {
+              name: req.body.name,
+              email: req.body.email,
+              password: hashedPass,
+              signature: getSignature(String(req.body.name))
+            },
+            function(err, user) {
+              if (err)
+                res.status(500).json({
+                  auth: false,
+                  token: null
+                });
+              var token = jwt.sign(
+                {
+                  id: user._id,
+                  name: user.name,
+                  signature: user.signature,
+                  email: user.email
+                },
+                config.secretKey,
+                {
+                  expiresIn: 86400 // expires in 24 hours
+                }
+              );
+              res.status(200).json({
+                auth: true,
+                token: token
+              });
+            }
+          );
+        }
+      })
+      .catch(error =>
+        res.status(500).json({
+          auth: false,
+          token: null
+        })
+      );
   }
 });
 

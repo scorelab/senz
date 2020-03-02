@@ -35,6 +35,12 @@ describe("Devices", () => {
     Project.deleteMany({});
     Device.deleteMany({});
   });
+  // clears the mockDatabase after tests in this module are complete
+  after(async () => {
+    await Project.deleteMany({});
+    await Device.deleteMany({});
+    await User.deleteMany({});
+  });
   it("Should POST a new device", done => {
     chai
       .request(server)

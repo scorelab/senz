@@ -10,7 +10,9 @@ describe("Users", () => {
     // run and erase the test database
     User.deleteMany({});
   });
-
+  after(async() => {
+    User.deleteMany({});
+  })
   describe("/POST user", () => {
     it("it should not REGISTER a user because password is not given ", done => {
       let user = {
@@ -45,6 +47,23 @@ describe("Users", () => {
           done();
         });
     });
+    it("it should not REGISTER a user as same email already in the database", done =>{
+      let user = {
+        email: "gargi@gmail.com",
+        name: "Gargi",
+        password: "gargi123"
+      };
+      chai
+        .request(server)
+        .post("/api/register")
+        .send(user)
+        .end((err, res) => {
+          res.should.have.status(409);
+          res.body.should.be.a("object");
+          res.body.should.have.property("auth").eql(false);
+          done();
+        });
+    })
     it("it should LOGIN a user ", done => {
       let user = {
         email: "gargi@gmail.com",
