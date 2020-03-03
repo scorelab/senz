@@ -26,13 +26,13 @@ class App extends Component {
       <ThemeProvider theme={theme}>
         <BrowserRouter data-test="AppComponent">
           <div>
-            <Route path="/" exact component={Register} />
+            <Route path="/" exact component={authNotRequired(Register)} />
             <Route
               path="/register"
               exact
               component={authNotRequired(Register)}
             />
-            <Route path="/login" exact component={Login} />
+            <Route path="/login" exact component={authNotRequired(Login)} />
             <Route path="/home" exact component={authRequired(Home)} />
 
             <Route
