@@ -54,6 +54,7 @@ export const LoginAction = ({ email, password }, history) => {
         type: AUTHENTICATION_ERROR,
         payload: "Invalid"
       });
+      alert("Email or password entered is incorrect");
     }
   };
 };

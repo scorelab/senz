@@ -3,6 +3,7 @@ import {
   Container,
   Typography,
   Grid,
+  Link,
   TextField,
   CssBaseline,
   Button,
@@ -47,11 +48,11 @@ class Register extends Component {
 
   state = {
     type: 'password',
-    Icon: <VisibilityOffIcon/>
+    Icon: <VisibilityIcon/>
   }
 
   handleClick = () => this.setState(({type}) => ({
-    Icon: type === 'text' ? <VisibilityOffIcon/> : <VisibilityIcon/> ,
+    Icon: type === 'text' ? <VisibilityIcon/> : <VisibilityOffIcon/> ,
     type: type === 'text' ? 'password' : 'text'
     
   }))
@@ -144,6 +145,13 @@ class Register extends Component {
             >
               Sign In
             </Button>
+            <Grid container justify="flex-end">
+              <Grid item>
+                <Link href="/register" variant="body2">
+                  Don't have an account? Create account
+                </Link>
+              </Grid>
+            </Grid>
           </form>
         </div>
       </Container>
