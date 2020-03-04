@@ -8,7 +8,7 @@
     pip install -r requirements.txt
     ```
 
-2.  Setup and run [Senz server](/../../senz-server/README.md)
+2.  Setup and run [Senz server](../../senz-server/README.md)
 
 3.  Run receiver device
     ```sh
@@ -20,3 +20,12 @@
     cd device_1
     python3 sender.py
     ```
+
+5.  In order to run tests first install the pytest package
+    `pip install pytest`
+
+    and then in terminal run 
+
+    `pytest`
+
+    

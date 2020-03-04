@@ -1,0 +1,34 @@
+version: "3"
+services:
+  server:
+    build: ./backend
+    expose:
+      - ${APP_SERVER_PORT}
+    environment:
+      API_HOST: ${API_HOST}
+      APP_SERVER_PORT: ${APP_SERVER_PORT}
+    ports:
+      - ${APP_SERVER_PORT}:${APP_SERVER_PORT}
+    volumes:
+      - ./backend:/srv/app/senzAdmin-server
+    links:
+      - mongo
+    command: npm run dev
+  client:
+    build: ./frontend
+    expose:
+      - ${REACT_APP_PORT}
+    environment:
+      - REACT_APP_PORT=${REACT_APP_PORT}
+    ports:
+      - ${REACT_APP_PORT}:${REACT_APP_PORT}
+    volumes:
+      - ./frontend:/srv/app/senzAdmin-client
+    links:
+      - server
+    command: npm run start
+  mongo:
+    container_name: mongo
+    image: mongo
+    ports:
+      - "27017:27017"

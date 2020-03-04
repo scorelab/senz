@@ -1,47 +1,51 @@
 const net = require("net");
+const logger = require('./utils/winstonConfig')
 // Create a socket (client) that connects to the server
-var socket = new net.Socket();
+const socket = new net.Socket();
 socket.connect(2552, "localhost", function () {
-    console.log("Client: Connected to server");
+    logger.info("Client: Connected to server");
 });
 
-var sendMessage=function(msg){
-    return new Promise(function(resolve,reject){
+const sendMessage = function (msg) {
+    return new Promise(function (resolve) {
         socket.write(msg);
-        socket.on("data",function(data){
-        data=data.toString('utf8')
-        resolve(data);
-    
-    
-    })
-    
-    })
-    
-}
-var getResponse=function(){
-    return new Promise(function(resolve,reject){
-            socket.on("data",function(data){
-                data=data.toString('utf8').split(" ")[2]
-                var chunk="";
-                for(var i=0;i<data.length;i++){
-                    chunk+=data[i];
-                }
-                console.log(chunk);
-                resolve(chunk);  
-            })
-            
-        })
-    }
+        socket.on("data", function (data) {
+            data = data.toString('utf8')
+            resolve(data);
 
-var receiveMessage=async function(){
-        let data=await getResponse();
-        return data;
-                
-    
-    
+
+        })
+        socket.on('error', function (e) {
+            logger.error(`Error Message: ${e}`);
+        })
+
+    })
+
 }
-var getTimestamp=function(){
+const getResponse = function () {
+    return new Promise(function (resolve) {
+        socket.on("data", function (data) {
+            data = data.toString('utf8').split(" ")[2]
+            let chunk = "";
+            for (let i = 0; i < data.length; i++) {
+                chunk += data[i];
+            }
+            logger.debug(chunk);
+            resolve(chunk);
+        })
+
+    })
+}
+
+const receiveMessage = async function () {
+    let data = await getResponse();
+    return data;
+
+
+
+}
+const getTimestamp = function () {
     return Date.now();
 }
 
-module.exports={sendMessage,receiveMessage,getTimestamp};
+module.exports = { sendMessage, receiveMessage, getTimestamp };

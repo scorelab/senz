@@ -1,0 +1,35 @@
+{
+  "name": "senz",
+  "version": "1.0.9",
+  "description": "This is the npm module for the senz-switch and the senz-web.",
+  "main": "main.js",
+  "scripts": {
+    "test": "mocha __tests__"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scorelab/senz.git"
+  },
+  "keywords": [
+    "npm",
+    "node",
+    "senz"
+  ],
+  "author": "YashMeh",
+  "license": "ISC",
+  "dependencies": {
+    "aes-js": "^3.1.2",
+    "arraybuffer-to-string": "^1.0.2",
+    "base64-js": "^1.3.0",
+    "express": "^4.16.4",
+    "winston": "^3.2.1"
+  },
+  "bugs": {
+    "url": "https://github.com/scorelab/senz/issues"
+  },
+  "homepage": "https://github.com/scorelab/senz#readme",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.2.0"
+  }
+}
