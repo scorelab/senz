@@ -7,7 +7,7 @@ cd tmp
 
 echo "Downloading binaries of MongoDB"
 sudo git clone https://aur.archlinux.org/mongodb-bin.git
-echo "Dwonlaodd completed"
+echo "Downlaod completed"
 
 echo "Installing MongoDB"
 cd mongodb-bin
