@@ -32,7 +32,10 @@ const styles = theme => ({
 });
 
 class AddProject extends Component {
-  state = { done: false };
+  state = { 
+    done: false,
+    notifier_message: ''
+  };
   componentWillMount = () => {
     this.props.toggleHeadingAction({ heading: "New Project" });
     this.props.fetchProjectAction(this.props.user.id, this.props.user.token);
@@ -77,8 +80,15 @@ class AddProject extends Component {
       newProject,
       this.props.user.id,
       this.props.user.token
-    );
-    this.setState({ done: true });
+    ).then(()=> {
+      this.setState({ done: true });
+      if(this.props.error==="Invalid") { // if same project name already exists
+        this.setState({ notifier_message: "A project with same name already exists!" });
+      }
+      else { // if the project addition was successful
+        this.setState({ notifier_message: "Project Created" });
+      }
+    });
   };
   handleClose = () => {
     this.setState({ done: false });
@@ -132,7 +142,7 @@ class AddProject extends Component {
             </form>
           </main>
           <Notifier
-            message="Project Created"
+            message={this.state.notifier_message}
             done={this.state.done}
             handleClose={this.handleClose}
           />
@@ -142,33 +152,25 @@ class AddProject extends Component {
   }
 }
 
-const validate = ({ name, description }, props) => {
+const validate = ({ name, description }) => {
   const errors = {};
   if (!name) errors.name = "Required";
   if (!description) errors.description = "Required";
-  if (
-    props.projects
-      .map(project => {
-        return project.name;
-      })
-      .indexOf(name) !== -1
-  )
-    errors.name = "Already Exist";
   return errors;
 };
 
-const updatedForm = reduxForm({
-  form: "addProject",
-  validate: validate
-})(withStyles(styles, { withTheme: true })(AddProject));
-
 const MapStateToProp = state => {
+  console.log(state);
   return {
     user: state.auth.user,
-    projects: state.project.AllProject
+    projects: state.project.AllProject,
+    error: state.project.error
   };
 };
-export default connect(
+export default reduxForm({
+  form: "addProject",
+  validate: validate
+})(connect(
   MapStateToProp,
   { toggleHeadingAction, fetchProjectAction, addProjectAction }
-)(updatedForm);
+  )(withStyles(styles, { withTheme: true })(AddProject)));

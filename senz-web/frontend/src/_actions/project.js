@@ -1,6 +1,7 @@
 import {
   FETCH_PROJECTS,
   ADD_PROJECT,
+  ADD_PROJECT_ERROR,
   SET_PROJECT,
   DELETE_PROJECT,
   UPDATE_PROJECT_INFO,
@@ -25,20 +26,28 @@ export const fetchProjectAction = (userId, token) => {
 
 export const addProjectAction = ({ name, description }, userId, token) => {
   return async dispatch => {
-    const response = await axios.post(
-      `${URL}/${userId}/new`,
-      {
-        name: name,
-        description: description
-      },
-      {
-        headers: {
-          Authorization: token
+    try {
+      const response = await axios.post(
+        `${URL}/${userId}/new`,
+        {
+          name: name,
+          description: description
+        },
+        {
+          headers: {
+            Authorization: token
+          }
         }
-      }
-    );
-    dispatch({ type: ADD_PROJECT, payload: response.data });
-  };
+      );
+      dispatch({ type: ADD_PROJECT, payload: response.data });
+    }
+    catch(err) {
+      dispatch({
+        type: ADD_PROJECT_ERROR,
+        payload: "Invalid"
+      });
+    }
+  }
 };
 
 export const setProjectAction = (projectId, token) => {
