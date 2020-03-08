@@ -1,8 +1,10 @@
 import {
   ADD_DEVICE,
+  EDIT_DEVICE,
   FETCH_DEVICES,
   SWITCH_DEVICE,
-  REMOVE_DEVICES
+  REMOVE_DEVICES,
+  TOGGLE_IS_EDITING_DEVICE
 } from "./types/index";
 import axios from "axios";
 
@@ -23,6 +25,26 @@ export const addDeviceAction = (name, pubkey, token, userId) => {
       }
     );
     dispatch({ type: ADD_DEVICE, payload: response.data });
+  };
+};
+
+//Edit device action
+export const editDeviceAction = (name, pubkey, deviceId, token, userId) => {
+  return async dispatch => {
+    const response = await axios.put(
+      `${URL}/${userId}/edit`,
+      {
+        name,
+        pubkey,
+        deviceId
+      },
+      {
+        headers: {
+          Authorization: token
+        }
+      }
+    );
+    dispatch({ type: EDIT_DEVICE, payload: response.data });
   };
 };
 
@@ -68,4 +90,8 @@ export const switchDevice = (devices, status, token) => {
     );
     dispatch({ type: SWITCH_DEVICE, payload: response.data });
   };
+};
+
+export const toggleIsEditingDevice = toggleValue => {
+  return { type: TOGGLE_IS_EDITING_DEVICE, payload: toggleValue };
 };

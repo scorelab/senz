@@ -1,29 +1,41 @@
 import {
   ADD_DEVICE,
+  EDIT_DEVICE,
   FETCH_DEVICES,
   REMOVE_PROJECT_DEVICE,
   REMOVE_DEVICES,
   SWITCH_DEVICE,
-  CLEAR_ALL
+  CLEAR_ALL,
+  TOGGLE_IS_EDITING_DEVICE
 } from "../_actions/types";
 
 export const deviceReducers = (
-  state = { AllDevices: [], SelectedDevice: {} },
+  state = { AllDevices: [], SelectedDevice: {}, isEditingDevice: false },
   action
 ) => {
   switch (action.type) {
     case ADD_DEVICE:
       return {
+        ...state,
         AllDevices: [...state.AllDevices, action.payload],
         SelectedDevice: state.SelectedDevice
       };
+    case EDIT_DEVICE: {
+      return {
+        ...state,
+        AllDevices: action.payload,
+        SelectedDevice: {}
+      };
+    }
     case FETCH_DEVICES:
       return {
+        ...state,
         AllDevices: action.payload,
         SelectedDevice: state.SelectedDevice
       };
     case CLEAR_ALL:
       return {
+        ...state,
         AllDevices: [],
         SelectedDevice: {}
       };
@@ -37,6 +49,7 @@ export const deviceReducers = (
         return device;
       });
       return {
+        ...state,
         AllDevices: modifiedDevices,
         SelectedDevice: state.SelectedDevice
       };
@@ -46,6 +59,7 @@ export const deviceReducers = (
         return !devices.includes(device._id);
       });
       return {
+        ...state,
         AllDevices: modDevices,
         SelectedDevice: {}
       };
@@ -60,9 +74,14 @@ export const deviceReducers = (
         return device;
       });
       return {
+        ...state,
         AllDevices: switchedDevices,
         SelectedDevice: {}
       };
+    case TOGGLE_IS_EDITING_DEVICE: {
+      const toggleValue = action.payload;
+      return { ...state, isEditingDevice: toggleValue };
+    }
     default:
       return state;
   }

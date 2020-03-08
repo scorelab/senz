@@ -1,11 +1,14 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import { withStyles } from "@material-ui/core/styles";
 import TableCell from "@material-ui/core/TableCell";
 import Paper from "@material-ui/core/Paper";
+import EditIcon from '@material-ui/icons/Edit';
+import EditDevice from './EditDevice';
 import { AutoSizer, Column, Table } from "react-virtualized";
 import { connect } from "react-redux";
+import { toggleIsEditingDevice} from "../../_actions/device";
 
 const styles = theme => ({
   flexContainer: {
@@ -153,14 +156,37 @@ MuiVirtualizedTable.propTypes = {
 const VirtualizedTable = withStyles(styles)(MuiVirtualizedTable);
 
 class ReactVirtualizedTable extends Component {
+  state = { 
+    deviceId:null,
+    name:null,
+    pubkey:null
+  }
+  async componentDidMount(){
+    this.props.toggleIsEditingDevice(false);
+  }
+  onEditIconClick = async (event, device) => {
+    event.stopPropagation();
+    const {_id, name, pubkey} = device;
+    await this.setState({deviceId:_id, name, pubkey });
+    this.props.toggleIsEditingDevice(true);
+  }
   render() {
     const rows = this.props.devices.map(device => {
+      const editIcon = <EditIcon onClick={(event) => this.onEditIconClick(event, device)}/>
       if (device.status)
-        return { ...device, date: device.date.substr(0, 10), active: "ON" };
-      else return { ...device, date: device.date.substr(0, 10), active: "OFF" };
+        return { ...device, date: device.date.substr(0, 10), active: "ON", edit:editIcon };
+      else return { ...device, date: device.date.substr(0, 10), active: "OFF", edit: editIcon };
     });
     if (rows.length === 0) return null;
-    return (
+    return (<Fragment>
+      {
+        this.props.isEditingDevice ? 
+        <EditDevice 
+        name={this.state.name} 
+        pubkey={this.state.pubkey} 
+        deviceId={ this.state.deviceId}
+        />
+        :
       <Paper
         style={{ height: 400, width: 800 }}
         data-test="DeviceListComponent"
@@ -203,17 +229,24 @@ class ReactVirtualizedTable extends Component {
               width: 100,
               label: "Status",
               dataKey: "active"
+            },
+            {
+              width:50,
+              dataKey:"edit"
             }
           ]}
         />
       </Paper>
+      }
+    </Fragment>
     );
   }
 }
 
 const MapStateToProp = state => {
   return {
-    devices: state.device.AllDevices
+    devices: state.device.AllDevices,
+    isEditingDevice: state.device.isEditingDevice
   };
 };
-export default connect(MapStateToProp)(ReactVirtualizedTable);
+export default connect(MapStateToProp, { toggleIsEditingDevice})(ReactVirtualizedTable);

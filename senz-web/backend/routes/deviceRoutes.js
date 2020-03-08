@@ -73,6 +73,118 @@ router.post("/:userId/new", jwtVerify, (req, res) => {
 });
 
 /**
+ * @api {put} device/:userId/edit edit a device in all device menu
+ * @apiGroup Devices
+ * @apiHeaderExample {json} Header-Example:
+ *     {
+ *       "Authorization": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjYTUxMzFmOTUzYmNmMGNhOThlN2Q3OCIsIm5hbWUiOiJ5YXNoIiwiaWF0IjoxNTU0MzIyNDQyLCJleHAiOjE1NTQ0MDg4NDJ9.9lQ_IN0AZjfcJoGh-f9F8HmG3Yt-RghMGhLxqGpYJJs"
+ *
+ *     }
+ * @apiParam {String} userId User id
+ * @apiParam {String} _id Device id
+ * @apiParam {String} name Name of device
+ * @apiParam {String} pubkey Device public key
+ * @apiSuccess {String} pubkey Device public key
+ * @apiSuccess {String} name Device name
+ * @apiSuccess {String} _id Id of the project
+ * @apiSuccess {Boolean} status status of the project
+ * @apiSuccess {Number} sent successfull send requests by the device
+ * @apiSuccess {Number} received successfull receive requests by the device
+ * @apiSuccess {Object[]} projects List of projects the device is a part of
+ * @apiSuccess {Date} date Date of creation
+ * @apiSuccessExample {json} Success
+ *    HTTP/1.1 200 OK
+ * [
+ *  {
+ *   "projects": [],
+ *   "sent": 0,
+ *   "received": 0,
+ *   "status": true,
+ *   "_id": "5d47116bcec70c4d058d6753",
+ *   "name": "dev1",
+ *   "pubkey": "dev1",
+ *   "date": "2019-08-04T17:10:03.096Z",
+ *   "__v": 0
+ *  }
+ * ]
+ * @apiErrorExample {json} Task not found
+ *    HTTP/1.1 404 Not Found
+ * @apiErrorExample {json} Find error
+ *    HTTP/1.1 500 Internal Server Error
+ */
+//edit a device in all device menu
+router.put("/:userid/edit", jwtVerify, async (req, res) => {
+  const userid = req.params.userid;
+  const { name, pubkey, deviceId } = req.body;
+  const update = { name, pubkey };
+  //update in pkmap
+  //finding pkmap on the basis of old key and signature and then updating it.
+  await User.findById(userid)
+    .then(foundUser => {
+      const { signature } = foundUser;
+      Device.findById(deviceId)
+        .then(foundDevice => {
+          const oldPubKey = foundDevice.pubkey;
+          pkMap
+            .findOneAndUpdate(
+              { signature: signature, publicKey: oldPubKey },
+              { publicKey: pubkey }
+            )
+            .catch(err => {
+              throw err;
+            });
+        })
+        .catch(err => {
+          throw err;
+        });
+    })
+    .catch(err => {
+      throw err;
+    });
+
+  //update in devices
+  Device.findOneAndUpdate(deviceId, update).catch(err => {
+    throw err;
+  });
+
+  //update in projects
+  Device.findById(deviceId)
+    .then(foundDevice => {
+      const { projects } = foundDevice;
+      projects.forEach(projectId => {
+        Project.findById(projectId)
+          .then(project => {
+            const upDatedDeviceList = project.devices.map(device => {
+              if (device._id.toString() === deviceId) {
+                device.name = name;
+                device.pubkey = pubkey;
+              }
+              return device;
+            });
+            project.devices = upDatedDeviceList;
+            project.markModified("devices");
+            project.save().catch(err => {
+              throw err;
+            });
+          })
+          .catch(err => {
+            throw err;
+          });
+      });
+    })
+    .catch(err => {
+      throw err;
+    });
+  // send all device list to user
+  User.findById(req.params.userid)
+    .populate("devices")
+    .exec((err, user) => {
+      if (err) throw err;
+      res.status(200).json(user.devices);
+    });
+});
+
+/**
  * @api {delete} device/:userId/delete/:deviceId Delete a device for a user
  * @apiGroup Devices
  * @apiHeaderExample {json} Header-Example:
@@ -129,33 +241,13 @@ router.delete("/:userId/delete/:deviceId", jwtVerify, (req, res) => {
  *
  *     }
  * @apiParam {String} userId User id
- * @apiSuccess {String} pubkey Device public key
- * @apiSuccess {String} name Device name
- * @apiSuccess {String} _id Id of the project
- * @apiSuccess {Boolean} status status of the project
- * @apiSuccess {Number} sent successfull send requests by the device
- * @apiSuccess {Number} received successfull receive requests by the device
- * @apiSuccess {Object[]} projects List of projects the device is a part of
- * @apiSuccess {Date} date Date of creation
- *@apiSuccess {String} message delete message
+ * @apiParam {String[]} devices List of devices id
+ * @apiSuccess {String} message delete message
  * @apiSuccessExample {json} Success
  *    HTTP/1.1 200 OK
  *  {
  *   "message":"Deleted"
  *  }
- * [
- * {
- *   "projects": [],
- *   "sent": 0,
- *   "received": 0,
- *   "status": true,
- *   "_id": "5d47116bcec70c4d058d6753",
- *   "name": "dev1",
- *   "pubkey": "dev1",
- *   "date": "2019-08-04T17:10:03.096Z",
- *   "__v": 0
- * }
- * ]
  * @apiErrorExample {json} Task not found
  *    HTTP/1.1 404 Not Found
  * @apiErrorExample {json} Find error
@@ -167,9 +259,9 @@ router.delete("/:userId/delete", jwtVerify, (req, res) => {
   const userId = req.params.userId;
   const devices = req.body;
   // console.log(userId, devices)
-  devices.forEach(deviceId => {
+  devices.forEach(async deviceId => {
     //Remove from the pkMap
-    Device.findById(deviceId).then(foundDevice => {
+    await Device.findById(deviceId).then(foundDevice => {
       pkMap.findOneAndDelete({ publicKey: foundDevice.pubkey }).catch(err => {
         throw err;
       });

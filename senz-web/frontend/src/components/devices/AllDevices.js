@@ -93,7 +93,7 @@ class AllDevice extends Component {
           <div className={classes.toolbar} />
           <Intro
             heading="Devices"
-            description="Each entry contains the name,public key,number of times data sent and received of a device alongwith their status. You can switch a device ON or OFF and the same will be reflected while sending data using the senz switch."
+            description="Each entry contains the name,public key,number of times data sent and received of a device along with their status. You can switch a device ON or OFF and the same will be reflected while sending data using the senz switch."
           />
           <div className={classes.table}>
             <form className={classes.root} autoComplete="off">
