@@ -4,7 +4,7 @@ import SideBar from "../layout/SideBar";
 import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import { toggleHeadingAction } from "../../_actions/heading";
-import { fetchAllDeviceAction } from "../../_actions/device";
+import { fetchAllDeviceAction, removeDevices } from "../../_actions/device";
 import DeviceList from "./DeviceList";
 import Intro from "../project/Intro";
 import { switchDevice } from "../../_actions/device";
@@ -25,10 +25,13 @@ const styles = theme => ({
     margin: theme.spacing(1),
     minWidth: 120
   },
-  button: {
+  buttonSwitch: {
     margin: theme.spacing(1),
     color: "#2196F3",
     borderColor: "#2196F3"
+  },
+  buttonRemove: {
+    margin: theme.spacing(1)
   },
   content: {
     flexGrow: 1,
@@ -62,6 +65,13 @@ class AllDevice extends Component {
         [e.target.name]: e.target.value
       };
     });
+  };
+  handleRemove = () => {
+    this.props.removeDevices(
+      this.props.user.id,
+      this.state.devices,
+      this.props.user.token
+    );
   };
   componentWillMount = () => {
     //Update devices from the redux store
@@ -106,10 +116,18 @@ class AllDevice extends Component {
               <Button
                 variant="outlined"
                 color="primary"
-                className={classes.button}
+                className={classes.buttonSwitch}
                 onClick={this.handleSwitch}
               >
                 Switch
+              </Button>
+              <Button
+                variant="outlined"
+                color="secondary"
+                className={classes.buttonRemove}
+                onClick={this.handleRemove}
+              >
+                Remove
               </Button>
             </form>
             <DeviceList handleCheck={this.handleCheck} />
@@ -122,11 +140,14 @@ class AllDevice extends Component {
 
 const MapStateToProp = state => {
   return {
+    project: state.project.SelectedProject,
     user: state.auth.user
   };
 };
 
-export default connect(
-  MapStateToProp,
-  { toggleHeadingAction, fetchAllDeviceAction, switchDevice }
-)(withStyles(styles, { withTheme: true })(AllDevice));
+export default connect(MapStateToProp, {
+  toggleHeadingAction,
+  fetchAllDeviceAction,
+  switchDevice,
+  removeDevices
+})(withStyles(styles, { withTheme: true })(AllDevice));

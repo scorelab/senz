@@ -2,6 +2,7 @@ import {
   ADD_DEVICE,
   FETCH_DEVICES,
   REMOVE_PROJECT_DEVICE,
+  REMOVE_DEVICES,
   SWITCH_DEVICE,
   CLEAR_ALL
 } from "../_actions/types";
@@ -39,6 +40,16 @@ export const deviceReducers = (
         AllDevices: modifiedDevices,
         SelectedDevice: state.SelectedDevice
       };
+    case REMOVE_DEVICES: {
+      const devices = action.payload;
+      const modDevices = state.AllDevices.filter(device => {
+        return !devices.includes(device._id);
+      });
+      return {
+        AllDevices: modDevices,
+        SelectedDevice: {}
+      };
+    }
     case SWITCH_DEVICE:
       const switchedDevices = state.AllDevices.map(device => {
         for (var i = 0; i < action.payload.length; i++) {
