@@ -9,7 +9,7 @@ import EditDevice from './EditDevice';
 import { AutoSizer, Column, Table } from "react-virtualized";
 import { connect } from "react-redux";
 import { toggleIsEditingDevice} from "../../_actions/device";
-
+import { toggleHeadingAction } from "../../_actions/heading";
 const styles = theme => ({
   flexContainer: {
     display: "flex",
@@ -163,6 +163,7 @@ class ReactVirtualizedTable extends Component {
   }
   async componentDidMount(){
     this.props.toggleIsEditingDevice(false);
+    this.props.toggleHeadingAction({ heading: "All Devices" });
   }
   onEditIconClick = async (event, device) => {
     event.stopPropagation();
@@ -249,4 +250,4 @@ const MapStateToProp = state => {
     isEditingDevice: state.device.isEditingDevice
   };
 };
-export default connect(MapStateToProp, { toggleIsEditingDevice})(ReactVirtualizedTable);
+export default connect(MapStateToProp, { toggleIsEditingDevice, toggleHeadingAction})(ReactVirtualizedTable);

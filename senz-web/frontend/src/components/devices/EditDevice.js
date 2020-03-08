@@ -92,12 +92,14 @@ class EditDevice extends Component {
     );
     await this.setState({ done: true });
     this.props.toggleIsEditingDevice(false);
+    this.props.toggleHeadingAction({ heading: "All Devices" });
   };
   handleClose = () => {
     this.setState({ done: false });
   };
   onCancel = () => {
     this.props.toggleIsEditingDevice(false);
+    this.props.toggleHeadingAction({ heading: "All Devices" });
   };
   render() {
     const { classes } = this.props;
