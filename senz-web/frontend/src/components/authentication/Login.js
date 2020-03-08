@@ -3,6 +3,7 @@ import {
   Container,
   Typography,
   Grid,
+  Link,
   TextField,
   CssBaseline,
   Button,
@@ -17,6 +18,7 @@ import { Field, reduxForm } from "redux-form";
 import { withStyles } from "@material-ui/core/styles";
 import { LoginAction } from "../../_actions/auth";
 import { connect } from "react-redux";
+import Notifier from "../Notifier";
 
 const styles = theme => ({
   "@global": {
@@ -43,15 +45,16 @@ const styles = theme => ({
   }
 });
 
-class Register extends Component {
+class Login extends Component {
 
   state = {
+    done: false,
     type: 'password',
-    Icon: <VisibilityOffIcon/>
+    Icon: <VisibilityIcon/>
   }
 
   handleClick = () => this.setState(({type}) => ({
-    Icon: type === 'text' ? <VisibilityOffIcon/> : <VisibilityIcon/> ,
+    Icon: type === 'text' ? <VisibilityIcon/> : <VisibilityOffIcon/> ,
     type: type === 'text' ? 'password' : 'text'
     
   }))
@@ -91,9 +94,21 @@ class Register extends Component {
       );
     }
   };
+
   submit = ({ email, password }) => {
-    this.props.LoginAction({ email, password }, this.props.history);
+    this.props.LoginAction({ email, password }, this.props.history)
+    .then(()=> { // show notification after getting response from the server
+      const { error } = this.props;
+      if(error==="Invalid") {
+        this.setState({ done: true });
+      }
+    });
   };
+
+  handleClose = () => {
+    this.setState({ done: false });
+  };
+
   render() {
     const { classes, invalid } = this.props;
     return (
@@ -144,8 +159,20 @@ class Register extends Component {
             >
               Sign In
             </Button>
+            <Grid container justify="flex-end">
+              <Grid item>
+                <Link href="/register" variant="body2">
+                  Don't have an account? Create account
+                </Link>
+              </Grid>
+            </Grid>
           </form>
         </div>
+        <Notifier
+          done={this.state.done}
+          message="Email or password entered is incorrect"
+          handleClose={this.handleClose}
+        />
       </Container>
     );
   }
@@ -171,12 +198,16 @@ const validate = ({ firstName, lastName, email, password, cPassword }) => {
   return errors;
 };
 
-const registerForm = reduxForm({
-  form: "register",
-  validate: validate
-})(withStyles(styles, { withTheme: true })(Register));
+const MapStateToProp = state => {
+  return {
+    error: state.auth.error
+  };
+};
 
-export default connect(
-  null,
+export default reduxForm({
+  form: "register",
+  validate: validate,
+})(connect(
+  MapStateToProp,
   { LoginAction }
-)(registerForm);
+  )(withStyles(styles, { withTheme: true })(Login)));
