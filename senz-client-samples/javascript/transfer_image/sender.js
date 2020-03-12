@@ -9,7 +9,7 @@ const sharedKey=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16];
 //Register Device 
 logger.info("Registering Device");
 const time=client.getTimestamp();
-const regmsg=`SHARE #pubkey KEY @senz #time ${time} ^dev1 signature\n`;
+const regmsg=`SHARE #pubkey KEY @senz #time ${time} ^dev1 signature`;
 const imagePathToSend="sample.jpg";
 //Convert image to byte string
 const byteString=imageUtil.imageToString(imagePathToSend);
@@ -18,7 +18,7 @@ const aes=new AESUtil.AESUtils(sharedKey);
 const encryptedByteString=aes.encrypt(byteString);
 //logger.info(encryptedByteString);
 //Send Message
-const senmsg = `DATA $image ${encryptedByteString} @dev2 #time ${time} ^dev1 signature\n`
+const senmsg = `DATA $image ${encryptedByteString} @dev2 #time ${time} ^dev1 signature`
 //sendImage(regmsg,senmsg);
 const registeringDevice=function(regmsg)
 {
@@ -29,7 +29,7 @@ const registeringDevice=function(regmsg)
 const sendingMessage=function(senmsg){
     client.sendMessage(senmsg).then(function(senData){
         logger.info(senData);
-        client.sendMessage(`UNSHARE #pubkey KEY @senz #time ${time} ^dev1 signature\n`).then(function(registered){
+        client.sendMessage(`UNSHARE #pubkey KEY @senz #time ${time} ^dev1 signature`).then(function(registered){
             logger.info(registered);
         })
     })
