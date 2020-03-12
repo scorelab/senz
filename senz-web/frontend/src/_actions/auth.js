@@ -2,6 +2,12 @@ import {
   AUTHENTICATED,
   UNAUTHENTICATED,
   AUTHENTICATION_ERROR,
+  PASSWORD_RESETTED,
+  PASSWORD_RESET_ERROR,
+  RESET_PASSWORD_TOKEN_VERIFIED,
+  RESET_PASSWORD_TOKEN_VERIFICATION_ERROR,
+  PASSWORD_UPDATED,
+  PASSWORD_UPDATION_ERROR,
   UPDATE_USER,
   CLEAR_ALL
 } from "./types/index";
@@ -64,6 +70,63 @@ export const LogoutAction = history => {
   return async dispatch => {
     dispatch({ type: UNAUTHENTICATED });
     dispatch({ type: CLEAR_ALL });
+  };
+};
+
+export const ResetPasswordAction = ({email}) => {
+  return async dispatch => {
+    try {
+      const response = await axios.post(`${URL}/reset-password`, {
+        email: email
+      });
+      dispatch({ type: PASSWORD_RESETTED, payload: response.data });
+    } catch (err) {
+      dispatch({
+        type: PASSWORD_RESET_ERROR,
+        payload: "Invalid"
+      });
+    }
+  };
+};
+
+export const VerifyResetPasswordTokenAction = (user_id, token) => {
+  return async dispatch => {
+    try {
+      const response = await axios.get(`${URL}/reset-password/${user_id}/${token}`);
+      const {success} = response.data;
+      if(success)
+        dispatch({type: RESET_PASSWORD_TOKEN_VERIFIED, 
+          payload: response.data});
+      else
+      dispatch({
+        type: RESET_PASSWORD_TOKEN_VERIFICATION_ERROR,
+        payload: "Invalid"
+      })
+    }
+    catch(err) {
+      dispatch({
+        type: RESET_PASSWORD_TOKEN_VERIFICATION_ERROR,
+        payload: "Invalid"
+      })
+    }
+  }
+}
+
+export const UpdatePasswordAction = ({password, user_id, token}) => {
+  return async dispatch => {
+    try {
+      const response = await axios.put(`${URL}/update-password`, {
+        password: password,
+        user_id: user_id,
+        token: token
+      });
+      dispatch({ type: PASSWORD_UPDATED, payload: response.data });
+    } catch (err) {
+      dispatch({
+        type: PASSWORD_UPDATION_ERROR,
+        payload: "Invalid"
+      });
+    }
   };
 };
 
