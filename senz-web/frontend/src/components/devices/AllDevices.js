@@ -8,13 +8,6 @@ import { fetchAllDeviceAction, removeDevices } from "../../_actions/device";
 import DeviceList from "./DeviceList";
 import Intro from "../project/Intro";
 import { switchDevice } from "../../_actions/device";
-import {
-  FormControl,
-  MenuItem,
-  Button,
-  InputLabel,
-  Select
-} from "@material-ui/core";
 const drawerWidth = 240;
 const styles = theme => ({
   root: {
@@ -78,12 +71,11 @@ class AllDevice extends Component {
     this.props.toggleHeadingAction({ heading: "All Devices" });
     this.props.fetchAllDeviceAction(this.props.user.id, this.props.user.token);
   };
-  handleSwitch = () => {
-    const status = this.state.status ? true : false;
-    this.props.switchDevice(this.state.devices, status, this.props.user.token);
-  };
   render() {
     const { classes } = this.props;
+    const newStatus = this.props.devices ? this.props.devices.map(a => {
+      return a.status
+    }) : []
     return (
       <div data-test="AllDevicesComponent">
         <NavBar />
@@ -96,41 +88,7 @@ class AllDevice extends Component {
             description="Each entry contains the name,public key,number of times data sent and received of a device along with their status. You can switch a device ON or OFF and the same will be reflected while sending data using the senz switch."
           />
           <div className={classes.table}>
-            <form className={classes.root} autoComplete="off">
-              <FormControl className={classes.formControl}>
-                <InputLabel htmlFor="Action">
-                  {this.state.status === 0 ? "OFF" : "ON"}
-                </InputLabel>
-                <Select
-                  value={this.state.status}
-                  onChange={this.handleChange}
-                  inputProps={{
-                    name: "status",
-                    id: "Action"
-                  }}
-                >
-                  <MenuItem value={0}>OFF</MenuItem>
-                  <MenuItem value={1}>ON</MenuItem>
-                </Select>
-              </FormControl>
-              <Button
-                variant="outlined"
-                color="primary"
-                className={classes.buttonSwitch}
-                onClick={this.handleSwitch}
-              >
-                Switch
-              </Button>
-              <Button
-                variant="outlined"
-                color="secondary"
-                className={classes.buttonRemove}
-                onClick={this.handleRemove}
-              >
-                Remove
-              </Button>
-            </form>
-            <DeviceList handleCheck={this.handleCheck} />
+            <DeviceList devicestatus={newStatus} user={this.props.user} />
           </div>
         </main>
       </div>
@@ -140,7 +98,7 @@ class AllDevice extends Component {
 
 const MapStateToProp = state => {
   return {
-    project: state.project.SelectedProject,
+    devices: state.device.AllDevices,
     user: state.auth.user
   };
 };

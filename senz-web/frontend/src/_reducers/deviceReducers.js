@@ -68,17 +68,14 @@ export const deviceReducers = (
       };
     }
     case SWITCH_DEVICE:
-      const switchedDevices = state.AllDevices.map(device => {
-        for (var i = 0; i < action.payload.length; i++) {
-          if (action.payload[i]._id === device._id) {
-            device = action.payload[i];
-          }
+      const switchedDevice = state.AllDevices.map(device => {
+        if (action.payload._id === device._id) {
+          device = action.payload;
         }
         return device;
       });
       return {
-        ...state,
-        AllDevices: switchedDevices,
+        AllDevices: switchedDevice,
         SelectedDevice: {}
       };
     case TOGGLE_IS_EDITING_DEVICE: {
