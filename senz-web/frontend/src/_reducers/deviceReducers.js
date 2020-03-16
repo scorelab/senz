@@ -3,7 +3,8 @@ import {
   FETCH_DEVICES,
   REMOVE_PROJECT_DEVICE,
   SWITCH_DEVICE,
-  CLEAR_ALL
+  CLEAR_ALL,
+  ADD_DEVICE_ERROR
 } from "../_actions/types";
 
 export const deviceReducers = (
@@ -16,6 +17,8 @@ export const deviceReducers = (
         AllDevices: [...state.AllDevices, action.payload],
         SelectedDevice: state.SelectedDevice
       };
+    case ADD_DEVICE_ERROR:
+      return { ...state, error: action.payload };
     case FETCH_DEVICES:
       return {
         AllDevices: action.payload,

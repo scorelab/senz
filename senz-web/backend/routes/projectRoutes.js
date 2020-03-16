@@ -96,13 +96,22 @@ router.post("/:userid/new", jwtVerify, (req, res) => {
     name: projectName,
     description: projectDesc
   };
-  User.findById(userId).then(user => {
-    Project.create(project).then(newProject => {
-      user.projects.push(newProject);
-      user.save();
-      res.status(200).json(newProject);
-    });
-  });
+  
+  // unique project name check
+  Project.findOne({name: projectName})
+    .then(proj => {
+      if(proj) { // if project with same name exists, return error
+        return res.status(409).json({ error: "Project with same name already exists" });
+      } else {
+        User.findById(userId).then(user => {
+          Project.create(project).then(newProject => {
+            user.projects.push(newProject);
+            user.save();
+            res.status(200).json(newProject);
+          });
+        });
+      }
+    })
 });
 
 /**

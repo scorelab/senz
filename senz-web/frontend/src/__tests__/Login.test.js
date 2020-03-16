@@ -20,6 +20,7 @@ describe("Login Component", () => {
         .dive()
         .dive()
         .dive()
+        .dive()
         .dive();
     });
     it("Should render the component correctly", () => {
