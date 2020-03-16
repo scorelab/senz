@@ -10,8 +10,10 @@ import Switch from '@material-ui/core/Switch';
 import { AutoSizer, Column, Table } from "react-virtualized";
 import { switchDevice } from "../../_actions/device";
 import { connect } from "react-redux";
-import { toggleIsEditingDevice} from "../../_actions/device";
+import { toggleIsEditingDevice } from "../../_actions/device";
 import { toggleHeadingAction } from "../../_actions/heading";
+import ReactLoading from 'react-loading';
+
 const styles = theme => ({
   flexContainer: {
     display: "flex",
@@ -177,94 +179,97 @@ MuiVirtualizedTable.propTypes = {
 const VirtualizedTable = withStyles(styles)(MuiVirtualizedTable);
 
 class ReactVirtualizedTable extends Component {
-  state = { 
-    deviceId:null,
-    name:null,
-    pubkey:null
+  state = {
+    deviceId: null,
+    name: null,
+    pubkey: null
   }
-  async componentDidMount(){
+  async componentDidMount() {
     this.props.toggleIsEditingDevice(false);
     this.props.toggleHeadingAction({ heading: "All Devices" });
   }
   onEditIconClick = async (event, device) => {
     event.stopPropagation();
-    const {_id, name, pubkey} = device;
-    await this.setState({deviceId:_id, name, pubkey });
+    const { _id, name, pubkey } = device;
+    await this.setState({ deviceId: _id, name, pubkey });
     this.props.toggleIsEditingDevice(true);
   }
   render() {
     const rows = this.props.devices.map(device => {
-      const editIcon = <EditIcon onClick={(event) => this.onEditIconClick(event, device)}/>
+      const editIcon = <EditIcon onClick={(event) => this.onEditIconClick(event, device)} />
       if (device.status)
-        return { ...device, date: device.date.substr(0, 10), active: true, edit:editIcon };
-      else return { ...device, date: device.date.substr(0, 10),  active: false, edit: editIcon };
+        return { ...device, date: device.date.substr(0, 10), active: true, edit: editIcon };
+      else return { ...device, date: device.date.substr(0, 10), active: false, edit: editIcon };
     });
     if (rows.length === 0) return null;
     return (<Fragment>
       {
-        this.props.isEditingDevice ? 
-        <EditDevice 
-        name={this.state.name} 
-        pubkey={this.state.pubkey} 
-        deviceId={ this.state.deviceId}
-        />
-        :
-      <Paper
-        style={{ height: 400, width: 800 }}
-        data-test="DeviceListComponent"
-      >
-        <VirtualizedTable
-          deviceStatus={this.props.devicestatus}
-          rowCount={rows.length}
-          rowGetter={({ index }) => rows[index]}
-          data-test="TableComponent"
-          user={this.props.user}
-          devices={this.props.devices}
-          switchDevice={this.props.switchDevice}
-          columns={[
+          this.props.isEditingDevice ?
+        <EditDevice
+            name={this.state.name}
+            pubkey={this.state.pubkey}
+            deviceId={this.state.deviceId}
+          />
+          :
+          <>
             {
-              width: 150,
-              label: "Name",
-              dataKey: "name"
-            },
-            {
-              width: 150,
-              label: "Number of Sents",
-              dataKey: "sent",
-              numeric: true
-            },
-            {
-              width: 150,
-              label: "Number of Receives",
-              dataKey: "received",
-              numeric: true
-            },
-            {
-              width: 200,
-              label: "Public Key",
-              dataKey: "pubkey",
-              numeric: true
-            },
-            {
-              width: 200,
-              label: "Created On",
-              dataKey: "date"
-            },
-            {
-              width: 100,
-              label: "Status",
-              dataKey: "active"
-            },
-            {
-              width:50,
-              dataKey:"edit"
+              this.props.switchloading ?
+                <ReactLoading type={'spinningBubbles'} color={'black'} height={40} width={40} />
+                :
+                <Paper
+                  style={{ height: 400, width: 800 }}
+                  data-test="DeviceListComponent"
+                >
+                  <VirtualizedTable
+                    rowCount={rows.length}
+                    rowGetter={({ index }) => rows[index]}
+                    handleCheck={this.props.handleCheck}
+                    data-test="TableComponent"
+                    columns={[
+                      {
+                        width: 150,
+                        label: "Name",
+                        dataKey: "name"
+                      },
+                      {
+                        width: 150,
+                        label: "Number of Sents",
+                        dataKey: "sent",
+                        numeric: true
+                      },
+                      {
+                        width: 150,
+                        label: "Number of Receives",
+                        dataKey: "received",
+                        numeric: true
+                      },
+                      {
+                        width: 200,
+                        label: "Public Key",
+                        dataKey: "pubkey",
+                        numeric: true
+                      },
+                      {
+                        width: 200,
+                        label: "Created On",
+                        dataKey: "date"
+                      },
+                      {
+                        width: 100,
+                        label: "Status",
+                        dataKey: "active"
+                      },
+                      {
+                        width: 50,
+                        dataKey: "edit"
+                      }
+                    ]}
+                  />
+                </Paper>
             }
-          ]}
-        />
-      </Paper>
+          </>
       }
-    </Fragment>
-    );
+    </Fragment>);
   }
 }
 
@@ -272,7 +277,8 @@ const MapStateToProp = state => {
   return {
     devices: state.device.AllDevices,
     isEditingDevice: state.device.isEditingDevice,
+    switchloading: state.device.loading,
     user: state.auth.user
   };
 };
-export default connect(MapStateToProp, { toggleIsEditingDevice, toggleHeadingAction, switchDevice})(ReactVirtualizedTable);
+export default connect(MapStateToProp, { toggleIsEditingDevice, toggleHeadingAction, switchDevice })(ReactVirtualizedTable);

@@ -1,8 +1,11 @@
 import {
   ADD_DEVICE,
+  ADD_DEVICE_REQUEST,
   EDIT_DEVICE,
   FETCH_DEVICES,
+  FETCH_DEVICES_REQUEST,
   SWITCH_DEVICE,
+  SWITCH_DEVICES_REQUEST,
   REMOVE_DEVICES,
   TOGGLE_IS_EDITING_DEVICE
 } from "./types/index";
@@ -13,6 +16,7 @@ const URL = "http://localhost:8080/device";
 
 export const addDeviceAction = (name, pubkey, token, userId) => {
   return async dispatch => {
+    dispatch(request())
     try {
       const response = await axios.post(
         `${URL}/${userId}/new`,
@@ -28,12 +32,15 @@ export const addDeviceAction = (name, pubkey, token, userId) => {
       );
       dispatch({ type: ADD_DEVICE, payload: response.data });
     }
-    catch(err) {
+    catch (err) {
       dispatch({
         type: ADD_DEVICE_ERROR,
         payload: "Invalid"
       });
     }
+  }
+  function request() {
+    return { type: ADD_DEVICE_REQUEST }
   }
 };
 
@@ -60,6 +67,7 @@ export const editDeviceAction = (name, pubkey, deviceId, token, userId) => {
 //All devices action
 export const fetchAllDeviceAction = (userId, token) => {
   return async dispatch => {
+    dispatch(request())
     const response = await axios.get(`${URL}/${userId}/all`, {
       headers: {
         Authorization: token
@@ -67,6 +75,9 @@ export const fetchAllDeviceAction = (userId, token) => {
     });
     dispatch({ type: FETCH_DEVICES, payload: response.data });
   };
+  function request() {
+    return { type: FETCH_DEVICES_REQUEST }
+  }
 };
 
 //Remove devices from all device menu.
@@ -85,6 +96,7 @@ export const removeDevices = (userId, devices, token) => {
 //Switch device
 export const switchDevice = (device, status, token) => {
   return async dispatch => {
+    dispatch(request())
     const response = await axios.put(
       `${URL}/switch`,
       {
@@ -99,6 +111,9 @@ export const switchDevice = (device, status, token) => {
     );
     dispatch({ type: SWITCH_DEVICE, payload: response.data });
   };
+  function request() {
+    return { type: SWITCH_DEVICES_REQUEST }
+  }
 };
 
 export const toggleIsEditingDevice = toggleValue => {

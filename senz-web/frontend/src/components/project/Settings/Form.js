@@ -19,6 +19,7 @@ import {
   switchProjectStatus
 } from "../../../_actions/project";
 import { withStyles } from "@material-ui/core/styles";
+import ReactLoading from 'react-loading';
 import { connect } from "react-redux";
 import { reduxForm, Field } from "redux-form";
 import Notifier from "../../Notifier";
@@ -56,6 +57,9 @@ const IOSSwitch = withStyles(theme => ({
     backgroundColor: theme.palette.grey[50],
     opacity: 1,
     transition: theme.transitions.create(["background-color", "border"])
+  },
+  loader: {
+    marginLeft: "42%"
   },
   checked: {},
   focusVisible: {}
@@ -183,32 +187,37 @@ class Form extends Component {
               <Typography variant="h6">Project Details</Typography>
               <Divider />
               <div className={classes.subHead}>
-                <TextField
-                  name="name"
-                  variant="outlined"
-                  label="Name"
-                  margin="normal"
-                  value={this.state.name}
-                  onChange={this.handleChangeInfo}
-                />
-                <TextField
-                  name="description"
-                  variant="outlined"
-                  label="Description"
-                  margin="normal"
-                  value={this.state.description}
-                  onChange={this.handleChangeInfo}
-                  fullWidth
-                />
-                <br />
-                <Button
-                  color="primary"
-                  variant="outlined"
-                  onClick={this.handleClickInfo}
-                  disabled={this.state.updated}
-                >
-                  Update
+                {this.props.updateloading ?
+                  <ReactLoading type={'spinningBubbles'} color={'black'} height={40} width={40} className={classes.loader} />
+                  :
+                  <>
+                    <TextField
+                      name="name"
+                      variant="outlined"
+                      label="Name"
+                      margin="normal"
+                      value={this.state.name}
+                      onChange={this.handleChangeInfo}
+                    />
+                    <TextField
+                      name="description"
+                      variant="outlined"
+                      label="Description"
+                      margin="normal"
+                      value={this.state.description}
+                      onChange={this.handleChangeInfo}
+                      fullWidth
+                    />
+                    <br />
+                    <Button
+                      color="primary"
+                      variant="outlined"
+                      onClick={this.handleClickInfo}
+                      disabled={this.state.updated}
+                    >
+                      Update
                 </Button>
+                  </>}
               </div>
             </div>
             <div className={classes.subSection}>
@@ -247,6 +256,9 @@ class Form extends Component {
                 data-test="ProjectSettingsSection"
               >
                 <Typography variant="body1">Project Switch</Typography>
+                {this.props.switchloading?
+                 <ReactLoading type={'spinningBubbles'} color={'black'} height={40} width={40} className={classes.loader} />
+                 :
                 <FormGroup>
                   <Grid
                     component="label"
@@ -268,7 +280,7 @@ class Form extends Component {
                     </Grid>
                     <Grid item>On</Grid>
                   </Grid>
-                </FormGroup>
+                </FormGroup>}
                 <Button
                   size="small"
                   color="secondary"
@@ -305,7 +317,9 @@ const MapStateToProp = state => {
   return {
     project: state.project.SelectedProject,
     devices: state.device.AllDevices,
-    user: state.auth.user
+    user: state.auth.user,
+    updateloading: state.project.loading,
+    switchloading:state.project.switchloading
   };
 };
 const validate = ({ pubkey }, props) => {

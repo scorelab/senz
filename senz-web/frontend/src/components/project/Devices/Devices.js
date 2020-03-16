@@ -2,9 +2,17 @@ import React, { Component } from "react";
 import Intro from "../Intro";
 import DevicesList from "./DevicesList";
 import { Grid, Container, Button } from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
+import ReactLoading from 'react-loading';
 import { toggleHeadingAction } from "../../../_actions/heading";
 import { removeProjectDevices } from "../../../_actions/project";
+
+const useStyles = theme => ({
+  loader: {
+    marginLeft: "42%"
+  }
+})
 
 class Devices extends Component {
   state = {
@@ -34,6 +42,7 @@ class Devices extends Component {
     );
   };
   render() {
+    const { classes } = this.props;
     return (
       <div>
         <Grid item xs={12}>
@@ -42,6 +51,10 @@ class Devices extends Component {
             description="This contains the list of devices contained in the selected project. You can select multiple devices and can remove them from the project."
           />
         </Grid>
+        {
+          this.props.devicesLoading ?
+        <ReactLoading type={'spinningBubbles'} color={'black'} height={40} width={40} className={classes.loader}/>
+            : 
         <Container maxWidth="lg">
           <Grid container spacing={1}>
             <Grid item xs={6}>
@@ -58,6 +71,7 @@ class Devices extends Component {
             </Grid>
           </Grid>
         </Container>
+        }
       </div>
     );
   }
@@ -67,11 +81,12 @@ const MapStateToProp = state => {
   return {
     devices: state.project.SelectedProject.devices,
     project: state.project.SelectedProject,
-    user: state.auth.user
+    user: state.auth.user,
+    devicesLoading: state.device.loading
   };
 };
 
 export default connect(
   MapStateToProp,
   { toggleHeadingAction, removeProjectDevices }
-)(Devices);
+)(withStyles(useStyles, { withTheme: true })(Devices));
