@@ -84,6 +84,23 @@ describe("Projects", () => {
         done();
       });
   });
+  it("Should not POST a project with existing name for a particular user", done => {
+    const mockProject = {
+      name: "test",
+      description: "test"
+    };
+    chai
+      .request(server)
+      .post(`/project/${user.id}/new`)
+      .set("Authorization", token)
+      .send(mockProject)
+      .end((err, res) => {
+        if (err) throw err;
+        res.should.have.status(409);
+        res.body.should.be.a("object");
+        done();
+      });
+  });
   it("Should add a device to the project", done => {
     const mockDevice = {
       name: "testDevice",

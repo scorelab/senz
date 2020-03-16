@@ -54,6 +54,19 @@ describe("Devices", () => {
         done();
       });
   });
+  it("Should not POST a new device with existing key", done => {
+    chai
+      .request(server)
+      .post(`/device/${user.id}/new`)
+      .set("Authorization", token)
+      .send(mockDevice)
+      .end((err, res) => {
+        if (err) throw err;
+        res.should.have.status(409);
+        res.body.should.be.a("object");
+        done();
+      });
+  });
   it("Should GET all devices of a particular user", done => {
     chai
       .request(server)
