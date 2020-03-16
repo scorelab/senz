@@ -7,11 +7,15 @@ import {
   SWITCH_DEVICE,
   CLEAR_ALL,
   TOGGLE_IS_EDITING_DEVICE,
-  ADD_DEVICE_ERROR
+  ADD_DEVICE_ERROR,
+  ADD_DEVICE_REQUEST,
+  FETCH_DEVICES_REQUEST,
+  SWITCH_DEVICES_REQUEST,
+  REMOVE_DEVICE_FROM_PROJECT_REQUEST
 } from "../_actions/types";
 
 export const deviceReducers = (
-  state = { AllDevices: [], SelectedDevice: {}, isEditingDevice: false },
+  state = { AllDevices: [], SelectedDevice: {}, isEditingDevice: false, loading: false },
   action
 ) => {
   switch (action.type) {
@@ -19,7 +23,8 @@ export const deviceReducers = (
       return {
         ...state,
         AllDevices: [...state.AllDevices, action.payload],
-        SelectedDevice: state.SelectedDevice
+        SelectedDevice: state.SelectedDevice,
+        loading: false
       };
     case EDIT_DEVICE: {
       return {
@@ -30,17 +35,23 @@ export const deviceReducers = (
     };
     case ADD_DEVICE_ERROR:
       return { ...state, error: action.payload };
+    case ADD_DEVICE_REQUEST:
+      return { ...state, loading: true }
     case FETCH_DEVICES:
       return {
         ...state,
         AllDevices: action.payload,
-        SelectedDevice: state.SelectedDevice
+        SelectedDevice: state.SelectedDevice,
+        loading: false
       };
+    case FETCH_DEVICES_REQUEST:
+      return { ...state, loading: true }
     case CLEAR_ALL:
       return {
         ...state,
         AllDevices: [],
-        SelectedDevice: {}
+        SelectedDevice: {},
+        loading: false
       };
     case REMOVE_PROJECT_DEVICE:
       const modifiedDevices = state.AllDevices.map(device => {
@@ -54,7 +65,8 @@ export const deviceReducers = (
       return {
         ...state,
         AllDevices: modifiedDevices,
-        SelectedDevice: state.SelectedDevice
+        SelectedDevice: state.SelectedDevice,
+        loading: false
       };
     case REMOVE_DEVICES: {
       const devices = action.payload;
@@ -64,9 +76,11 @@ export const deviceReducers = (
       return {
         ...state,
         AllDevices: modDevices,
-        SelectedDevice: {}
+        SelectedDevice: {},
       };
     }
+    case REMOVE_DEVICE_FROM_PROJECT_REQUEST:
+      return { ...state, loading: true }
     case SWITCH_DEVICE:
       const switchedDevice = state.AllDevices.map(device => {
         if (action.payload._id === device._id) {
@@ -75,13 +89,17 @@ export const deviceReducers = (
         return device;
       });
       return {
-        AllDevices: switchedDevice,
-        SelectedDevice: {}
+        ...state,
+        AllDevices: switchedDevices,
+        SelectedDevice: {},
+        loading: false
       };
     case TOGGLE_IS_EDITING_DEVICE: {
       const toggleValue = action.payload;
       return { ...state, isEditingDevice: toggleValue };
     }
+    case SWITCH_DEVICES_REQUEST:
+      return { ...state, loading: true }
     default:
       return state;
   }

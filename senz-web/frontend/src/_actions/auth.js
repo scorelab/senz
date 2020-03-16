@@ -1,5 +1,6 @@
 import {
   AUTHENTICATED,
+  AUTHENTICATION_REQUEST,
   UNAUTHENTICATED,
   AUTHENTICATION_ERROR,
   PASSWORD_RESETTED,
@@ -8,7 +9,9 @@ import {
   RESET_PASSWORD_TOKEN_VERIFICATION_ERROR,
   PASSWORD_UPDATED,
   PASSWORD_UPDATION_ERROR,
+  LOGOUT_REQUEST,
   UPDATE_USER,
+  UPDATE_REQUEST,
   CLEAR_ALL
 } from "./types/index";
 
@@ -19,6 +22,7 @@ const URL = "http://localhost:8080/api";
 
 export const RegisterAction = ({ name, email, password }, history) => {
   return async dispatch => {
+    dispatch(request())
     try {
       const response = await axios.post(`${URL}/register`, {
         name: name,
@@ -39,10 +43,14 @@ export const RegisterAction = ({ name, email, password }, history) => {
       });
     }
   };
+  function request() {
+    return { type: AUTHENTICATION_REQUEST }
+  }
 };
 
 export const LoginAction = ({ email, password }, history) => {
   return async dispatch => {
+    dispatch(request())
     try {
       const response = await axios.post(`${URL}/login`, {
         email: email,
@@ -62,15 +70,22 @@ export const LoginAction = ({ email, password }, history) => {
       });
     }
   };
+  function request() {
+    return { type: AUTHENTICATION_REQUEST }
+  }
 };
 
 export const LogoutAction = history => {
   localStorage.removeItem("id_token");
   history.push("/register");
   return async dispatch => {
+    dispatch(request())
     dispatch({ type: UNAUTHENTICATED });
     dispatch({ type: CLEAR_ALL });
   };
+  function request() {
+    return { type: LOGOUT_REQUEST }
+  }
 };
 
 export const ResetPasswordAction = ({email}) => {
@@ -138,6 +153,7 @@ export const updateUserData = (
   newPassword
 ) => {
   return async dispatch => {
+    dispatch(request())
     const response = await axios.put(
       `${URL}/${userId}/update`,
       {
@@ -153,4 +169,7 @@ export const updateUserData = (
     );
     dispatch({ type: UPDATE_USER, payload: response.data });
   };
+  function request() {
+    return { type: UPDATE_REQUEST }
+  }
 };
