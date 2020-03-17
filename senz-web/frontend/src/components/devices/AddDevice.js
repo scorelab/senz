@@ -29,7 +29,10 @@ const styles = theme => ({
 });
 
 class AddDevice extends Component {
-  state = { done: false };
+  state = { 
+    done: false,
+    notifier_message: ''
+  };
   componentWillMount = () => {
     this.props.fetchAllDeviceAction(this.props.user.id, this.props.user.token);
     this.props.toggleHeadingAction({ heading: "Register Device" });
@@ -72,8 +75,15 @@ class AddDevice extends Component {
       publicKey,
       this.props.user.token,
       this.props.user.id
-    );
-    this.setState({ done: true });
+    ).then(()=> {
+      this.setState({ done: true });
+      if(this.props.error==="Invalid") { // if same public key already exists
+        this.setState({notifier_message: "A device with same key already exists!"})
+      }
+      else { // if device registration was successful
+        this.setState({notifier_message: "Device Registered"});
+      }
+    });
   };
   handleClose = () => {
     this.setState({ done: false });
@@ -128,7 +138,7 @@ class AddDevice extends Component {
         </Paper>
         <Notifier
           done={this.state.done}
-          message="Device Registered"
+          message={this.state.notifier_message}
           handleClose={this.handleClose}
         />
       </div>
@@ -140,23 +150,21 @@ const validate = ({ name, publicKey }, prop) => {
   const errors = {};
   if (!name) errors.name = "Required";
   if (!publicKey) errors.publicKey = "Required";
-  const pubKeyAll = prop.devices.map(device => {
-    return device.pubkey;
-  });
-  if (pubKeyAll.indexOf(publicKey) !== -1) errors.publicKey = "Already Exists";
   return errors;
 };
 
-const updatedForm = reduxForm({
-  form: "addDevice",
-  validate: validate
-})(withStyles(styles, { withTheme: true })(AddDevice));
-
 const MapStateToProp = state => {
-  return { user: state.auth.user, devices: state.device.AllDevices };
+  return { 
+    user: state.auth.user, 
+    devices: state.device.AllDevices ,
+    error: state.device.error
+  };
 };
 
-export default connect(
+export default reduxForm({
+  form: "addDevice",
+  validate: validate
+})(connect(
   MapStateToProp,
   { toggleHeadingAction, addDeviceAction, fetchAllDeviceAction }
-)(updatedForm);
+)(withStyles(styles, { withTheme: true })(AddDevice)));

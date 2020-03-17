@@ -1,6 +1,7 @@
 import {
   FETCH_PROJECTS,
   ADD_PROJECT,
+  ADD_PROJECT_ERROR,
   SET_PROJECT,
   DELETE_PROJECT,
   UPDATE_PROJECT_INFO,
@@ -25,6 +26,8 @@ export const projectReducers = (
         AllProject: [...state.AllProject, action.payload],
         SelectedProject: state.SelectedProject
       };
+    case ADD_PROJECT_ERROR:
+      return { ...state, error: action.payload };
     case SET_PROJECT:
       return { AllProject: state.AllProject, SelectedProject: action.payload };
     case DELETE_PROJECT:
