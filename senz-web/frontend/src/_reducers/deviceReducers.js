@@ -7,6 +7,7 @@ import {
   SWITCH_DEVICE,
   CLEAR_ALL,
   TOGGLE_IS_EDITING_DEVICE
+  ADD_DEVICE_ERROR
 } from "../_actions/types";
 
 export const deviceReducers = (
@@ -26,7 +27,9 @@ export const deviceReducers = (
         AllDevices: action.payload,
         SelectedDevice: {}
       };
-    }
+    };
+    case ADD_DEVICE_ERROR:
+      return { ...state, error: action.payload };
     case FETCH_DEVICES:
       return {
         ...state,

@@ -6,26 +6,35 @@ import {
   REMOVE_DEVICES,
   TOGGLE_IS_EDITING_DEVICE
 } from "./types/index";
+
 import axios from "axios";
 
 const URL = "http://localhost:8080/device";
 
 export const addDeviceAction = (name, pubkey, token, userId) => {
   return async dispatch => {
-    const response = await axios.post(
-      `${URL}/${userId}/new`,
-      {
-        name,
-        pubkey
-      },
-      {
-        headers: {
-          Authorization: token
+    try {
+      const response = await axios.post(
+        `${URL}/${userId}/new`,
+        {
+          name,
+          pubkey
+        },
+        {
+          headers: {
+            Authorization: token
+          }
         }
-      }
-    );
-    dispatch({ type: ADD_DEVICE, payload: response.data });
-  };
+      );
+      dispatch({ type: ADD_DEVICE, payload: response.data });
+    }
+    catch(err) {
+      dispatch({
+        type: ADD_DEVICE_ERROR,
+        payload: "Invalid"
+      });
+    }
+  }
 };
 
 //Edit device action
