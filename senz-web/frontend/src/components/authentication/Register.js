@@ -51,24 +51,24 @@ class Register extends Component {
   state = {
     done: false,
     type: 'password',
-    Icon: <VisibilityIcon/>,
+    Icon: <VisibilityIcon />,
     cType: 'password',
-    cIcon: <VisibilityIcon/>
+    cIcon: <VisibilityIcon />
   }
 
 
-  handleClick = () => this.setState(({type}) => ({
-    Icon: type === 'text' ? <VisibilityIcon/> : <VisibilityOffIcon/> ,
+  handleClick = () => this.setState(({ type }) => ({
+    Icon: type === 'text' ? <VisibilityIcon /> : <VisibilityOffIcon />,
     type: type === 'text' ? 'password' : 'text'
-    
+
   }))
 
-  confirmPassowrdShow = () => this.setState(({cType}) => ({
-    cIcon: cType === 'text' ? <VisibilityIcon/> : <VisibilityOffIcon/> ,
+  confirmPassowrdShow = () => this.setState(({ cType }) => ({
+    cIcon: cType === 'text' ? <VisibilityIcon /> : <VisibilityOffIcon />,
     cType: cType === 'text' ? 'password' : 'text'
-    
+
   }))
-  
+
   renderInputError = ({ error, touched }) => {
     if (error && touched) return { error: true, message: error };
     else return { error: false, message: "" };
@@ -107,13 +107,13 @@ class Register extends Component {
   submit = ({ firstName, lastName, email, password }) => {
     const name = `${firstName} ${lastName}`;
     this.props.RegisterAction({ name, email, password }, this.props.history)
-    .then(()=> { // show notification after getting response from the server
-      const { error } = this.props;
-      console.log(error);
-      if(error==="Invalid") {
-        this.setState({ done: true });
-      }
-    });
+      .then(() => { // show notification after getting response from the server
+        const { error } = this.props;
+        console.log(error);
+        if (error === "Invalid") {
+          this.setState({ done: true });
+        }
+      });
   };
 
   handleClose = () => {
@@ -177,11 +177,11 @@ class Register extends Component {
                   component={this.renderInput}
                 />
               </Grid>
-              <IconButton aria-label="info" onClick = {this.handleClick}>
-                  {this.state.Icon}
+              <IconButton aria-label="info" onClick={this.handleClick}>
+                {this.state.Icon}
               </IconButton>
-              <IconButton aria-label="info" onClick = {this.passwordCheckHandler}>
-                <InfoIcon/>
+              <IconButton aria-label="info" onClick={this.passwordCheckHandler}>
+                <InfoIcon />
               </IconButton>
               <Grid item xs={10}>
                 <Field
@@ -192,8 +192,8 @@ class Register extends Component {
                   component={this.renderInput}
                 />
               </Grid>
-              <IconButton aria-label="info" onClick = {this.confirmPassowrdShow}>
-                  {this.state.cIcon}
+              <IconButton aria-label="info" onClick={this.confirmPassowrdShow}>
+                {this.state.cIcon}
               </IconButton>
             </Grid>
             <Button
@@ -249,7 +249,6 @@ const validate = ({ firstName, lastName, email, password, cPassword }) => {
 };
 
 const MapStateToProp = state => {
-  console.log(state);
   return {
     error: state.auth.error
   };
