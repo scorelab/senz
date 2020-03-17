@@ -4,7 +4,7 @@ import SideBar from "../layout/SideBar";
 import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import { toggleHeadingAction } from "../../_actions/heading";
-import { fetchAllDeviceAction } from "../../_actions/device";
+import { fetchAllDeviceAction, removeDevices } from "../../_actions/device";
 import DeviceList from "./DeviceList";
 import Intro from "../project/Intro";
 import { switchDevice } from "../../_actions/device";
@@ -25,10 +25,13 @@ const styles = theme => ({
     margin: theme.spacing(1),
     minWidth: 120
   },
-  button: {
+  buttonSwitch: {
     margin: theme.spacing(1),
     color: "#2196F3",
     borderColor: "#2196F3"
+  },
+  buttonRemove: {
+    margin: theme.spacing(1)
   },
   content: {
     flexGrow: 1,
@@ -63,6 +66,13 @@ class AllDevice extends Component {
       };
     });
   };
+  handleRemove = () => {
+    this.props.removeDevices(
+      this.props.user.id,
+      this.state.devices,
+      this.props.user.token
+    );
+  };
   componentWillMount = () => {
     //Update devices from the redux store
     this.props.toggleHeadingAction({ heading: "All Devices" });
@@ -83,7 +93,7 @@ class AllDevice extends Component {
           <div className={classes.toolbar} />
           <Intro
             heading="Devices"
-            description="Each entry contains the name,public key,number of times data sent and received of a device alongwith their status. You can switch a device ON or OFF and the same will be reflected while sending data using the senz switch."
+            description="Each entry contains the name,public key,number of times data sent and received of a device along with their status. You can switch a device ON or OFF and the same will be reflected while sending data using the senz switch."
           />
           <div className={classes.table}>
             <form className={classes.root} autoComplete="off">
@@ -106,10 +116,18 @@ class AllDevice extends Component {
               <Button
                 variant="outlined"
                 color="primary"
-                className={classes.button}
+                className={classes.buttonSwitch}
                 onClick={this.handleSwitch}
               >
                 Switch
+              </Button>
+              <Button
+                variant="outlined"
+                color="secondary"
+                className={classes.buttonRemove}
+                onClick={this.handleRemove}
+              >
+                Remove
               </Button>
             </form>
             <DeviceList handleCheck={this.handleCheck} />
@@ -122,11 +140,14 @@ class AllDevice extends Component {
 
 const MapStateToProp = state => {
   return {
+    project: state.project.SelectedProject,
     user: state.auth.user
   };
 };
 
-export default connect(
-  MapStateToProp,
-  { toggleHeadingAction, fetchAllDeviceAction, switchDevice }
-)(withStyles(styles, { withTheme: true })(AllDevice));
+export default connect(MapStateToProp, {
+  toggleHeadingAction,
+  fetchAllDeviceAction,
+  switchDevice,
+  removeDevices
+})(withStyles(styles, { withTheme: true })(AllDevice));
