@@ -57,26 +57,6 @@ export const editDeviceAction = (name, pubkey, deviceId, token, userId) => {
   };
 };
 
-//Edit device action
-export const editDeviceAction = (name, pubkey, deviceId, token, userId) => {
-  return async dispatch => {
-    const response = await axios.put(
-      `${URL}/${userId}/edit`,
-      {
-        name,
-        pubkey,
-        deviceId
-      },
-      {
-        headers: {
-          Authorization: token
-        }
-      }
-    );
-    dispatch({ type: EDIT_DEVICE, payload: response.data });
-  };
-};
-
 //All devices action
 export const fetchAllDeviceAction = (userId, token) => {
   return async dispatch => {
