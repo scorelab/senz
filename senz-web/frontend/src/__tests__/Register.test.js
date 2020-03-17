@@ -20,13 +20,14 @@ describe("Register Component", () => {
         .dive()
         .dive()
         .dive()
+        .dive()
         .dive();
     });
     it("Should render the component correctly", () => {
       const register = findByTestAttr(shallowComponent, "RegisterComponent");
       expect(register.length).toBe(1);
     });
-    it("Should render the login form", () => {
+    it("Should render the registration form", () => {
       const register = findByTestAttr(shallowComponent, "RegisterForm");
       expect(register.length).toBe(1);
     });
