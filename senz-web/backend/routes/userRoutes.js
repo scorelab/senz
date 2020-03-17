@@ -258,7 +258,7 @@ router.post('/reset-password', (req, res) => {
     req.body &&
     req.body.email
   ) {
-    const email = req.body.email
+    const email = req.body.email;
     User.findOne({ email: email })
       .then(function (user) {
         if (!user) {
@@ -300,10 +300,9 @@ router.post('/reset-password', (req, res) => {
                       + 'If you did not request this, please ignore this email and your password will remain unchanged.\n',
                   };
 
-                  console.log('sending mail');
-
                   transporter.sendMail(mailOptions, (err, response) => {
                     if (err) {
+                      console.log(err);
                       return res.status(400).json(err)
                     } else {
                       console.log('here is the res: ', response);
@@ -316,6 +315,8 @@ router.post('/reset-password', (req, res) => {
         }
       }
       )
+  } else { // if request received is not in expected format
+    return res.status(400).json('Invalid format');
   }
 })
 
@@ -342,7 +343,8 @@ router.get('/reset-password/:user_id/:token', async (req, res, next) => {
             res.status(200).json({
               username: user.username,
               email: user.email,
-              msg: 'password reset link a-ok',
+              success: true,
+              msg: 'password reset link a-ok'
             })
           } else {
             return res.json({ success: false, msg: 'Token Invalid' });
@@ -359,14 +361,12 @@ router.put('/update-password', (req, res) => {
   if (
     req &&
     req.body &&
-    req.body.email &&
-    req.body.username &&
+    req.body.user_id &&
     req.body.password &&
-    req.body.resetPasswordToken
+    req.body.token
   ) {
     User.findOne({
-      username: req.body.username,
-      email: req.body.email,
+      _id: req.body.user_id,
       resetPasswordExpires: {
         $gt: Date.now()
       },
@@ -374,14 +374,13 @@ router.put('/update-password', (req, res) => {
       if (user == null) {
         res.status(403).json({ msg: 'password reset link is invalid or has expired' });
       } else if (user != null) {
-        bcrypt.compare(req.body.resetPasswordToken, user.resetPasswordToken, function (err, response) {
+        bcrypt.compare(req.body.token, user.resetPasswordToken, function (err, response) {
           if (response) {
             bcrypt.genSalt(10, (err, salt) => {
               bcrypt.hash(req.body.password, salt, (err, hashedPassword) => {
                 if (err) throw err
                 User.findOneAndUpdate({
-                  email: req.body.email,
-                  username: req.body.username
+                  _id: req.body.user_id
                 }, {
                     $set: {
                       password: hashedPassword,
