@@ -8,7 +8,7 @@ const port=process.env.port || 3000;
 const sharedKey=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16];
 //Register Device 
 const time=client.getTimestamp();
-const regmsg=`SHARE #pubkey KEY @senz #time ${time} ^dev2 signature\n`;
+const regmsg=`SHARE #pubkey KEY @senz #time ${time} ^dev2 signature`;
 const imagePathToSave="received.jpg";
 const aes=new AESUtil.AESUtils(sharedKey);  
 const registerDevice=function(){
@@ -25,7 +25,7 @@ const receiveImage=function(){
     const decrptedBase64=aes.decrypt(encImg);
     imageUtil.stringToImage(decrptedBase64,imagePathToSave);
     client.sendMessage("").then(function() {
-        logger.info(`UNSHARE #pubkey KEY @senz #time ${time} ^dev2 signature\n`);
+        logger.info(`UNSHARE #pubkey KEY @senz #time ${time} ^dev2 signature`);
         logger.info("Unregistering the device");
 
     })

@@ -27,7 +27,7 @@ byteString = aes.encrypt(byteString)
 print("Press enter to send the image...")
 input()
 
-msg = "DATA $image {} @dev2 #time {} ^dev1 signature\n".format(byteString, getTimestamp())
+msg = "DATA $image {} @dev2 #time {} ^dev1 signature".format(byteString, getTimestamp())
 sendMessage(msg)
 
 # Unregister device
