@@ -28,8 +28,10 @@ class NavDropDown extends Component {
     project: ""
   };
   componentWillMount = () => {
-    this.props.fetchProjectAction(this.props.user.id, this.props.user.token);
-    this.props.fetchAllDeviceAction(this.props.user.id, this.props.user.token);
+    if(this.props.user) {
+      this.props.fetchProjectAction(this.props.user.id, this.props.user.token);
+      this.props.fetchAllDeviceAction(this.props.user.id, this.props.user.token);
+    }
   };
   handleChange = e => {
     this.setState(prevState => {
