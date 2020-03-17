@@ -19,6 +19,7 @@ import { Field, reduxForm } from "redux-form";
 import { withStyles } from "@material-ui/core/styles";
 import { RegisterAction } from "../../_actions/auth";
 import { connect } from "react-redux";
+import Notifier from "../Notifier";
 
 const styles = theme => ({
   "@global": {
@@ -48,6 +49,7 @@ const styles = theme => ({
 class Register extends Component {
 
   state = {
+    done: false,
     type: 'password',
     Icon: <VisibilityIcon/>,
     cType: 'password',
@@ -104,7 +106,18 @@ class Register extends Component {
   };
   submit = ({ firstName, lastName, email, password }) => {
     const name = `${firstName} ${lastName}`;
-    this.props.RegisterAction({ name, email, password }, this.props.history);
+    this.props.RegisterAction({ name, email, password }, this.props.history)
+    .then(()=> { // show notification after getting response from the server
+      const { error } = this.props;
+      console.log(error);
+      if(error==="Invalid") {
+        this.setState({ done: true });
+      }
+    });
+  };
+
+  handleClose = () => {
+    this.setState({ done: false });
   };
 
   passwordCheckHandler = () => {
@@ -202,6 +215,11 @@ class Register extends Component {
             </Grid>
           </form>
         </div>
+        <Notifier
+          done={this.state.done}
+          message="An account is already registered with this email."
+          handleClose={this.handleClose}
+        />
       </Container>
     );
   }
@@ -230,12 +248,17 @@ const validate = ({ firstName, lastName, email, password, cPassword }) => {
   return errors;
 };
 
-const registerForm = reduxForm({
+const MapStateToProp = state => {
+  console.log(state);
+  return {
+    error: state.auth.error
+  };
+};
+
+export default reduxForm({
   form: "register",
   validate: validate
-})(withStyles(styles, { withTheme: true })(Register));
-
-export default connect(
-  null,
+})(connect(
+  MapStateToProp,
   { RegisterAction }
-)(registerForm);
+)(withStyles(styles, { withTheme: true })(Register)));

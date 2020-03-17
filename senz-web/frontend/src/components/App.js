@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Register from "./authentication/Register";
 import Login from "./authentication/Login";
 import ResetPassword from "./authentication/ResetPassword";
@@ -13,6 +13,7 @@ import AllProject from "./project/AllProjects";
 import AllDevice from "./devices/AllDevices";
 import EditProfile from "./profile/EditProfile";
 import ViewProfile from "./profile/ViewProfile";
+import NotFound from "./notFound";
 import "./App.css";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
@@ -27,7 +28,7 @@ class App extends Component {
     return (
       <ThemeProvider theme={theme}>
         <BrowserRouter data-test="AppComponent">
-          <div>
+          <Switch>
             <Route path="/" exact component={authNotRequired(Register)} />
             <Route
               path="/register"
@@ -69,7 +70,8 @@ class App extends Component {
               exact
               component={authRequired(ViewProfile)}
             />
-          </div>
+            <Route component={NotFound}/>
+          </Switch>
         </BrowserRouter>
       </ThemeProvider>
     );
