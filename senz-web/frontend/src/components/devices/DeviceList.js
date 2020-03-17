@@ -6,7 +6,9 @@ import TableCell from "@material-ui/core/TableCell";
 import Paper from "@material-ui/core/Paper";
 import EditIcon from '@material-ui/icons/Edit';
 import EditDevice from './EditDevice';
+import Switch from '@material-ui/core/Switch';
 import { AutoSizer, Column, Table } from "react-virtualized";
+import { switchDevice } from "../../_actions/device";
 import { connect } from "react-redux";
 import { toggleIsEditingDevice} from "../../_actions/device";
 import { toggleHeadingAction } from "../../_actions/heading";
@@ -45,8 +47,19 @@ class MuiVirtualizedTable extends React.PureComponent {
     rowHeight: 48
   };
   state = {
-    devices: []
+    devices: [],
+    status: [],
   };
+  componentDidMount() {
+    this.setState({
+      status: this.props.deviceStatus
+    })
+  }
+  componentDidUpdate() {
+    this.setState({
+      status: this.props.deviceStatus
+    })
+  }
   getRowClassName = ({ index }) => {
     const { classes, onRowClick } = this.props;
 
@@ -55,8 +68,18 @@ class MuiVirtualizedTable extends React.PureComponent {
       [classes.selectedRow]: this.state.devices.includes(index)
     });
   };
-
-  cellRenderer = ({ cellData, columnIndex }) => {
+  handleChange = (event) => {
+    const newStatus = this.state.status.map((val, index) => {
+      return event.target.value === index ? !val : val
+    })
+    this.setState({
+      status: newStatus
+    })
+    const status = this.state.status[event.target.value] ? true : false;
+    this.props.switchDevice(event.target.name, !status, this.props.user.token);
+  };
+  cellRenderer = ({ cellData, columnIndex, rowData }) => {
+    const deviceIndex = this.props.devices.map(a => a._id)
     const { columns, classes, rowHeight, onRowClick } = this.props;
     return (
       <TableCell
@@ -72,7 +95,14 @@ class MuiVirtualizedTable extends React.PureComponent {
             : "left"
         }
       >
-        <span>{cellData}</span>
+        {columnIndex === 5 ? <Switch
+          checked={cellData}
+          name={rowData._id}
+          onChange={this.handleChange}
+          value={deviceIndex.indexOf(rowData._id)}
+          inputProps={{ 'aria-label': 'secondary checkbox' }}
+          color="primary"
+        /> : <span>{cellData}</span>}
       </TableCell>
     );
   };
@@ -97,18 +127,6 @@ class MuiVirtualizedTable extends React.PureComponent {
       </TableCell>
     );
   };
-  handleClick = ({ index, rowData }) => {
-    if (this.state.devices.includes(index)) {
-      const modDevices = this.state.devices.filter(stateIndex => {
-        return stateIndex !== index;
-      });
-      this.setState({ devices: modDevices });
-    } else {
-      const modDevices = [...this.state.devices, index];
-      this.setState({ devices: modDevices });
-    }
-    this.props.handleCheck(rowData._id);
-  };
   render() {
     const { classes, columns, ...tableProps } = this.props;
     return (
@@ -119,7 +137,6 @@ class MuiVirtualizedTable extends React.PureComponent {
             width={width}
             {...tableProps}
             rowClassName={this.getRowClassName}
-            onRowClick={this.handleClick}
           >
             {columns.map(({ dataKey, ...other }, index) => {
               return (
@@ -150,7 +167,11 @@ MuiVirtualizedTable.propTypes = {
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,
   headerHeight: PropTypes.number,
   onRowClick: PropTypes.func,
-  rowHeight: PropTypes.number
+  rowHeight: PropTypes.number,
+  devicestatus: PropTypes.array,
+  user: PropTypes.object,
+  devices: PropTypes.array,
+  switchDevice: PropTypes.func
 };
 
 const VirtualizedTable = withStyles(styles)(MuiVirtualizedTable);
@@ -175,8 +196,8 @@ class ReactVirtualizedTable extends Component {
     const rows = this.props.devices.map(device => {
       const editIcon = <EditIcon onClick={(event) => this.onEditIconClick(event, device)}/>
       if (device.status)
-        return { ...device, date: device.date.substr(0, 10), active: "ON", edit:editIcon };
-      else return { ...device, date: device.date.substr(0, 10), active: "OFF", edit: editIcon };
+        return { ...device, date: device.date.substr(0, 10), active: true, edit:editIcon };
+      else return { ...device, date: device.date.substr(0, 10),  active: false, edit: editIcon };
     });
     if (rows.length === 0) return null;
     return (<Fragment>
@@ -193,10 +214,13 @@ class ReactVirtualizedTable extends Component {
         data-test="DeviceListComponent"
       >
         <VirtualizedTable
+          deviceStatus={this.props.devicestatus}
           rowCount={rows.length}
           rowGetter={({ index }) => rows[index]}
-          handleCheck={this.props.handleCheck}
           data-test="TableComponent"
+          user={this.props.user}
+          devices={this.props.devices}
+          switchDevice={this.props.switchDevice}
           columns={[
             {
               width: 150,
@@ -247,7 +271,8 @@ class ReactVirtualizedTable extends Component {
 const MapStateToProp = state => {
   return {
     devices: state.device.AllDevices,
-    isEditingDevice: state.device.isEditingDevice
+    isEditingDevice: state.device.isEditingDevice,
+    user: state.auth.user
   };
 };
-export default connect(MapStateToProp, { toggleIsEditingDevice, toggleHeadingAction})(ReactVirtualizedTable);
+export default connect(MapStateToProp, { toggleIsEditingDevice, toggleHeadingAction, switchDevice})(ReactVirtualizedTable);

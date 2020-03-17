@@ -83,12 +83,12 @@ export const removeDevices = (userId, devices, token) => {
   };
 };
 //Switch device
-export const switchDevice = (devices, status, token) => {
+export const switchDevice = (device, status, token) => {
   return async dispatch => {
     const response = await axios.put(
       `${URL}/switch`,
       {
-        devices,
+        device,
         status
       },
       {
