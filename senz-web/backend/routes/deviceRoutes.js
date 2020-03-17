@@ -471,7 +471,7 @@ const switchProjects = (projectArray, deviceId, status) => {
       projectArray.forEach(projectId => {
         Project.findById(projectId).then((project, prIndex, prArr) => {
           project.devices.forEach((device, index, arr) => {
-            if (device._id == deviceId) {
+            if (String(device._id) === String(deviceId)) {
               device.status = status;
             }
             project.devices.set(index, device);
@@ -526,29 +526,18 @@ const switchProjects = (projectArray, deviceId, status) => {
  *    HTTP/1.1 500 Internal Server Error
  */
 router.put("/switch", (req, res) => {
-  const promiseArray = [];
-  const { devices, status } = req.body;
-  devices.forEach(deviceId => {
-    const deviceUpdate = Device.findByIdAndUpdate(
-      deviceId,
-      { $set: { status } },
-      { new: true }
-    );
-    promiseArray.push(deviceUpdate);
-  });
-
-  Promise.all(promiseArray).then(result => {
-    const subPromiseArray = [];
-    result.forEach(device => {
-      const projectUpdate = switchProjects(
-        device.projects,
-        device._id,
-        device.status
-      );
-      subPromiseArray.push(projectUpdate);
-    });
-    Promise.all(subPromiseArray).then(projectResult => {
-      res.json(result).status(200);
+  const { device, status } = req.body;
+  Device.findByIdAndUpdate(
+    device,
+    { $set: { status } },
+    { new: true }
+  ).then(device => {
+    switchProjects(
+      device.projects,
+      device._id,
+      device.status
+    ).then(projectResult => {
+      res.json(device).status(200);
     });
   });
 });
