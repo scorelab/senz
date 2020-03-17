@@ -10,13 +10,10 @@ import {
   Avatar
 } from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import IconButton from '@material-ui/core/IconButton';
-import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
-import VisibilityIcon from '@material-ui/icons/Visibility';
 
 import { Field, reduxForm } from "redux-form";
 import { withStyles } from "@material-ui/core/styles";
-import { LoginAction } from "../../_actions/auth";
+import { ResetPasswordAction } from "../../_actions/auth";
 import { connect } from "react-redux";
 import Notifier from "../Notifier";
 
@@ -45,26 +42,19 @@ const styles = theme => ({
   }
 });
 
-class Login extends Component {
+class ForgotPassword extends Component {
 
   state = {
     done: false,
-    type: 'password',
-    Icon: <VisibilityIcon/>
+    notifier_message: ''
   }
-
-  handleClick = () => this.setState(({type}) => ({
-    Icon: type === 'text' ? <VisibilityIcon/> : <VisibilityOffIcon/> ,
-    type: type === 'text' ? 'password' : 'text'
-    
-  }))
 
   renderInputError = ({ error, touched }) => {
     if (error && touched) return { error: true, message: error };
     else return { error: false, message: "" };
   };
 
-  renderInput = ({ input, label, type, id, meta }) => {
+  renderInput = ({ input, label, meta }) => {
     const { error, message } = this.renderInputError(meta);
     if (error) {
       return (
@@ -73,8 +63,6 @@ class Login extends Component {
           autoComplete="off"
           variant="outlined"
           fullWidth
-          type={type}
-          id={id}
           error
           label={message}
         />
@@ -86,8 +74,6 @@ class Login extends Component {
           autoComplete="off"
           variant="outlined"
           fullWidth
-          type={type}
-          id={id}
           required
           label={label}
         />
@@ -95,13 +81,17 @@ class Login extends Component {
     }
   };
 
-  submit = ({ email, password }) => {
-    this.props.LoginAction({ email, password }, this.props.history)
+  submit = (email) => {
+    this.props.ResetPasswordAction(email)
     .then(()=> { // show notification after getting response from the server
-      const { error } = this.props;
-      if(error==="Invalid") {
-        this.setState({ done: true });
+      const { password_resetted } = this.props;
+      if(password_resetted) {
+        this.setState({notifier_message: "A recovery email has been sent to your email address."})
       }
+      else {
+        this.setState({notifier_message: "There is no account associated with this email address."})
+      }
+      this.setState({ done: true });
     });
   };
 
@@ -112,19 +102,19 @@ class Login extends Component {
   render() {
     const { classes, invalid } = this.props;
     return (
-      <Container component="main" maxWidth="xs" data-test="LoginComponent">
+      <Container component="main" maxWidth="xs" data-test="ForgotPasswordComponent">
         <CssBaseline />
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Forgot Password
           </Typography>
           <form
             className={classes.form}
             onSubmit={this.props.handleSubmit(this.submit)}
-            data-test="LoginForm"
+            data-test="ForgotPasswordForm"
           >
             <Grid container spacing={2}>
               <Grid item xs={12}>
@@ -136,18 +126,6 @@ class Login extends Component {
                   type="text"
                 />
               </Grid>
-              <Grid item xs={10}>
-                <Field
-                  name="password"
-                  id="password"
-                  label="Password"
-                  type={this.state.type}
-                  component={this.renderInput}
-                />
-              </Grid>
-              <IconButton aria-label="info" onClick = {this.handleClick}>
-                  {this.state.Icon}
-              </IconButton>
             </Grid>
             <Button
               type="submit"
@@ -157,17 +135,12 @@ class Login extends Component {
               className={classes.submit}
               disabled = {invalid}
             >
-              Sign In
+              Submit
             </Button>
-            <Grid container justify="space-between">
-            <Grid item>
-                <Link href="/forgotPassword" variant="body2">
-                  Forgot Password?
-                </Link>
-              </Grid>
+            <Grid container justify="flex-start">
               <Grid item>
-                <Link href="/register" variant="body2">
-                  Create account
+                <Link href="/login" variant="body2">
+                  Back to Login
                 </Link>
               </Grid>
             </Grid>
@@ -175,7 +148,7 @@ class Login extends Component {
         </div>
         <Notifier
           done={this.state.done}
-          message="Email or password entered is incorrect"
+          message={this.state.notifier_message}
           handleClose={this.handleClose}
         />
       </Container>
@@ -190,29 +163,22 @@ const emailValid = email => {
   return pattern.test(email);
 };
 
-const passwordNullityCheck = password => {
-  if(password == null)
-    return true;
-  return false;
-}
-
-const validate = ({ firstName, lastName, email, password, cPassword }) => {
+const validate = ({email}) => {
   const errors = {};
   if (!emailValid(email)) errors.email = "Email not valid";
-  if (passwordNullityCheck(password)) errors.password = "Enter password" ;
   return errors;
 };
 
 const MapStateToProp = state => {
   return {
-    error: state.auth.error
+    password_resetted: state.auth.password_resetted
   };
 };
 
 export default reduxForm({
-  form: "register",
+  form: "forgotPassword",
   validate: validate,
 })(connect(
   MapStateToProp,
-  { LoginAction }
-  )(withStyles(styles, { withTheme: true })(Login)));
+  { ResetPasswordAction }
+  )(withStyles(styles, { withTheme: true })(ForgotPassword)));

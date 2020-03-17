@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Register from "./authentication/Register";
 import Login from "./authentication/Login";
+import ResetPassword from "./authentication/ResetPassword";
+import ForgotPassword from "./authentication/ForgotPassword";
 import Home from "./Home";
 import AddProject from "./project/AddProject";
 import authRequired from "./authentication/hoc/authRequired";
@@ -34,6 +36,8 @@ class App extends Component {
               component={authNotRequired(Register)}
             />
             <Route path="/login" exact component={authNotRequired(Login)} />
+            <Route path="/forgotPassword" exact component={authNotRequired(ForgotPassword)} />
+            <Route path="/reset/:user_id/:token" exact component={authNotRequired(ResetPassword)} />
             <Route path="/home" exact component={authRequired(Home)} />
 
             <Route
