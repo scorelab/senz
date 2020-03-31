@@ -38,6 +38,7 @@ class NavBar extends React.Component {
     const { classes } = this.props;
     const devices = this.props.devices ? this.props.devices : null
     const projects = this.props.projects ? this.props.projects : null
+    const user = this.props.user ? this.props.user : null
     return (
       <div className={classes.root} data-test="NavBarComponent">
         <CssBaseline />
@@ -50,7 +51,7 @@ class NavBar extends React.Component {
             <Typography variant="h6" noWrap>
               {this.props.heading}
             </Typography>
-            <Search projects={projects} devices={devices} />
+            <Search projects={projects} devices={devices} user={user} />
             <div className={classes.navDrop}>
               <NavDropDown />
             </div>
@@ -69,14 +70,16 @@ const MapStateToProp = state => {
   return {
     heading: state.heading.heading,
     projects: state.project.AllProject,
-    devices: state.device.AllDevices
+    devices: state.device.AllDevices,
+    user: state.auth.user,
   };
 };
 
 NavBar.propTypes = {
   heading: PropTypes.string,
   projects: PropTypes.array,
-  devices: PropTypes.array
+  devices: PropTypes.array,
+  user: PropTypes.array
 };
 
 export default connect(

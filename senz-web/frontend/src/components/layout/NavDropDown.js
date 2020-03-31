@@ -12,7 +12,8 @@ const styles = theme => ({
     flexWrap: "wrap"
   },
   formControl: {
-    margin: theme.spacing(1),
+    float: 'right',
+    marginRight: '30vw',
     minWidth: 120
   },
   selectEmpty: {
@@ -28,7 +29,7 @@ class NavDropDown extends Component {
     project: ""
   };
   componentWillMount = () => {
-    if(this.props.user) {
+    if (this.props.user) {
       this.props.fetchProjectAction(this.props.user.id, this.props.user.token);
       this.props.fetchAllDeviceAction(this.props.user.id, this.props.user.token);
     }
