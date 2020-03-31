@@ -10,7 +10,10 @@ import {
   Switch,
   FormGroup,
   FormControlLabel,
-  Grid
+  Grid,
+  Dialog,
+  DialogActions,
+  DialogTitle
 } from "@material-ui/core";
 import {
   updateProjectInfoAction,
@@ -104,8 +107,14 @@ class Form extends Component {
     description: this.props.project.description,
     added: false,
     updated: false,
-    switch: false
+    switch: false,
+    openModal: false
   };
+
+  openModal = () => {
+    this.setState({ openModal: true });
+  };
+
   handleClose = name => event => {
     this.setState({ [name]: false });
   };
@@ -285,7 +294,7 @@ class Form extends Component {
                   size="small"
                   color="secondary"
                   variant="outlined"
-                  onClick={this.handleDelete}
+                  onClick={this.openModal}
                 >
                   Delete Project
                 </Button>
@@ -308,6 +317,26 @@ class Form extends Component {
           done={this.state.switch}
           handleClose={this.handleClose("switch")}
         />
+        
+        {/* modal to ask for delete confimation from user*/}
+        <Dialog
+        open={this.state.openModal}
+        onClose={this.handleClose}
+        aria-labelledby="responsive-dialog-title"
+      >
+        <DialogTitle>
+            Are you sure you want to delete this project?
+          </DialogTitle>
+        <DialogActions>
+          <Button autoFocus onClick={this.handleClose("openModal")} 
+            color="primary">
+            Cancel
+          </Button>
+          <Button onClick={this.handleDelete} color="secondary" autoFocus>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
       </Container>
     );
   }
