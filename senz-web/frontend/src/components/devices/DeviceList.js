@@ -53,14 +53,11 @@ class MuiVirtualizedTable extends React.PureComponent {
     status: [],
   };
   componentDidMount() {
-    this.setState({
-      status: this.props.deviceStatus
+    // console.log(this.props);
+    const status = this.props.devices.map((device)=> {
+      return device.status;
     })
-  }
-  componentDidUpdate() {
-    this.setState({
-      status: this.props.deviceStatus
-    })
+    this.setState({ status });
   }
   getRowClassName = ({ index }) => {
     const { classes, onRowClick } = this.props;
@@ -225,6 +222,9 @@ class ReactVirtualizedTable extends Component {
                     rowGetter={({ index }) => rows[index]}
                     handleCheck={this.props.handleCheck}
                     data-test="TableComponent"
+                    devices={this.props.devices}
+                    user={this.props.user}
+                    switchDevice={this.props.switchDevice}
                     columns={[
                       {
                         width: 150,
