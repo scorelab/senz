@@ -9,14 +9,19 @@ import {
   PASSWORD_UPDATED,
   PASSWORD_UPDATION_ERROR,
   UPDATE_USER,
-  CLEAR_ALL
+  CLEAR_ALL,
+  AUTHENTICATION_REQUEST,
+  UPDATE_REQUEST,
+  LOGOUT_REQUEST,
 } from "../_actions/types/index";
-export default function(state = {}, action) {
+export default function (state = {}, action) {
   switch (action.type) {
     case AUTHENTICATED:
-      return { ...state, authenticated: true, user: action.payload };
+      return { ...state, authenticated: true, user: action.payload, loading: false };
+    case AUTHENTICATION_REQUEST:
+      return { ...state, loading: true }
     case UNAUTHENTICATED:
-      return { ...state, authenticated: false, user: {} };
+      return { ...state, authenticated: false, user: {}, loading: false };
     case AUTHENTICATION_ERROR:
       return { ...state, error: action.payload };
     case PASSWORD_RESETTED:
@@ -35,8 +40,13 @@ export default function(state = {}, action) {
       return {
         ...state,
         authenticated: true,
-        user: { ...state.user, name: action.payload.name }
+        user: { ...state.user, name: action.payload.name },
+        loading: false
       };
+    case UPDATE_REQUEST:
+      return { ...state, loading: true }
+    case LOGOUT_REQUEST:
+      return { ...state, loading: true }
     case CLEAR_ALL:
       return {};
     default:

@@ -8,6 +8,7 @@ import { fetchAllDeviceAction, removeDevices } from "../../_actions/device";
 import DeviceList from "./DeviceList";
 import Intro from "../project/Intro";
 import { switchDevice } from "../../_actions/device";
+import ReactLoading from 'react-loading';
 const drawerWidth = 240;
 const styles = theme => ({
   root: {
@@ -35,7 +36,11 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar,
   table: {
     marginLeft: 100
-  }
+  },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
+  },
 });
 
 class AllDevice extends Component {
@@ -77,29 +82,38 @@ class AllDevice extends Component {
       return a.status
     }) : []
     return (
-      <div data-test="AllDevicesComponent">
-        <NavBar />
-        <SideBar />
+      <>
+        <div data-test="AllDevicesComponent">
+          <NavBar />
+          <SideBar />
 
-        <main className={classes.content}>
-          <div className={classes.toolbar} />
-          <Intro
-            heading="Devices"
-            description="Each entry contains the name,public key,number of times data sent and received of a device along with their status. You can switch a device ON or OFF and the same will be reflected while sending data using the senz switch."
-          />
-          <div className={classes.table}>
-            <DeviceList devicestatus={newStatus} user={this.props.user} />
-          </div>
-        </main>
-      </div>
+          <main className={classes.content}>
+            <div className={classes.toolbar} />
+            <Intro
+              heading="Devices"
+              description="Each entry contains the name,public key,number of times data sent and received of a device along with their status. You can switch a device ON or OFF and the same will be reflected while sending data using the senz switch."
+            />
+            <div className={classes.table}>
+              {
+                this.props.devicesLoading ?
+                  <ReactLoading type={'spinningBubbles'} color={'black'} height={40} width={40} />
+                  : <DeviceList devicestatus={newStatus} user={this.props.user} />
+              }
+
+            </div>
+          </main>
+        </div>
+      </>
     );
   }
 }
 
 const MapStateToProp = state => {
   return {
+    project: state.project.SelectedProject,
+    user: state.auth.user,
     devices: state.device.AllDevices,
-    user: state.auth.user
+    devicesLoading: state.device.loading
   };
 };
 

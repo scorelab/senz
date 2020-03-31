@@ -10,7 +10,10 @@ import {
   Switch,
   FormGroup,
   FormControlLabel,
-  Grid
+  Grid,
+  Dialog,
+  DialogActions,
+  DialogTitle
 } from "@material-ui/core";
 import {
   updateProjectInfoAction,
@@ -19,6 +22,7 @@ import {
   switchProjectStatus
 } from "../../../_actions/project";
 import { withStyles } from "@material-ui/core/styles";
+import ReactLoading from 'react-loading';
 import { connect } from "react-redux";
 import { reduxForm, Field } from "redux-form";
 import Notifier from "../../Notifier";
@@ -56,6 +60,9 @@ const IOSSwitch = withStyles(theme => ({
     backgroundColor: theme.palette.grey[50],
     opacity: 1,
     transition: theme.transitions.create(["background-color", "border"])
+  },
+  loader: {
+    marginLeft: "42%"
   },
   checked: {},
   focusVisible: {}
@@ -100,8 +107,14 @@ class Form extends Component {
     description: this.props.project.description,
     added: false,
     updated: false,
-    switch: false
+    switch: false,
+    openModal: false
   };
+
+  openModal = () => {
+    this.setState({ openModal: true });
+  };
+
   handleClose = name => event => {
     this.setState({ [name]: false });
   };
@@ -183,32 +196,37 @@ class Form extends Component {
               <Typography variant="h6">Project Details</Typography>
               <Divider />
               <div className={classes.subHead}>
-                <TextField
-                  name="name"
-                  variant="outlined"
-                  label="Name"
-                  margin="normal"
-                  value={this.state.name}
-                  onChange={this.handleChangeInfo}
-                />
-                <TextField
-                  name="description"
-                  variant="outlined"
-                  label="Description"
-                  margin="normal"
-                  value={this.state.description}
-                  onChange={this.handleChangeInfo}
-                  fullWidth
-                />
-                <br />
-                <Button
-                  color="primary"
-                  variant="outlined"
-                  onClick={this.handleClickInfo}
-                  disabled={this.state.updated}
-                >
-                  Update
+                {this.props.updateloading ?
+                  <ReactLoading type={'spinningBubbles'} color={'black'} height={40} width={40} className={classes.loader} />
+                  :
+                  <>
+                    <TextField
+                      name="name"
+                      variant="outlined"
+                      label="Name"
+                      margin="normal"
+                      value={this.state.name}
+                      onChange={this.handleChangeInfo}
+                    />
+                    <TextField
+                      name="description"
+                      variant="outlined"
+                      label="Description"
+                      margin="normal"
+                      value={this.state.description}
+                      onChange={this.handleChangeInfo}
+                      fullWidth
+                    />
+                    <br />
+                    <Button
+                      color="primary"
+                      variant="outlined"
+                      onClick={this.handleClickInfo}
+                      disabled={this.state.updated}
+                    >
+                      Update
                 </Button>
+                  </>}
               </div>
             </div>
             <div className={classes.subSection}>
@@ -247,6 +265,9 @@ class Form extends Component {
                 data-test="ProjectSettingsSection"
               >
                 <Typography variant="body1">Project Switch</Typography>
+                {this.props.switchloading?
+                 <ReactLoading type={'spinningBubbles'} color={'black'} height={40} width={40} className={classes.loader} />
+                 :
                 <FormGroup>
                   <Grid
                     component="label"
@@ -268,12 +289,12 @@ class Form extends Component {
                     </Grid>
                     <Grid item>On</Grid>
                   </Grid>
-                </FormGroup>
+                </FormGroup>}
                 <Button
                   size="small"
                   color="secondary"
                   variant="outlined"
-                  onClick={this.handleDelete}
+                  onClick={this.openModal}
                 >
                   Delete Project
                 </Button>
@@ -296,6 +317,26 @@ class Form extends Component {
           done={this.state.switch}
           handleClose={this.handleClose("switch")}
         />
+        
+        {/* modal to ask for delete confimation from user*/}
+        <Dialog
+        open={this.state.openModal}
+        onClose={this.handleClose}
+        aria-labelledby="responsive-dialog-title"
+      >
+        <DialogTitle>
+            Are you sure you want to delete this project?
+          </DialogTitle>
+        <DialogActions>
+          <Button autoFocus onClick={this.handleClose("openModal")} 
+            color="primary">
+            Cancel
+          </Button>
+          <Button onClick={this.handleDelete} color="secondary" autoFocus>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
       </Container>
     );
   }
@@ -305,7 +346,9 @@ const MapStateToProp = state => {
   return {
     project: state.project.SelectedProject,
     devices: state.device.AllDevices,
-    user: state.auth.user
+    user: state.auth.user,
+    updateloading: state.project.loading,
+    switchloading:state.project.switchloading
   };
 };
 const validate = ({ pubkey }, props) => {

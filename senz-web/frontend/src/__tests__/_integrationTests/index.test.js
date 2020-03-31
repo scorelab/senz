@@ -67,7 +67,7 @@ describe("ACTION CREATORS", () => {
       };
       return store.dispatch(RegisterAction(testUser)).then(() => {
         const actualAction = store.getActions();
-        expect(actualAction[0]).toEqual(expectedAction);
+        expect(actualAction[1]).toEqual(expectedAction);
       });
     });
     it("Should login the user and save the JWT token", () => {
@@ -101,7 +101,7 @@ describe("ACTION CREATORS", () => {
       };
       return store.dispatch(LoginAction(testUser, [])).then(() => {
         const actualAction = store.getActions();
-        expect(actualAction[0]).toEqual(expectedAction);
+        expect(actualAction[1]).toEqual(expectedAction);
       });
     });
   });
@@ -141,7 +141,7 @@ describe("ACTION CREATORS", () => {
       };
       return store.dispatch(addProjectAction(testProject)).then(() => {
         const actualAction = store.getActions();
-        expect(actualAction[0]).toEqual(expectedAction);
+        expect(actualAction[1]).toEqual(expectedAction);
       });
     });
     it("Should fetch all projects", () => {
@@ -171,7 +171,7 @@ describe("ACTION CREATORS", () => {
       };
       return store.dispatch(fetchProjectAction({ ...fetchArg })).then(() => {
         const actualAction = store.getActions();
-        expect(actualAction[0]).toEqual(expectedAction);
+        expect(actualAction[1]).toEqual(expectedAction);
       });
     });
     it("Should delete the project", () => {
@@ -196,7 +196,7 @@ describe("ACTION CREATORS", () => {
       const expectedAction = { type: DELETE_PROJECT, payload: mockResponse };
       return store.dispatch(deleteProjectAction({ ...deleteArg })).then(() => {
         const actualAction = store.getActions();
-        expect(actualAction[0]).toEqual(expectedAction);
+        expect(actualAction[1]).toEqual(expectedAction);
       });
     });
     it("Should update the project information", () => {
@@ -227,7 +227,7 @@ describe("ACTION CREATORS", () => {
         .dispatch(updateProjectInfoAction({ ...updateArg }))
         .then(() => {
           const actualAction = store.getActions();
-          expect(actualAction[0]).toEqual(expectedAction);
+          expect(actualAction[1]).toEqual(expectedAction);
         });
     });
   });
@@ -266,7 +266,7 @@ describe("ACTION CREATORS", () => {
       const expectedAction = { type: ADD_DEVICE, payload: mockResponse };
       return store.dispatch(addDeviceAction({ ...addArg })).then(() => {
         const actualAction = store.getActions();
-        expect(actualAction[0]).toEqual(expectedAction);
+        expect(actualAction[1]).toEqual(expectedAction);
       });
     });
     it("Should fetch all devices", () => {
@@ -288,7 +288,7 @@ describe("ACTION CREATORS", () => {
       const expectedAction = { type: FETCH_DEVICES, payload: mockResponse };
       return store.dispatch(fetchAllDeviceAction({ ...fetchArg })).then(() => {
         const actualAction = store.getActions();
-        expect(actualAction[0]).toEqual(expectedAction);
+        expect(actualAction[1]).toEqual(expectedAction);
       });
     });
     it("Should switch the status of array of devices", () => {
@@ -311,7 +311,7 @@ describe("ACTION CREATORS", () => {
       const expectedAction = { type: SWITCH_DEVICE, payload: mockResponse };
       return store.dispatch(switchDevice({ ...switchArg })).then(() => {
         const actualAction = store.getActions();
-        expect(actualAction[0]).toEqual(expectedAction);
+        expect(actualAction[1]).toEqual(expectedAction);
       });
     });
   });

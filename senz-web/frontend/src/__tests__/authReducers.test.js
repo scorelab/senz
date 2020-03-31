@@ -11,12 +11,12 @@ describe("Authentication Reducers", () => {
       type: AUTHENTICATED,
       payload: mockPayload
     });
-    expect(newState).toEqual({ authenticated: true, user: mockPayload });
+    expect(newState).toEqual({ authenticated: true, user: mockPayload, loading:false });
   });
   it("Should unauthenticate the user", () => {
     const newState = authReducers(undefined, {
       type: UNAUTHENTICATED
     });
-    expect(newState).toEqual({ user: {}, authenticated: false });
+    expect(newState).toEqual({ user: {}, authenticated: false, loading:false });
   });
 });
