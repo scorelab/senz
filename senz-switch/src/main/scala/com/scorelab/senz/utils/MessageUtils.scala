@@ -29,7 +29,7 @@ object MessageUtils {
       .mkString(" ")
     val redshift = new SimpleDateFormat("yyyyMMddHHmmssX")
     val timestamp = redshift.format(new Date())
-    s"$msgType $attribs #time $timestamp @$receiver ^$sender $signature"
+    s"$msgType $attribs #time $timestamp @$receiver ^$sender $signature\n"
   }
 
   /** Parse the query to message structure

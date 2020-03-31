@@ -82,7 +82,7 @@ export const deviceReducers = (
     case REMOVE_DEVICE_FROM_PROJECT_REQUEST:
       return { ...state, loading: true }
     case SWITCH_DEVICE:
-      const switchedDevice = state.AllDevices.map(device => {
+      const switchedDevices = state.AllDevices.map(device => {
         if (action.payload._id === device._id) {
           device = action.payload;
         }

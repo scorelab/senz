@@ -106,7 +106,7 @@ class SocketHandlerActor(device: ActorRef) extends Actor with ActorLogging {
     println("RECEIVED: Data Message")
     if (SessionManager.sessions.contains(message.receiver)){
       val receiverActor: ActorRef = SessionManager.getSession(message.receiver).value
-      receiverActor ! Tcp.Write(data)
+      receiverActor ! Tcp.Write(ByteString(data.utf8String+"\n"))
       device ! Tcp.Write(ByteString("Message is sent to the device " + message.receiver + "\n"))
     } else {
       device ! Tcp.Write(ByteString("Device is not logged in\n"))
