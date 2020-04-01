@@ -13,7 +13,7 @@ const styles = theme => ({
   },
   formControl: {
     float: 'right',
-    marginRight: '30vw',
+    marginRight: '40vw',
     minWidth: 120
   },
   selectEmpty: {
@@ -42,6 +42,7 @@ class NavDropDown extends Component {
         [e.target.name]: e.target.value
       };
     });
+    window.location.href = process.env.API_HOST + '/home'
   };
   render() {
     const { classes } = this.props;
